@@ -43,7 +43,7 @@
 <body>
   <div id="tsparticles"></div>
     <nav class="bg-gradient-to-r from-red-400 via-red-500 to-red-600 shadow-lg px-8 py-8 flex items-center justify-between relative z-10">
-  <div class="text-3xl font-extrabold text-white">ClubNexus</div>
+  <div class="text-3xl font-extrabold text-white">ClubNexus </div>
     <ul class="flex space-x-14 absolute left-1/2 transform -translate-x-1/2">
       <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">Home</a></li>
       <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">About</a></li>
@@ -60,7 +60,9 @@
   <div class="flex w-full h-[calc(100vh-96px)]">
     <!-- Left: IEEE Club Description -->
     <div class="w-1/2 flex flex-col justify-center items-start px-16 bg-white bg-opacity-80">
-      <h2 class="text-4xl font-bold mb-6 text-orange-600">Welcome to IEEE</h2>
+      <h2 class="text-4xl font-bold mb-6 text-orange-600">
+  <span id="ieee-typing" style="display:inline-block; min-width: 27ch; white-space: pre;"></span>
+      </h2>
       <p class="text-lg text-gray-700 leading-relaxed">
         IEEE is one of the most active technical clubs in our college, dedicated to promoting innovation, coding, and technology among students. We organize coding competitions, hackathons, technical workshops, and expert talks to help members enhance their skills and stay updated with the latest trends in technology. Our club provides a collaborative environment for students of all levels to learn, share, and grow together.<br><br>
         Join IEEE to connect with tech enthusiasts, participate in exciting events, and build a strong foundation for your future in technology!
@@ -134,7 +136,105 @@
     </div>
   </section>
 
+  <!-- Footer -->
+  <footer class="w-full bg-gradient-to-r from-red-400 via-red-500 to-red-600 text-white pt-10 pb-6 mt-12 shadow-inner">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <!-- About -->
+      <div>
+        <h3 class="text-xl font-bold mb-4">About IEEE</h3>
+        <p class="text-sm leading-relaxed opacity-90">
+          IEEE is a leading technical club in our college, dedicated to promoting innovation, coding, and technology. We organize coding competitions, hackathons, workshops, and expert talks for all tech enthusiasts.
+        </p>
+      </div>
+      <!-- Quick Links -->
+      <div>
+        <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+        <ul class="space-y-2 text-sm opacity-90">
+          <li><a href="#" class="hover:underline">Home</a></li>
+          <li><a href="#" class="hover:underline">About</a></li>
+          <li><a href="#" class="hover:underline">Events</a></li>
+          <li><a href="#" class="hover:underline">Dashboard</a></li>
+        </ul>
+      </div>
+      <!-- Contact -->
+      <div>
+        <h3 class="text-xl font-bold mb-4">Contact</h3>
+        <ul class="text-sm opacity-90">
+          <li>Email: <a href="mailto:ieee@college.edu" class="hover:underline">ieee@college.edu</a></li>
+          <li>Phone: <a href="tel:+911234567890" class="hover:underline">+91 12345 67890</a></li>
+          <li>Location: College Campus, City</li>
+        </ul>
+      </div>
+      <!-- Social -->
+      <div>
+        <h3 class="text-xl font-bold mb-4">Follow Us</h3>
+        <div class="flex space-x-4 mt-2">
+          <a href="#" class="hover:text-yellow-300" aria-label="Instagram"><svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5A4.25 4.25 0 0 0 20.5 16.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm4.25 3.25a5.25 5.25 0 1 1 0 10.5a5.25 5.25 0 0 1 0-10.5zm0 1.5a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5zm5.25.75a1 1 0 1 1-2 0a1 1 0 0 1 2 0z"></path></svg></a>
+          <a href="#" class="hover:text-yellow-300" aria-label="LinkedIn"><svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75s1.75.79 1.75 1.75s-.78 1.75-1.75 1.75zm13.5 10.28h-3v-4.5c0-1.08-.02-2.47-1.5-2.47c-1.5 0-1.73 1.18-1.73 2.39v4.58h-3v-9h2.89v1.23h.04c.4-.75 1.38-1.54 2.84-1.54c3.04 0 3.6 2 3.6 4.59v4.72z"></path></svg></a>
+          <a href="#" class="hover:text-yellow-300" aria-label="Twitter"><svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M24 4.557a9.93 9.93 0 0 1-2.828.775a4.932 4.932 0 0 0 2.165-2.724c-.951.564-2.005.974-3.127 1.195a4.92 4.92 0 0 0-8.384 4.482c-4.086-.205-7.713-2.164-10.141-5.144c-.423.722-.666 1.561-.666 2.475c0 1.708.87 3.216 2.188 4.099a4.904 4.904 0 0 1-2.229-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.936 4.936 0 0 1-2.224.084c.627 1.956 2.444 3.377 4.6 3.417a9.867 9.867 0 0 1-6.102 2.104c-.396 0-.787-.023-1.175-.069a13.945 13.945 0 0 0 7.548 2.212c9.057 0 14.009-7.513 14.009-14.009c0-.213-.005-.425-.014-.636a10.012 10.012 0 0 0 2.457-2.548z"></path></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="text-center text-xs opacity-80 mt-8">&copy; 2025 IEEE Club. All rights reserved.</div>
+  </footer>
+
   <script>
+    // Typing effect for IEEE heading
+    const typingText = "Welcome to IEEE Club . . .";
+    const typingElem = document.getElementById("ieee-typing");
+    let typingIdx = 0;
+    let isErasing = false;
+    let lastTime = null;
+    let delay = 70;
+    let pause = 1200;
+    let erasePause = 400;
+    function typeWriter(now) {
+      if (!lastTime) lastTime = now;
+      const elapsed = now - lastTime;
+      if (!isErasing && typingIdx <= typingText.length) {
+        if (elapsed > delay) {
+          let txt = typingText.slice(0, typingIdx);
+          if (txt.length === 0) {
+            typingElem.innerText = '\u00A0';
+          } else {
+            typingElem.innerText = txt;
+          }
+          typingIdx++;
+          lastTime = now;
+        }
+        if (typingIdx <= typingText.length) {
+          requestAnimationFrame(typeWriter);
+        } else {
+          setTimeout(() => {
+            isErasing = true;
+            lastTime = null;
+            requestAnimationFrame(typeWriter);
+          }, pause);
+        }
+      } else if (isErasing && typingIdx >= 0) {
+        if (elapsed > delay) {
+          let txt = typingText.slice(0, typingIdx);
+          if (txt.length === 0) {
+            typingElem.innerText = '\u00A0';
+          } else {
+            typingElem.innerText = txt;
+          }
+          typingIdx--;
+          lastTime = now;
+        }
+        if (typingIdx >= 0) {
+          requestAnimationFrame(typeWriter);
+        } else {
+          setTimeout(() => {
+            isErasing = false;
+            lastTime = null;
+            requestAnimationFrame(typeWriter);
+          }, erasePause);
+        }
+      }
+    }
+    typingElem.style.minWidth = typingText.length + 'ch';
+    requestAnimationFrame(typeWriter);
     // Slideshow logic
     const slides = [
       {
