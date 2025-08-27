@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- tsParticles CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+  <style>
+    body, html {
+      margin: 0; padding: 0; min-height: 100vh;
+      overflow-x: hidden;
+    }
+    #tsparticles {
+      position: fixed !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      top: 0; left: 0;
+      z-index: 0;
+      background: transparent !important;
+    }
+    main, nav, section, .flex, .relative, .z-10, .w-full, .h-full {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+    body, html {
+      margin: 0; padding: 0; min-height: 100vh;
+      overflow-x: hidden;
+    }
+    #tsparticles {
+      position: fixed !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      top: 0; left: 0;
+      z-index: 0;
+      background: transparent !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="tsparticles"></div>
+    <nav class="bg-gradient-to-r from-red-400 via-red-500 to-red-600 shadow-lg px-8 py-8 flex items-center justify-between relative z-10">
+  <div class="text-3xl font-extrabold text-white">ClubNexus</div>
+    <ul class="flex space-x-14 absolute left-1/2 transform -translate-x-1/2">
+      <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">Home</a></li>
+      <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">About</a></li>
+      <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">Events</a></li>
+      <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">Dashboard</a></li>
+    </ul>
+    <div>
+      <img src="https://via.placeholder.com/40" alt="Profile"
+        class="w-14 h-14 rounded-full border-4 border-white cursor-pointer shadow-md">
+    </div>
+  </nav>
+
+
+  <div class="flex w-full h-[calc(100vh-96px)]">
+    <!-- Left: IEEE Club Description -->
+    <div class="w-1/2 flex flex-col justify-center items-start px-16 bg-white bg-opacity-80">
+      <h2 class="text-4xl font-bold mb-6 text-orange-600">Welcome to IEEE</h2>
+      <p class="text-lg text-gray-700 leading-relaxed">
+        IEEE is one of the most active technical clubs in our college, dedicated to promoting innovation, coding, and technology among students. We organize coding competitions, hackathons, technical workshops, and expert talks to help members enhance their skills and stay updated with the latest trends in technology. Our club provides a collaborative environment for students of all levels to learn, share, and grow together.<br><br>
+        Join IEEE to connect with tech enthusiasts, participate in exciting events, and build a strong foundation for your future in technology!
+      </p>
+    </div>
+    <!-- Right: Animated Slideshow -->
+    <div class="w-[45%] h-full flex items-center justify-center relative overflow-hidden">
+      <div class="w-[92%] h-[60%] flex items-center justify-center">
+        <img id="slideshow-img" src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=80" alt="Event Photo" class="w-full h-full object-cover rounded-xl shadow-xl transition-all duration- 100">
+      </div>
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3">
+        <span class="slideshow-dot w-4 h-4 rounded-full bg-orange-200 cursor-pointer border-2 border-white" onclick="showSlide(0)"></span>
+        <span class="slideshow-dot w-4 h-4 rounded-full bg-orange-200 cursor-pointer border-2 border-white" onclick="showSlide(1)"></span>
+        <span class="slideshow-dot w-4 h-4 rounded-full bg-orange-200 cursor-pointer border-2 border-white" onclick="showSlide(2)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upcoming Events Flashcards -->
+  <section class="w-full flex flex-col items-center py-12 bg-white bg-opacity-80">
+    <h2 class="text-3xl font-bold text-orange-600 mb-8">Upcoming Events</h2>
+    <div class="flex flex-wrap justify-center gap-8 w-full max-w-6xl">
+      <div class="bg-orange-100 rounded-xl shadow-lg p-8 w-80 flex flex-col items-center">
+  <div class="w-48 h-32 mb-4 bg-orange-200 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=320&q=80" alt="Hackathon" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-xl font-semibold text-orange-700 mb-2">Hackathon 2025</h3>
+        <p class="text-gray-700 mb-4 text-center">Join our annual hackathon! Collaborate, innovate, and win exciting prizes.<br>Date: Sept 10, 2025</p>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition">Register</button>
+      </div>
+      <div class="bg-orange-100 rounded-xl shadow-lg p-8 w-80 flex flex-col items-center">
+  <div class="w-48 h-32 mb-4 bg-orange-200 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=320&q=80" alt="AI Bootcamp" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-xl font-semibold text-orange-700 mb-2">AI Bootcamp</h3>
+        <p class="text-gray-700 mb-4 text-center">Learn the basics of AI and machine learning in this 2-day bootcamp.<br>Date: Sept 20-21, 2025</p>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition">Register</button>
+      </div>
+      <div class="bg-orange-100 rounded-xl shadow-lg p-8 w-80 flex flex-col items-center">
+  <div class="w-48 h-32 mb-4 bg-orange-200 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=320&q=80" alt="Web Dev Workshop" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-xl font-semibold text-orange-700 mb-2">Web Dev Workshop</h3>
+        <p class="text-gray-700 mb-4 text-center">Hands-on workshop on modern web development tools and frameworks.<br>Date: Oct 5, 2025</p>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition">Register</button>
+      </div>
+      <div class="bg-orange-100 rounded-xl shadow-lg p-8 w-80 flex flex-col items-center">
+  <div class="w-48 h-32 mb-4 bg-orange-200 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=320&q=80" alt="AI Bootcamp" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-xl font-semibold text-orange-700 mb-2">AI Bootcamp</h3>
+        <p class="text-gray-700 mb-4 text-center">Learn the basics of AI and machine learning in this 2-day bootcamp.<br>Date: Sept 20-21, 2025</p>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition">Register</button>
+      </div>
+      <div class="bg-orange-100 rounded-xl shadow-lg p-8 w-80 flex flex-col items-center">
+  <div class="w-48 h-32 mb-4 bg-orange-200 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=320&q=80" alt="AI Bootcamp" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-xl font-semibold text-orange-700 mb-2">AI Bootcamp</h3>
+        <p class="text-gray-700 mb-4 text-center">Learn the basics of AI and machine learning in this 2-day bootcamp.<br>Date: Sept 20-21, 2025</p>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition">Register</button>
+      </div>
+      <div class="bg-orange-100 rounded-xl shadow-lg p-8 w-80 flex flex-col items-center">
+  <div class="w-48 h-32 mb-4 bg-orange-200 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=320&q=80" alt="Competitive Coding Night" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-xl font-semibold text-orange-700 mb-2">Competitive Coding Night</h3>
+        <p class="text-gray-700 mb-4 text-center">Test your coding skills in a fun, competitive environment.<br>Date: Oct 20, 2025</p>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition">Register</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Slideshow logic
+    const slides = [
+      {
+        img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=80',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=900&q=80',
+      }
+    ];
+    let currentSlide = 0;
+    const imgElem = document.getElementById('slideshow-img');
+    const dots = document.getElementsByClassName('slideshow-dot');
+
+    function showSlide(idx) {
+      currentSlide = idx;
+      imgElem.src = slides[idx].img;
+      for (let i = 0; i < dots.length; i++) {
+        dots[i].classList.remove('bg-orange-500');
+        dots[i].classList.add('bg-orange-200');
+      }
+      dots[idx].classList.add('bg-orange-500');
+      dots[idx].classList.remove('bg-orange-200');
+    }
+
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+    }, 3000);
+
+    // Initial highlight
+    showSlide(0);
+  </script>
+</body>
+<script>
+  tsParticles.load("tsparticles", {
+    background: { color: { value: "transparent" } },
+    fpsLimit: 60,
+    interactivity: {
+      events: {
+        onClick: { enable: true, mode: "push" },
+        onHover: { enable: true, mode: "repulse" },
+        resize: true
+      },
+      modes: {
+        push: { quantity: 4 },
+        repulse: { distance: 100, duration: 0.4 }
+      }
+    },
+    particles: {
+      color: { value: "#ff5722" },
+      links: { enable: true, color: "#ffb385", distance: 150, opacity: 0.4, width: 1 },
+      collisions: { enable: true },
+      move: { direction: "none", enable: true, outModes: { default: "bounce" }, random: false, speed: 2, straight: false },
+      number: { density: { enable: true, area: 800 }, value: 60 },
+      opacity: { value: 0.5 },
+      shape: { type: "circle" },
+      size: { value: { min: 2, max: 6 } }
+    },
+    detectRetina: true
+  });
+</script>
+</html>
