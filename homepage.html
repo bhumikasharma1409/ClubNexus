@@ -71,15 +71,18 @@
     </div>
 
     <!-- Right Image Slider -->
-<div class="mt-10 md:mt-0 md:ml-12 w-full md:w-4/5 lg:w-2/3 relative overflow-hidden rounded-2xl shadow-xl h-72 md:h-96">
-  <div id="slider" class="flex transition-transform duration-700 h-full">
-    <img src="first.jpg" class="w-full flex-shrink-0 h-full object-cover" />
-    <img src="second.jpg" class="w-full flex-shrink-0 h-full object-cover" />
-    <img src="third.jpg" class="w-full flex-shrink-0 h-full object-cover" />
-  </div>
-</div>
-
-
+    <div class="mt-10 md:mt-0 md:ml-12 w-full md:w-4/5 lg:w-2/3 relative overflow-hidden rounded-2xl shadow-xl h-72 md:h-96">
+      <div id="slider" class="flex transition-transform duration-700 h-full">
+        <img src="first.jpg" class="w-full flex-shrink-0 h-full object-cover" />
+        <img src="fourth.jpg" class="w-full flex-shrink-0 h-full object-cover" />
+        <img src="second.jpg" class="w-full flex-shrink-0 h-full object-cover" />
+        <img src="fifth.jpg" class="w-full flex-shrink-0 h-full object-cover" />
+        <img src="third.jpg" class="w-full flex-shrink-0 h-full object-cover" />
+        <img src="sixth.jpg" class="w-full flex-shrink-0 h-full object-cover" />
+        <img src="seven.jpg" class="w-full flex-shrink-0 h-full object-cover" />
+        <img src="eight.jpg" class="w-full flex-shrink-0 h-full object-cover" />
+      </div>
+    </div>
 
   </main>
 
@@ -105,16 +108,28 @@
       }
     });
 
-    /// Slider JS
-const slider = document.getElementById("slider");
-let index = 0;
-const totalSlides = slider.children.length;
+    /// Slider JS (Infinite Forward Loop)
+    const slider = document.getElementById("slider");
+    let index = 0;
+    const totalSlides = slider.children.length;
 
-setInterval(() => {
-  index = (index + 1) % totalSlides;
-  slider.style.transform = `translateX(-${index * 100}%)`;
-}, 3000); // change every 3s
+    // Clone first slide
+    const firstClone = slider.children[0].cloneNode(true);
+    slider.appendChild(firstClone);
 
+    setInterval(() => {
+      index++;
+      slider.style.transition = "transform 0.7s ease-in-out";
+      slider.style.transform = `translateX(-${index * 100}%)`;
+
+      if (index === totalSlides) {
+        setTimeout(() => {
+          slider.style.transition = "none";
+          slider.style.transform = "translateX(0)";
+          index = 0;
+        }, 700); // match transition duration
+      }
+    }, 2000);
   </script>
 </body>
 </html>
