@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College Clubs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+  <!-- Font Awesome for Social Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      overflow-y: scroll; /* Always show vertical scrollbar */
+    }
+    .club-card {
+      min-height: 340px; /* Extra height for icons */
+    }
+  </style>
+</head>
+<body class="bg-white min-h-screen relative">
+
+  <div id="tsparticles" class="fixed inset-0 z-0"></div>
+
+  <nav class="bg-gradient-to-r from-red-400 via-red-500 to-red-600 shadow-lg px-8 py-8 flex items-center justify-between relative z-10">
+    <div class="text-3xl font-extrabold text-white">ClubNexus</div>
+    <ul class="flex space-x-14 absolute left-1/2 transform -translate-x-1/2">
+      <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">Home</a></li>
+      <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">About</a></li>
+      <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">Events</a></li>
+      <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">Dashboard</a></li>
+    </ul>
+    <div>
+      <img src="https://via.placeholder.com/40" alt="Profile"
+        class="w-14 h-14 rounded-full border-4 border-white cursor-pointer shadow-md">
+    </div>
+  </nav><br>
+  </body>
+</html>
