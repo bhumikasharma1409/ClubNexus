@@ -8,31 +8,41 @@
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
   <style>
     body, html {
-      margin: 0; padding: 0; min-height: 100vh;
+      margin: 0; 
+      padding: 0; 
+      min-height: 100%;
       overflow-x: hidden;
+    }
+    html {
+      scroll-padding-top: 90px; /* Fix navbar overlap */
     }
     #tsparticles {
       position: fixed !important;
-      width: 100vw !important;
+      width: 100% !important;
       height: 100vh !important;
-      top: 0; left: 0;
+      top: 0; 
+      left: 0;
       z-index: 0;
       background: transparent !important;
     }
+    section, main {
+      position: relative; 
+      z-index: 10;
+    }
   </style>
 </head>
-<body class="relative overflow-hidden">
+<body>
   
   <!-- Particle Background -->
   <div id="tsparticles"></div>
 
   <!-- Navbar -->
-  <nav class="bg-gradient-to-r from-red-400 via-red-500 to-red-600 shadow-lg px-8 py-8 flex items-center justify-between relative z-10">
+  <nav class="fixed top-0 left-0 w-full bg-gradient-to-r from-red-400 via-red-500 to-red-600 shadow-lg px-8 py-6 flex items-center justify-between z-20">
     <div class="text-3xl font-serif font-extrabold text-white">ClubNexus</div>
     <ul class="flex space-x-14 absolute left-1/2 transform -translate-x-1/2">
-      <li><a href="#" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">Home</a></li>
+      <li><a href="#home" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">Home</a></li>
       <li><a href="#about" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">About</a></li>
-      <li><a href="#events" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">Events</a></li>
+      <li><a href="#clubs" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">Clubs</a></li>
       <li><a href="#dashboard" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">Dashboard</a></li>
     </ul>
     <div class="relative w-14 h-14">
@@ -43,8 +53,7 @@
   </nav>
 
   <!-- Hero Section -->
-  <main class="relative flex flex-col md:flex-row items-center justify-between min-h-[90vh] px-8 md:px-28 z-10 font-serif">
-    
+  <main id="home" class="flex flex-col md:flex-row items-center justify-between h-screen px-8 md:px-28 font-serif pt-28">
     <!-- Left Text -->
     <div class="max-w-2xl text-left">
       <span class="inline-block px-4 py-1 mb-6 text-sm font-medium text-blue-700 bg-blue-100 rounded-full shadow">
@@ -85,9 +94,8 @@
     </div>
   </main>
 
-  <!--Club Section-->
-    <!-- Club Section -->
-  <section id="clubs" class="relative z-10 py-20 bg-gray-50">
+  <!-- Club Section -->
+  <section id="clubs" class="h-screen flex flex-col items-center justify-center">
     <div class="text-center mb-12">
       <h2 class="text-4xl font-extrabold text-gray-900 font-serif">
         Our Clubs
@@ -97,26 +105,23 @@
       </p>
     </div>
 
-    <div class="flex flex-col md:flex-row justify-center items-center gap-12">
-      
+    <div class="flex flex-col md:flex-row justify-center items-center gap-16">
       <!-- Technical Club -->
       <a href="#technical" class="group">
-        <div class="w-40 h-40 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-700 shadow-lg text-white font-bold text-lg transition transform hover:scale-110 hover:shadow-2xl">
+        <div class="w-72 h-72 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-700 shadow-lg text-white font-bold text-2xl transition transform hover:scale-110 hover:shadow-2xl text-center">
           Technical Club
         </div>
       </a>
 
       <!-- Non-Technical Club -->
       <a href="#nontechnical" class="group">
-        <div class="w-40 h-40 flex items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-red-500 shadow-lg text-white font-bold text-lg transition transform hover:scale-110 hover:shadow-2xl">
+        <div class="w-72 h-72 flex items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-red-500 shadow-lg text-white font-bold text-2xl transition transform hover:scale-110 hover:shadow-2xl text-center">
           Non-Technical Club
         </div>
       </a>
-
     </div>
   </section>
 
-  
   <!-- Particle Config + Slider JS -->
   <script>
     tsParticles.load("tsparticles", {
@@ -144,7 +149,6 @@
     let index = 0;
     const totalSlides = slider.children.length;
 
-    // Clone first slide
     const firstClone = slider.children[0].cloneNode(true);
     slider.appendChild(firstClone);
 
@@ -158,7 +162,7 @@
           slider.style.transition = "none";
           slider.style.transform = "translateX(0)";
           index = 0;
-        }, 700); // match transition duration
+        }, 700);
       }
     }, 2000);
   </script>
