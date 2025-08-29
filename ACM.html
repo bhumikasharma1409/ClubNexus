@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- tsParticles CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+  <style>
+    body, html {
+      margin: 0; padding: 0; min-height: 100vh;
+      overflow-x: hidden;
+    }
+    #tsparticles {
+      position: fixed !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      top: 0; left: 0;
+      z-index: 0;
+      background: transparent !important;
+    }
+    main, nav, section, .flex, .relative, .z-10, .w-full, .h-full {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+    body, html {
+      margin: 0; padding: 0; min-height: 100vh;
+      overflow-x: hidden;
+    }
+    #tsparticles {
+      position: fixed !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      top: 0; left: 0;
+      z-index: 0;
+      background: transparent !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="tsparticles"></div>
+    <nav class="bg-gradient-to-r from-red-400 via-red-500 to-red-600 shadow-lg px-8 py-8 flex items-center justify-between relative z-10">
+    <div class="text-3xl font-extrabold text-white">ClubNexus</div>
+    <ul class="flex space-x-14 absolute left-1/2 transform -translate-x-1/2">
+      <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">Home</a></li>
+      <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">About</a></li>
+      <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">Events</a></li>
+      <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">Dashboard</a></li>
+    </ul>
+    <div>
+      <img src="https://via.placeholder.com/40" alt="Profile"
+        class="w-14 h-14 rounded-full border-4 border-white cursor-pointer shadow-md">
+    </div>
+  </nav>
+
+
+  <div class="flex w-full h-[calc(100vh-96px)]">
+    <!-- Left: Coding Ninjas Club Description -->
+    <div class="w-1/2 flex flex-col justify-center items-start px-16 bg-white bg-opacity-80">
+      <h2 class="text-4xl font-bold mb-6 text-orange-600">
+        Welcome to ACM Club
+      </h2>
+      <p class="text-lg text-gray-700 leading-relaxed">
+        ACM Club is a premier technical club in our college, dedicated to empowering students in both coding and career development. We organize a variety of coding events, hackathons, and speaker sessions that provide valuable insights into current industry trends, the most in-demand programming languages, and practical roadmaps for success in the tech world. Our expert-led talks help members understand what skills are needed in the market and how to plan their learning journey effectively.<br><br>
+        By joining ACM Club, you'll have the opportunity to participate in exciting competitions, attend talks from industry leaders, and connect with a vibrant community of tech enthusiasts. Whether you're looking to improve your coding skills or seeking guidance for your career path, ACM Club is here to support your growth every step of the way!
+      </p>
+    </div>
+    <!-- Right: Animated Slideshow -->
+    <div class="w-[45%] h-full flex items-center justify-center relative overflow-hidden">
+      <div class="w-[92%] h-[60%] flex items-center justify-center">
+        <img id="slideshow-img" src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=80" alt="Event Photo" class="w-full h-full object-cover rounded-xl shadow-xl transition-all duration- 100">
+      </div>
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3">
+        <span class="slideshow-dot w-4 h-4 rounded-full bg-orange-200 cursor-pointer border-2 border-white" onclick="showSlide(0)"></span>
+        <span class="slideshow-dot w-4 h-4 rounded-full bg-orange-200 cursor-pointer border-2 border-white" onclick="showSlide(1)"></span>
+        <span class="slideshow-dot w-4 h-4 rounded-full bg-orange-200 cursor-pointer border-2 border-white" onclick="showSlide(2)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upcoming Events Flashcards -->
+  <section class="w-full flex flex-col items-center py-12 bg-white bg-opacity-80">
+    <h2 class="text-3xl font-bold text-orange-600 mb-8">Upcoming Events</h2>
+    <div class="flex flex-wrap justify-center gap-8 w-full max-w-6xl">
+      <div class="bg-orange-100 rounded-xl shadow-lg p-8 w-80 flex flex-col items-center">
+  <div class="w-48 h-32 mb-4 bg-orange-200 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=320&q=80" alt="Hackathon" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-xl font-semibold text-orange-700 mb-2">Hackathon 2025</h3>
+        <p class="text-gray-700 mb-4 text-center">Join our annual hackathon! Collaborate, innovate, and win exciting prizes.<br>Date: Sept 10, 2025</p>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition">Register</button>
+      </div>
+      <div class="bg-orange-100 rounded-xl shadow-lg p-8 w-80 flex flex-col items-center">
+  <div class="w-48 h-32 mb-4 bg-orange-200 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=320&q=80" alt="AI Bootcamp" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-xl font-semibold text-orange-700 mb-2">AI Bootcamp</h3>
+        <p class="text-gray-700 mb-4 text-center">Learn the basics of AI and machine learning in this 2-day bootcamp.<br>Date: Sept 20-21, 2025</p>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition">Register</button>
+      </div>
+      <div class="bg-orange-100 rounded-xl shadow-lg p-8 w-80 flex flex-col items-center">
+  <div class="w-48 h-32 mb-4 bg-orange-200 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=320&q=80" alt="Web Dev Workshop" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-xl font-semibold text-orange-700 mb-2">Web Dev Workshop</h3>
+        <p class="text-gray-700 mb-4 text-center">Hands-on workshop on modern web development tools and frameworks.<br>Date: Oct 5, 2025</p>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition">Register</button>
+      </div>
+      <div class="bg-orange-100 rounded-xl shadow-lg p-8 w-80 flex flex-col items-center">
+  <div class="w-48 h-32 mb-4 bg-orange-200 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=320&q=80" alt="AI Bootcamp" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-xl font-semibold text-orange-700 mb-2">AI Bootcamp</h3>
+        <p class="text-gray-700 mb-4 text-center">Learn the basics of AI and machine learning in this 2-day bootcamp.<br>Date: Sept 20-21, 2025</p>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition">Register</button>
+      </div>
+      <div class="bg-orange-100 rounded-xl shadow-lg p-8 w-80 flex flex-col items-center">
+  <div class="w-48 h-32 mb-4 bg-orange-200 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=320&q=80" alt="AI Bootcamp" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-xl font-semibold text-orange-700 mb-2">AI Bootcamp</h3>
+        <p class="text-gray-700 mb-4 text-center">Learn the basics of AI and machine learning in this 2-day bootcamp.<br>Date: Sept 20-21, 2025</p>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition">Register</button>
+      </div>
+      <div class="bg-orange-100 rounded-xl shadow-lg p-8 w-80 flex flex-col items-center">
+  <div class="w-48 h-32 mb-4 bg-orange-200 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=320&q=80" alt="Competitive Coding Night" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-xl font-semibold text-orange-700 mb-2">Competitive Coding Night</h3>
+        <p class="text-gray-700 mb-4 text-center">Test your coding skills in a fun, competitive environment.<br>Date: Oct 20, 2025</p>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition">Register</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="w-full bg-gradient-to-r from-red-400 via-red-500 to-red-600 text-white pt-10 pb-6 mt-12 shadow-inner">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <!-- About -->
+      <div>
+        <h3 class="text-xl font-bold mb-4">About Coding Ninjas Club</h3>
+        <p class="text-sm leading-relaxed opacity-90">
+         ACM Club is a premier technical club in our college, dedicated to empowering students in both coding and career development. We organize a variety of coding events, hackathons, and speaker sessions that provide valuable insights into current industry trends. 
+        
+        </p>
+      </div>
+      <!-- Quick Links -->
+      <div>
+        <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+        <ul class="space-y-2 text-sm opacity-90">
+          <li><a href="#" class="hover:underline">Home</a></li>
+          <li><a href="#" class="hover:underline">About</a></li>
+          <li><a href="#" class="hover:underline">Events</a></li>
+          <li><a href="#" class="hover:underline">Dashboard</a></li>
+        </ul>
+      </div>
+      <!-- Contact -->
+      <div>
+        <h3 class="text-xl font-bold mb-4">Contact</h3>
+        <ul class="text-sm opacity-90">
+          <li>Email: <a href="mailto:codingninjas@college.edu" class="hover:underline">codingninjas@college.edu</a></li>
+          <li>Phone: <a href="tel:+911234567890" class="hover:underline">+91 12345 67890</a></li>
+          <li>Location: Chitkara University , Punjab</li>
+        </ul>
+      </div>
+      <!-- Social -->
+      <div>
+        <h3 class="text-xl font-bold mb-4">Follow Us</h3>
+        <div class="flex space-x-4 mt-2">
+          <a href="#" class="hover:text-yellow-300" aria-label="Instagram"><svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5A4.25 4.25 0 0 0 20.5 16.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm4.25 3.25a5.25 5.25 0 1 1 0 10.5a5.25 5.25 0 0 1 0-10.5zm0 1.5a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5zm5.25.75a1 1 0 1 1-2 0a1 1 0 0 1 2 0z"></path></svg></a>
+          <a href="#" class="hover:text-yellow-300" aria-label="LinkedIn"><svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75s1.75.79 1.75 1.75s-.78 1.75-1.75 1.75zm13.5 10.28h-3v-4.5c0-1.08-.02-2.47-1.5-2.47c-1.5 0-1.73 1.18-1.73 2.39v4.58h-3v-9h2.89v1.23h.04c.4-.75 1.38-1.54 2.84-1.54c3.04 0 3.6 2 3.6 4.59v4.72z"></path></svg></a>
+          <a href="#" class="hover:text-yellow-300" aria-label="Twitter"><svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M24 4.557a9.93 9.93 0 0 1-2.828.775a4.932 4.932 0 0 0 2.165-2.724c-.951.564-2.005.974-3.127 1.195a4.92 4.92 0 0 0-8.384 4.482c-4.086-.205-7.713-2.164-10.141-5.144c-.423.722-.666 1.561-.666 2.475c0 1.708.87 3.216 2.188 4.099a4.904 4.904 0 0 1-2.229-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.936 4.936 0 0 1-2.224.084c.627 1.956 2.444 3.377 4.6 3.417a9.867 9.867 0 0 1-6.102 2.104c-.396 0-.787-.023-1.175-.069a13.945 13.945 0 0 0 7.548 2.212c9.057 0 14.009-7.513 14.009-14.009c0-.213-.005-.425-.014-.636a10.012 10.012 0 0 0 2.457-2.548z"></path></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="text-center text-xs opacity-80 mt-8">&copy; 2025 Coding Ninjas Club. All rights reserved.</div>
+  </footer>
+
+  <script>
+    // Typing effect for Coding Ninjas heading
+  const cnTypingText = "Welcome to ACm Chapter . . .";
+    const cnTypingElem = document.getElementById("cn-typing");
+    let cnTypingIdx = 0;
+    let cnIsErasing = false;
+    let cnLastTime = null;
+    let cnDelay = 70;
+    let cnPause = 1200;
+    let cnErasePause = 400;
+    function cnTypeWriter(now) {
+      if (!cnLastTime) cnLastTime = now;
+      const elapsed = now - cnLastTime;
+      if (!cnIsErasing && cnTypingIdx <= cnTypingText.length) {
+        if (elapsed > cnDelay) {
+          let txt = cnTypingText.slice(0, cnTypingIdx);
+          if (cnTypingElem.textContent !== txt && !(txt.length === 0 && cnTypingElem.textContent === '\u00A0')) {
+            cnTypingElem.textContent = txt.length === 0 ? '\u00A0' : txt;
+          }
+          cnTypingIdx++;
+          cnLastTime = now;
+        }
+        if (cnTypingIdx <= cnTypingText.length) {
+          requestAnimationFrame(cnTypeWriter);
+        } else {
+          setTimeout(() => {
+            cnIsErasing = true;
+            cnLastTime = null;
+            requestAnimationFrame(cnTypeWriter);
+          }, cnPause);
+        }
+      } else if (cnIsErasing && cnTypingIdx >= 0) {
+        if (elapsed > cnDelay) {
+          let txt = cnTypingText.slice(0, cnTypingIdx);
+          if (cnTypingElem.textContent !== txt && !(txt.length === 0 && cnTypingElem.textContent === '\u00A0')) {
+            cnTypingElem.textContent = txt.length === 0 ? '\u00A0' : txt;
+          }
+          cnTypingIdx--;
+          cnLastTime = now;
+        }
+        if (cnTypingIdx >= 0) {
+          requestAnimationFrame(cnTypeWriter);
+        } else {
+          setTimeout(() => {
+            cnIsErasing = false;
+            cnLastTime = null;
+            requestAnimationFrame(cnTypeWriter);
+          }, cnErasePause);
+        }
+      }
+    }
+    requestAnimationFrame(cnTypeWriter);
+    // Slideshow logic
+    const slides = [
+      {
+        img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=80',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=900&q=80',
+      }
+    ];
+    let currentSlide = 0;
+    const imgElem = document.getElementById('slideshow-img');
+    const dots = document.getElementsByClassName('slideshow-dot');
+
+    function showSlide(idx) {
+      currentSlide = idx;
+      imgElem.src = slides[idx].img;
+      for (let i = 0; i < dots.length; i++) {
+        dots[i].classList.remove('bg-orange-500');
+        dots[i].classList.add('bg-orange-200');
+      }
+      dots[idx].classList.add('bg-orange-500');
+      dots[idx].classList.remove('bg-orange-200');
+    }
+
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+    }, 3000);
+
+    // Initial highlight
+    showSlide(0);
+  </script>
+</body>
+<script>
+  tsParticles.load("tsparticles", {
+    background: { color: { value: "transparent" } },
+    fpsLimit: 60,
+    interactivity: {
+      events: {
+        onClick: { enable: true, mode: "push" },
+        onHover: { enable: true, mode: "repulse" },
+        resize: true
+      },
+      modes: {
+        push: { quantity: 4 },
+        repulse: { distance: 100, duration: 0.4 }
+      }
+    },
+    particles: {
+      color: { value: "#ff5722" },
+      links: { enable: true, color: "#ffb385", distance: 150, opacity: 0.4, width: 1 },
+      collisions: { enable: true },
+      move: { direction: "none", enable: true, outModes: { default: "bounce" }, random: false, speed: 2, straight: false },
+      number: { density: { enable: true, area: 800 }, value: 60 },
+      opacity: { value: 0.5 },
+      shape: { type: "circle" },
+      size: { value: { min: 2, max: 6 } }
+    },
+    detectRetina: true
+  });
+</script>
+</html>
