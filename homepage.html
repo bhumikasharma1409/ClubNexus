@@ -19,7 +19,7 @@
     #tsparticles {
       position: fixed !important;
       width: 100% !important;
-      height: 100vh !important;
+      height: 100% !important; /* Full page coverage */
       top: 0; 
       left: 0;
       z-index: 0;
@@ -47,12 +47,11 @@
     </ul>
     
     <!-- Profile Circle -->
-  <div class="relative w-14 h-14">
-    <div class="absolute inset-0 bg-white rounded-full border-4 border-white shadow-md flex items-center justify-center overflow-hidden">
-      <img src="" alt="Profile" class="w-full h-full object-cover rounded-full" />
+    <div class="relative w-14 h-14">
+      <div class="absolute inset-0 bg-white rounded-full border-4 border-white shadow-md flex items-center justify-center overflow-hidden">
+        <img src="" alt="Profile" class="w-full h-full object-cover rounded-full" />
+      </div>
     </div>
-  </div>
-
   </nav>
 
   <!-- Hero Section -->
@@ -154,6 +153,68 @@
       </div>
     </div>
   </section>
+
+  <!-- About Section -->
+<section id="about" class="h-screen flex flex-col items-center justify-center px-6">
+  <div class="max-w-5xl w-full grid md:grid-cols-2 gap-8">
+    
+    <!-- Card 1 -->
+    <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8">
+      <h2 class="text-2xl font-extrabold text-gray-900 font-serif mb-4">
+        Who We Are
+      </h2>
+      <p class="text-lg text-gray-600 leading-relaxed mb-4">
+        ClubNexus is your one-stop platform for exploring, joining, and participating 
+        in the vibrant world of college clubs and events. We simplify event discovery 
+        and make it easier to connect with opportunities on campus.
+      </p>
+      <p class="text-md text-gray-500 leading-relaxed">
+        Our platform is built with students in mind, ensuring that every feature 
+        is simple, accessible, and designed to create lasting impact.
+      </p>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8">
+      <h2 class="text-2xl font-extrabold text-gray-900 font-serif mb-4">
+        Our Mission
+      </h2>
+      <p class="text-lg text-gray-600 leading-relaxed mb-4">
+        Our mission is to bring students together through technology, culture, 
+        and leadership opportunities — helping them build networks and create 
+        unforgettable memories.
+      </p>
+      <p class="text-md text-gray-500 leading-relaxed">
+        We believe in fostering innovation and inclusivity, encouraging every student 
+        to find their voice and shine in their chosen community.
+      </p>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8">
+      <h2 class="text-2xl font-extrabold text-gray-900 font-serif mb-4">
+        What We Offer
+      </h2>
+      <p class="text-lg text-gray-600 leading-relaxed">
+        From coding challenges to cultural fests, ClubNexus helps you discover 
+        and register for events easily, making sure you never miss an opportunity.
+      </p>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8">
+      <h2 class="text-2xl font-extrabold text-gray-900 font-serif mb-4">
+        Why Join Us?
+      </h2>
+      <p class="text-lg text-gray-600 leading-relaxed">
+        Joining ClubNexus gives you access to a vibrant community where you can 
+        showcase your talents, learn new skills, and grow with like-minded peers.
+      </p>
+    </div>
+
+  </div>
+</section>
+
 
   <!-- Particle Config + Slider JS -->
   <script>
