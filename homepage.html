@@ -41,8 +41,8 @@
     <div class="text-3xl font-serif font-extrabold text-white">ClubNexus</div>
     <ul class="flex space-x-14 absolute left-1/2 transform -translate-x-1/2">
       <li><a href="#home" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">Home</a></li>
-      <li><a href="#about" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">About</a></li>
       <li><a href="#clubs" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">Clubs</a></li>
+      <li><a href="#about" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">About</a></li>
       <li><a href="#dashboard" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">Dashboard</a></li>
     </ul>
     
@@ -153,8 +153,9 @@
       </div>
     </div>
   </section>
+
 <!-- About Section -->
-<section id="about" class="py-20 relative bg-white/70">
+<section id="about" class="h-screen flex items-center justify-center relative bg-transparent">
   <div class="max-w-6xl mx-auto px-6 text-center">
     <h2 class="text-4xl font-extrabold text-gray-900 font-serif">About ClubNexus</h2>
     <p class="mt-6 text-lg text-gray-700 max-w-3xl mx-auto">
@@ -190,49 +191,151 @@
   </div>
 </section>
 
-  <!-- Particle Config + Slider JS -->
+<!-- FAQ Section -->
+<section id="faq" class="py-20 bg-gradient-to-r from-red-50 via-pink-50 to-red-100 relative z-10">
+  <div class="max-w-6xl mx-auto px-6">
+    <h2 class="text-4xl font-extrabold text-center text-gray-900 font-serif">Frequently Asked Questions</h2>
+    <p class="mt-3 text-lg text-gray-600 text-center">
+      Have questions? We've got you covered.
+    </p>
+
+    <div class="mt-12 space-y-6">
+      <!-- Q1 -->
+      <div class="border border-gray-200 rounded-xl shadow bg-white/80 backdrop-blur-md">
+        <button class="w-full flex justify-between items-center px-6 py-4 text-left text-lg font-medium text-gray-800 faq-toggle">
+          What is ClubNexus?
+          <span class="text-red-500">+</span>
+        </button>
+        <div class="px-6 pb-4 hidden text-gray-600">
+          ClubNexus is a digital platform where students can explore, join, and stay updated with all college clubs and events in one place.
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="border border-gray-200 rounded-xl shadow bg-white/80 backdrop-blur-md">
+        <button class="w-full flex justify-between items-center px-6 py-4 text-left text-lg font-medium text-gray-800 faq-toggle">
+          How can I register for a club?
+          <span class="text-red-500">+</span>
+        </button>
+        <div class="px-6 pb-4 hidden text-gray-600">
+          Navigate to the "Clubs" section, choose your preferred club, and follow the registration link or form provided.
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="border border-gray-200 rounded-xl shadow bg-white/80 backdrop-blur-md">
+        <button class="w-full flex justify-between items-center px-6 py-4 text-left text-lg font-medium text-gray-800 faq-toggle">
+          Is ClubNexus free to use?
+          <span class="text-red-500">+</span>
+        </button>
+        <div class="px-6 pb-4 hidden text-gray-600">
+          Yes! ClubNexus is completely free for students to explore, register, and participate in clubs and events.
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="border border-gray-200 rounded-xl shadow bg-white/80 backdrop-blur-md">
+        <button class="w-full flex justify-between items-center px-6 py-4 text-left text-lg font-medium text-gray-800 faq-toggle">
+          Can I join multiple clubs?
+          <span class="text-red-500">+</span>
+        </button>
+        <div class="px-6 pb-4 hidden text-gray-600">
+          Absolutely! Students are encouraged to explore and join multiple clubs based on their interests and availability.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+    <!-- Footer -->
+  <footer class="relative bg-gradient-to-r from-red-400 via-red-500 to-red-600 text-white font-serif mt-20">
+    <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
+      
+      <!-- Brand / Tagline -->
+      <div>
+        <h3 class="text-3xl font-extrabold">ClubNexus</h3>
+        <p class="mt-3 text-gray-200 text-sm">
+          Discover • Register • Connect  
+          <br/>All your college clubs & events in one place.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h4 class="text-xl font-bold mb-4">Quick Links</h4>
+        <ul class="space-y-2">
+          <li><a href="#home" class="hover:text-yellow-300 transition">Home</a></li>
+          <li><a href="#clubs" class="hover:text-yellow-300 transition">Clubs</a></li>
+          <li><a href="#about" class="hover:text-yellow-300 transition">About</a></li>
+          <li><a href="#dashboard" class="hover:text-yellow-300 transition">Dashboard</a></li>
+        </ul>
+      </div>
+
+      <!-- Social Media -->
+      <div>
+        <h4 class="text-xl font-bold mb-4">Follow Us</h4>
+        <div class="flex space-x-6">
+          <!-- Instagram -->
+          <a href="#" class="hover:scale-110 transition">
+            <svg class="w-7 h-7 fill-current text-pink-300 hover:text-pink-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224,202.7A53.3,53.3,0,1,0,277.3,256,53.38,53.38,0,0,0,224,202.7Zm124.7-41a54,54,0,0,0-30.4-30.4C296.5,125.2,224,125.2,224,125.2s-72.5,0-94.3,6.1a54,54,0,0,0-30.4,30.4c-6.1,21.8-6.1,94.3-6.1,94.3s0,72.5,6.1,94.3a54,54,0,0,0,30.4,30.4c21.8,6.1,94.3,6.1,94.3,6.1s72.5,0,94.3-6.1a54,54,0,0,0,30.4-30.4c6.1-21.8,6.1-94.3,6.1-94.3S354.8,183.5,348.7,161.7ZM224,338a82,82,0,1,1,82-82A82.09,82.09,0,0,1,224,338Z"/></svg>
+          </a>
+          <!-- Twitter -->
+          <a href="#" class="hover:scale-110 transition">
+            <svg class="w-7 h-7 fill-current text-blue-300 hover:text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.4 151.7c.3 4.5 .3 9.1 .3 13.6 0 138.7-105.6 298.7-298.7 298.7A296.2 296.2 0 0 1 0 430.1a215.8 215.8 0 0 0 25.3 1.4 209.9 209.9 0 0 0 130-44.9c-45.8-1-84.3-31.2-97.7-72.8a105 105 0 0 0 19.6 1.9c13.9 0 27.4-1.8 40.1-5.3-47.5-9.6-83.4-51.4-83.4-101.6v-1.4c14.1 7.8 30.3 12.7 47.5 13.3-28.3-18.9-47-51-47-87.4 0-19.3 5.2-37.4 14.4-52.9 52.5 64.3 131 106.7 219.6 111.2-1.8-7.7-2.8-15.9-2.8-24.3 0-58.7 47.5-106.5 106.5-106.5 30.6 0 58.4 12.9 77.8 33.7a211 211 0 0 0 67.3-25.9 106.2 106.2 0 0 1-46.9 58.9 212.6 212.6 0 0 0 61.2-16.5c-14.1 20.3-31.8 38.4-52.4 52.7z"/></svg>
+          </a>
+          <!-- LinkedIn -->
+          <a href="#" class="hover:scale-110 transition">
+            <svg class="w-7 h-7 fill-current text-blue-500 hover:text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M100.3 448H7.4V148.9h92.9zM53.7 108.1C24 108.1 0 83.5 0 53.7 0 24 24 0 53.7 0s53.7 24 53.7 53.7c0 29.8-24 54.4-53.7 54.4zm394.3 339.9h-92.4V312.1c0-32.4-11.6-54.4-40.6-54.4-22.1 0-35.2 14.8-41 29.1-2.1 5.2-2.6 12.3-2.6 19.4v141.8h-92.4s1.2-230 0-253.1h92.4v35.9c12.3-18.9 34.3-45.8 83.4-45.8 60.9 0 106.2 39.8 106.2 125.4V448z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="mt-10 text-center text-sm text-gray-200">
+      © 2025 ClubNexus. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- Slider Script -->
+  <script>
+    const slider = document.getElementById("slider");
+    let scrollAmount = 0;
+    function autoScroll() {
+      scrollAmount += slider.clientWidth;
+      if (scrollAmount >= slider.scrollWidth) {
+        scrollAmount = 0;
+      }
+      slider.scrollTo({ left: scrollAmount, behavior: "smooth" });
+    }
+    setInterval(autoScroll, 3000);
+  </script>
+
+  <!-- Particles Script -->
   <script>
     tsParticles.load("tsparticles", {
-      fullScreen: { enable: false },
       background: { color: "transparent" },
       particles: {
         number: { value: 70 },
-        color: { value: ["#dc2626", "#f97316"] },
+        color: { value: ["#ff4d4d", "#ff944d", "#ff1a75"] },
         shape: { type: "circle" },
         opacity: { value: 0.6 },
-        size: { value: { min: 2, max: 6 } },
-        move: { enable: true, speed: 1.2, direction: "none", outModes: { default: "bounce" } }
-      },
-      interactivity: {
-        events: {
-          onHover: { enable: true, mode: "repulse" },
-          onClick: { enable: true, mode: "push" }
-        },
-        modes: { repulse: { distance: 100 }, push: { quantity: 4 } }
+        size: { value: { min: 2, max: 5 } },
+        move: { enable: true, speed: 1.5 }
       }
     });
-
-    /// Slider JS (Infinite Forward Loop)
-    const slider = document.getElementById("slider");
-    let index = 0;
-    const totalSlides = slider.children.length;
-
-    const firstClone = slider.children[0].cloneNode(true);
-    slider.appendChild(firstClone);
-
-    setInterval(() => {
-      index++;
-      slider.style.transition = "transform 0.7s ease-in-out";
-      slider.style.transform = `translateX(-${index * 100}%)`;
-
-      if (index === totalSlides) {
-        setTimeout(() => {
-          slider.style.transition = "none";
-          slider.style.transform = "translateX(0)";
-          index = 0;
-        }, 700);
-      }
-    }, 2000);
   </script>
+
+<!-- FAQ Toggle Script -->
+<script>
+  document.querySelectorAll(".faq-toggle").forEach(button => {
+    button.addEventListener("click", () => {
+      const answer = button.nextElementSibling;
+      answer.classList.toggle("hidden");
+
+      const sign = button.querySelector("span");
+      sign.textContent = sign.textContent === "+" ? "−" : "+";
+    });
+  });
+</script>
 </body>
 </html>
