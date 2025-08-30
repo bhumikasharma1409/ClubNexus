@@ -325,17 +325,5 @@
     });
   </script>
 
-<!-- FAQ Toggle Script -->
-<script>
-  document.querySelectorAll(".faq-toggle").forEach(button => {
-    button.addEventListener("click", () => {
-      const answer = button.nextElementSibling;
-      answer.classList.toggle("hidden");
-
-      const sign = button.querySelector("span");
-      sign.textContent = sign.textContent === "+" ? "−" : "+";
-    });
-  });
-</script>
 </body>
 </html>
