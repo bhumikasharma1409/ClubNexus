@@ -6,23 +6,16 @@
   <title>College Clubs</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
- 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    body {
-      overflow-y: scroll; 
-    }
-    .club-card {
-      min-height: 340px; 
-    }
-  </style>
 </head>
-<body class="bg-white min-h-screen relative">
+<body class="bg-white min-h-screen relative overflow-y-scroll">
 
   <div id="tsparticles" class="fixed inset-0 z-0"></div>
 
   <nav class="bg-gradient-to-r from-red-400 via-red-500 to-red-600 shadow-lg px-8 py-8 flex items-center justify-between relative z-10">
-    <div class="text-3xl font-extrabold text-white">ClubNexus</div>
+    <div>
+      <img src="logo.png" alt="ClubNexus Logo" class="h-16 w-auto">
+    </div>
     <ul class="flex space-x-14 absolute left-1/2 transform -translate-x-1/2">
       <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">Home</a></li>
       <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium">About</a></li>
@@ -34,39 +27,40 @@
         class="w-14 h-14 rounded-full border-4 border-white cursor-pointer shadow-md">
     </div>
   </nav><br>
-   <div class="relative z-10 p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
 
-   
-    <div class="club-card bg-black text-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform cursor-pointer">
+  <div class="relative z-10 p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+
+    <div class="bg-black text-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform cursor-pointer min-h-[340px]">
       <div class="p-2">
-        <img src="cn.jpg" class="w-full h-40 object-cover rounded-lg" alt="Coding Ninjas">
+        <img src="cn.jpg" class="w-full h-40 object-contain rounded-lg bg-white p-2" alt="Coding Ninjas">
       </div>
       <div class="p-4">
         <h2 class="text-lg font-bold">Coding Ninjas</h2>
         <p class="text-sm text-gray-300 mt-2">Sharpen coding skills with contests, projects, and mentorship.</p>
         <div class="flex justify-center space-x-4 mt-4 text-xl">
-          <a href="https://www.instagram.com/codingninjas_cuiet?igsh=MWVrbGxrOWxwc2Frag=="><i class="fab fa-instagram text-pink-500 "></i></a>
-          <a href="#"><i class="fab fa-linkedin text-sky-400"></i></a>
+          <a href="https://www.instagram.com/codingninjas_cuiet?igsh=MWVrbGxrOWxwc2Frag=="><i class="fab fa-instagram text-pink-500"></i></a>
+          <a href="https://www.linkedin.com/company/codingninjas-cuiet/"><i class="fab fa-linkedin text-sky-400"></i></a>
         </div>
       </div>
     </div>
-        <div class="club-card bg-black text-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform cursor-pointer">
+
+    <div class="bg-black text-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform cursor-pointer min-h-[340px]">
       <div class="p-2">
-        <img src="ieee.webp" class="w-full h-40 object-cover rounded-lg" alt="IEEE">
+        <img src="ieee.webp" class="w-full h-40 object-contain rounded-lg bg-white p-2" alt="IEEE">
       </div>
       <div class="p-4">
         <h2 class="text-lg font-bold">IEEE</h2>
         <p class="text-sm text-gray-300 mt-2">Innovate with technology, research, and professional networking.</p>
         <div class="flex justify-center space-x-4 mt-4 text-xl">
           <a href="https://www.instagram.com/ieeeciet?igsh=MWxqMmJtcDU4em9zcw=="><i class="fab fa-instagram text-pink-500"></i></a>
-          <a href="#"><i class="fab fa-linkedin text-sky-400"></i></a>
+          <a href="https://www.linkedin.com/company/ieee-ciet-student-branch/"><i class="fab fa-linkedin text-sky-400"></i></a>
         </div>
       </div>
     </div>
 
-    <div class="club-card bg-black text-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform cursor-pointer">
+    <div class="bg-black text-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform cursor-pointer min-h-[340px]">
       <div class="p-2">
-        <img src="gfg.jpeg" class="w-full h-40 object-cover rounded-lg" alt="GFG Student Chapter">
+        <img src="gfg.jpeg" class="w-full h-40 object-contain rounded-lg bg-white p-2" alt="GFG Student Chapter">
       </div>
       <div class="p-4">
         <h2 class="text-lg font-bold">GFG Student Chapter</h2>
@@ -78,52 +72,51 @@
       </div>
     </div>
 
-    <div class="club-card bg-black text-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform cursor-pointer">
+    <div class="bg-black text-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform cursor-pointer min-h-[340px]">
       <div class="p-2">
-        <img src="acm.webp" class="w-full h-40 object-cover rounded-lg" alt="ACM">
+        <img src="acm.jpg" class="w-full h-40 object-contain rounded-lg bg-white p-2" alt="ACM">
       </div>
       <div class="p-4">
         <h2 class="text-lg font-bold">ACM</h2>
         <p class="text-sm text-gray-300 mt-2">Advance computing with workshops, papers, and events.</p>
         <div class="flex justify-center space-x-4 mt-4 text-xl">
           <a href="https://www.instagram.com/acm_cuiet?igsh=MW50Zzc1ZWd0bHJxYQ=="><i class="fab fa-instagram text-pink-500"></i></a>
-          <a href="#"><i class="fab fa-linkedin text-sky-400"></i></a>
+          <a href="https://www.linkedin.com/company/chitkara-acm-student-chapter/"><i class="fab fa-linkedin text-sky-400"></i></a>
         </div>
       </div>
     </div>
-     <div class="group bg-black text-white rounded-xl shadow-lg overflow-hidden cursor-pointer min-h-[340px] transform transition duration-300 hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-br hover:from-gray-900 hover:to-black">
+
+    <div class="bg-black text-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform cursor-pointer min-h-[340px]">
       <div class="p-2">
-        <img src="open.jpeg" class="w-full h-40 object-cover rounded-lg" alt="Open Source">
+        <img src="open.jpg" class="w-full h-40 object-contain rounded-lg bg-white p-2" alt="Open Source">
       </div>
       <div class="p-4">
         <h2 class="text-lg font-bold">Open Source</h2>
         <p class="text-sm text-gray-300 mt-2">Contribute to real-world projects and collaborate globally.</p>
         <div class="flex justify-center space-x-4 mt-4 text-xl">
           <a href="https://www.instagram.com/opensourcechandigarh?igsh=NHZldWJkbmVleTBs"><i class="fab fa-instagram text-pink-500"></i></a>
-          <a href="#"><i class="fab fa-linkedin text-sky-400"></i></a>
+          <a href="https://www.linkedin.com/company/open-source-chandigarh/"><i class="fab fa-linkedin text-sky-400"></i></a>
         </div>
       </div>
     </div>
 
-
-    <div class="group bg-black text-white rounded-xl shadow-lg overflow-hidden cursor-pointer min-h-[340px] transform transition duration-300 hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-br hover:from-gray-900 hover:to-black">
+    <div class="bg-black text-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform cursor-pointer min-h-[340px]">
       <div class="p-2">
-        <img src="bits.webp" class="w-full h-40 object-cover rounded-lg" alt="Bit N Bytes">
+        <img src="bits.webp" class="w-full h-40 object-contain rounded-lg bg-white p-2" alt="Bit N Bytes">
       </div>
       <div class="p-4">
         <h2 class="text-lg font-bold">Bit N Bytes</h2>
         <p class="text-sm text-gray-300 mt-2">Explore coding, gaming, and fun digital competitions.</p>
         <div class="flex justify-center space-x-4 mt-4 text-xl">
           <a href="https://www.instagram.com/bits_nbytes?igsh=aWtwNWZscW5kZmsy"><i class="fab fa-instagram text-pink-500"></i></a>
-          <a href="#"><i class="fab fa-linkedin text-sky-400"></i></a>
+          <a href="https://www.linkedin.com/company/bits-n-bytes-chitkara/"><i class="fab fa-linkedin text-sky-400"></i></a>
         </div>
       </div>
     </div>
 
-
-    <div class="group bg-black text-white rounded-xl shadow-lg overflow-hidden cursor-pointer min-h-[340px] transform transition duration-300 hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-br hover:from-gray-900 hover:to-black">
+    <div class="bg-black text-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform cursor-pointer min-h-[340px]">
       <div class="p-2">
-        <img src="google.jpg" class="w-full h-40 object-cover rounded-lg" alt="GDSC">
+        <img src="google.jpg" class="w-full h-40 object-contain rounded-lg bg-white p-2" alt="GDSC">
       </div>
       <div class="p-4">
         <h2 class="text-lg font-bold">GDSC</h2>
@@ -135,21 +128,22 @@
       </div>
     </div>
 
-
-    <div class="group bg-black text-white rounded-xl shadow-lg overflow-hidden cursor-pointer min-h-[340px] transform transition duration-300 hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-br hover:from-gray-900 hover:to-black">
+    <div class="bg-black text-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform cursor-pointer min-h-[340px]">
       <div class="p-2">
-        <img src="codingblocks.jpeg" class="w-full h-40 object-cover rounded-lg" alt="Coding Blocks">
+        <img src="codingblocks.jpeg" class="w-full h-40 object-contain rounded-lg bg-white p-2" alt="Coding Blocks">
       </div>
       <div class="p-4">
         <h2 class="text-lg font-bold">Coding Blocks</h2>
         <p class="text-sm text-gray-300 mt-2">Master programming with bootcamps, courses, and events.</p>
         <div class="flex justify-center space-x-4 mt-4 text-xl">
           <a href="https://www.instagram.com/codingblocks_cuiet?igsh=MXZtNDR6YmV5dnJrdg=="><i class="fab fa-instagram text-pink-500"></i></a>
-          <a href="#"><i class="fab fa-linkedin text-sky-400"></i></a>
+          <a href="https://www.linkedin.com/company/coding-blocks-cuiet-chapter/"><i class="fab fa-linkedin text-sky-400"></i></a>
         </div>
       </div>
     </div>
+
   </div>
+
   <script>
     tsParticles.load("tsparticles", {
       fullScreen: { enable: false },
@@ -179,5 +173,5 @@
       }
     });
   </script>
-  </body>
+</body>
 </html>
