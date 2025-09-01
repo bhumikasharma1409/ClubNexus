@@ -9,34 +9,44 @@
 <body class="min-h-screen bg-cover bg-center flex items-center justify-center relative" 
       style="background-image: url('chitkara.jpg'); background-position: center -80px;">
 
+  <!-- Dark overlay -->
   <div class="absolute inset-0 bg-black/40"></div>
 
+  <!-- Back Button -->
   <a href="index.html" 
      class="absolute top-4 right-4 bg-gradient-to-r from-orange-500 to-red-600 text-white px-4 py-2 rounded-lg shadow-md hover:opacity-90 transition transform hover:scale-105">
     Back to Home
   </a>
 
+  <!-- Register Card -->
   <div class="relative bg-white/95 p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-200 backdrop-blur">
     <h1 class="text-3xl font-extrabold text-center bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent mb-2">
       Create Account
     </h1>
     <p class="text-center text-gray-600 text-sm mb-6">Join us to manage clubs and events</p>
 
-    <form id="registerForm" class="space-y-5">
+    <!-- Register Form -->
+    <form id="registerForm" class="space-y-5" onsubmit="return validateForm()">
       <div class="grid grid-cols-2 gap-4">
-        <input type="text" id="firstName" placeholder="First Name" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
-        <input type="text" id="lastName" placeholder="Last Name" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
+        <input type="text" id="firstName" placeholder="First Name" 
+               class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
+        <input type="text" id="lastName" placeholder="Last Name" 
+               class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
       </div>
 
-      <input type="email" id="email" placeholder="Email" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
+      <input type="email" id="email" placeholder="Email" 
+             class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
 
       <div class="grid grid-cols-2 gap-4">
-        <input type="password" id="password" placeholder="Password" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
-        <input type="password" id="confirmPassword" placeholder="Confirm Password" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
+        <input type="password" id="password" placeholder="Password" 
+               class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" 
+               class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
-        <select id="branch" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
+        <select id="branch" 
+                class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
           <option value="">Select Branch</option>
           <option>CSE</option>
           <option>ECE</option>
@@ -44,7 +54,8 @@
           <option>CE</option>
           <option>Other</option>
         </select>
-        <select id="year" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
+        <select id="year" 
+                class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
           <option value="">Select Year</option>
           <option>1st</option>
           <option>2nd</option>
@@ -54,11 +65,13 @@
       </div>
 
       <div class="flex items-center gap-2 text-sm">
-        <input type="checkbox" id="terms" class="h-4 w-4 text-orange-600 border-gray-300 rounded focus:ring-red-500" required>
+        <input type="checkbox" id="terms" 
+               class="h-4 w-4 text-orange-600 border-gray-300 rounded focus:ring-red-500" required>
         <label class="text-gray-700">I agree to the <a href="#" class="text-orange-600 hover:underline">Terms & Conditions</a></label>
       </div>
 
-      <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-2 rounded-lg hover:opacity-90 transition transform hover:scale-[1.02] shadow-md">
+      <button type="submit" 
+              class="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-2 rounded-lg hover:opacity-90 transition transform hover:scale-[1.02] shadow-md">
         Create Account
       </button>
 
@@ -71,50 +84,16 @@
   </div>
 
   <script>
-    document.getElementById("registerForm").addEventListener("submit", function(e) {
-      e.preventDefault(); 
-      const firstName = document.getElementById("firstName").value.trim();
-      const lastName = document.getElementById("lastName").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
-      const branch = document.getElementById("branch").value;
-      const year = document.getElementById("year").value;
-      const terms = document.getElementById("terms").checked;
-      const errorMsg = document.getElementById("errorMsg");
+  function validateForm() {
+    let password = document.getElementById("password").value;
+    let confirmPassword = document.getElementById("confirmPassword").value;
 
-   
-      if (!firstName || !lastName || !email || !password || !confirmPassword || !branch || !year) {
-        errorMsg.textContent = "⚠️ Please fill all fields.";
-        errorMsg.classList.remove("hidden");
-        return;
-      }
+    if (password !== confirmPassword) {
+      alert("❌ Passwords do not match!");
+      return false; 
+    }
 
-   
-      if (password.length < 6) {
-        errorMsg.textContent = "⚠️ Password must be at least 6 characters.";
-        errorMsg.classList.remove("hidden");
-        return;
-      }
-
-     
-      if (password !== confirmPassword) {
-        errorMsg.textContent = "⚠️ Passwords do not match.";
-        errorMsg.classList.remove("hidden");
-        return;
-      }
-
-
-      if (!terms) {
-        errorMsg.textContent = "⚠️ You must agree to Terms & Conditions.";
-        errorMsg.classList.remove("hidden");
-        return;
-      }
-
-      errorMsg.classList.add("hidden");
-      alert("✅ Registration Successful!");
-      this.reset(); 
-    });
-  </script>
-</body>
-</html>
+    alert("✅ Registration Successful!");
+    return true;  
+  }
+</script>
