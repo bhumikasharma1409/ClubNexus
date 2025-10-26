@@ -121,10 +121,32 @@
         select option {
             background: white;
         }
+
+        @keyframes scale {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .animate-scale {
+            animation: scale 0.3s ease-out;
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 md:p-6">
-    
+    <!-- Go to Homepage Button -->
+<div class="absolute top-4 right-6">
+  <a href="index.html" 
+     class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
+     Go to Homepage
+  </a>
+</div>
+
     <div class="relative w-full max-w-md">
         
         <!-- Logo Section -->
@@ -141,16 +163,53 @@
         </div>
 
         
-        <div id="successMessage" class="hidden mb-6 p-4 rounded-2xl bg-green-50 border-2 border-green-200">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        <!-- Success Modal -->
+        <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-3xl p-8 max-w-md w-full card-shadow relative animate-scale">
+                <button 
+                    id="closeSuccessBtn"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
+                    aria-label="Close"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
+                </button>
+                <div class="text-center">
+                    <div class="w-20 h-20 rounded-full bg-green-100 mx-auto flex items-center justify-center mb-4">
+                        <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Successfully Registered!</h2>
+                    <p class="text-gray-600 mb-6">Welcome to ClubNexus! Your account has been created successfully.</p>
+                    <button 
+                        id="goToHomeBtn"
+                        class="btn-primary w-full text-white font-bold py-4 px-6 rounded-xl text-sm tracking-wide"
+                    >
+                        Go to Home Page
+                    </button>
                 </div>
-                <div>
-                    <p class="text-green-800 font-semibold text-sm">Registration Successful!</p>
-                    <p class="text-green-600 text-xs mt-0.5">Welcome to ClubNexus</p>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div id="errorModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-3xl p-8 max-w-md w-full card-shadow relative animate-scale">
+                <div class="text-center">
+                    <div class="w-20 h-20 rounded-full bg-red-100 mx-auto flex items-center justify-center mb-4">
+                        <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Registration Failed</h2>
+                    <p id="errorMessage" class="text-gray-600 mb-6">An error occurred during registration. Please try again.</p>
+                    <button 
+                        id="closeErrorBtn"
+                        class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-4 px-6 rounded-xl text-sm tracking-wide transition"
+                    >
+                        Try Again
+                    </button>
                 </div>
             </div>
         </div>
@@ -350,8 +409,8 @@
             <div class="text-center mt-6 relative z-10">
                 <p class="text-gray-600 text-sm">
                     Already have an account? 
-                    <a href="#" class="text-red-600 font-semibold hover:text-red-700 transition ml-1">
-                        Sign in
+                    <a href="loginPage.html" class="text-red-600 font-semibold hover:text-red-700 transition ml-1">
+                        Login
                     </a>
                 </p>
             </div>
@@ -446,9 +505,7 @@
         function validatePassword() {
             const pwd = document.getElementById('password');
             const error = document.getElementById('passwordError');
-            // inside validatePassword()
             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&*#^()\-_=+<>.,;:])[A-Za-z\d@$!%?&*#^()\-_=+<>.,;:]{8,}$/;
-
             
             if (!passwordRegex.test(pwd.value)) {
                 error.classList.remove('hidden');
@@ -529,7 +586,7 @@
             };
 
             try {
-                // API call - using JSONPlaceholder as mock API
+                // API call to backend
                 // Replace this URL with your actual backend API endpoint
                 const response = await fetch('http://localhost:5000/register', {
                     method: 'POST',
@@ -537,14 +594,14 @@
                     body: JSON.stringify(formData)
                 });
 
+                const data = await response.json();
 
                 if (response.ok) {
-                    const data = await response.json();
                     console.log('Registration successful:', data);
                     console.log('Form data sent:', formData);
                     
-                    // Show success message
-                    document.getElementById('successMessage').classList.remove('hidden');
+                    // Show success modal
+                    document.getElementById('successModal').classList.remove('hidden');
                     
                     // Reset form
                     form.reset();
@@ -555,18 +612,28 @@
                         bar.className = 'h-1.5 flex-1 rounded-full bg-gray-200 transition-all';
                     });
                     document.getElementById('strengthText').textContent = '';
-                    
-                    // Hide success message after 5 seconds
-                    setTimeout(() => {
-                        document.getElementById('successMessage').classList.add('hidden');
-                    }, 5000);
                 } else {
-                    alert('Registration failed. Please try again.');
+                    // Show error modal
+                    document.getElementById('errorMessage').textContent = data.message || 'Registration failed. Please try again.';
+                    document.getElementById('errorModal').classList.remove('hidden');
                 }
             } catch (error) {
                 console.error('Error during registration:', error);
-                alert('An error occurred. Please check the console for details.');
+                // Show error modal
+                document.getElementById('errorMessage').textContent = 'Unable to connect to server. Please check your connection and try again.';
+                document.getElementById('errorModal').classList.remove('hidden');
             }
+        });
+
+        // Go to Home Page button handler
+        document.getElementById('goToHomeBtn').addEventListener('click', function() {
+            // Redirect to home page - replace with your actual home page URL
+            window.location.href = 'index.html'; // Change this to your home page
+        });
+
+        // Close error modal button handler
+        document.getElementById('closeErrorBtn').addEventListener('click', function() {
+            document.getElementById('errorModal').classList.add('hidden');
         });
 
         // Google Sign-In Handler
