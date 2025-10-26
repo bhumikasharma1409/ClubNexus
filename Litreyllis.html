@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NonTechnical Clubs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body class="bg-white min-h-screen relative overflow-y-scroll">
+
+  <!-- Particles Background -->
+  <div id="tsparticles" class="fixed inset-0 z-0"></div>
+
+  <!-- Navbar (unchanged) -->
+  <nav class="fixed top-0 left-0 w-full bg-gradient-to-r from-red-600 via-red-800 to-black shadow-lg px-8 py-6 flex items-center justify-between z-20">
+    <img src="logo.png" alt="" class="h-16 w-auto">
+
+    <!-- Centered Links -->
+    <ul class="flex space-x-14 absolute left-1/2 transform -translate-x-1/2">
+      <li><a href="index.html" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">Home</a></li>
+      <li><a href="tecnicalEvents.html" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">Technical Clubs</a></li>
+    </ul>
+
+    <!-- Right End Login/Profile -->
+    <div class="flex items-center space-x-4">
+      <div class="relative w-14 h-14">
+        <div class="absolute h-10 w-10 bg-white rounded-full border-4 border-white shadow-md flex items-center justify-center overflow-hidden">
+          <img src="pfp.jpg" alt="Profile" class="w-10 h-10 object-cover rounded-full" />
+        </div>
+      </div>
+      <a href="registerPage.html" 
+         class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-800 text-white text-sm font-semibold rounded-lg shadow hover:opacity-90 transition">
+        Sign Up
+      </a>
+    </div>
+  </nav>
+
+  <div class="h-28"></div> <!-- spacing below navbar -->
+
+  <!-- Main Body Content (from second code) -->
+  <main class="py-20 px-4 relative z-10">
+    <div class="max-w-6xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 md:p-12 flex flex-col md:flex-row items-center gap-12">
+      
+      <!-- Left Text Section -->
+      <div class="w-full md:w-1/2">
+        <h2 id="cn-typing" class="text-4xl font-bold mb-6 text-orange-600 h-24">&nbsp;</h2>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          The Dhwani Student Chapter is a vibrant community that unites singers and provides them with a platform to showcase their talent. This club is dedicated to fostering a love for music and encouraging stage performances, helping members build confidence and connect with fellow music enthusiasts.
+          <br><br>
+          Join us to celebrate the joy of music and create unforgettable performances on stage.
+        </p>
+      </div>
+
+      <!-- Right Slider Section -->
+      <div class="w-full md:w-1/2 h-80 rounded-xl overflow-hidden shadow-md">
+        <div id="slideshow-filmstrip" class="h-full flex transition-transform duration-700 ease-in-out"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer (unchanged) -->
+  <footer class="relative footer-wave-border bg-gradient-to-r from-red-600 via-red-800 to-black text-white pt-32 pb-10 z-50">
+    <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="flex flex-col items-center text-center md:items-start md:text-left">
+        <h3 class="text-2xl font-bold mb-2">ClubNexus</h3>
+        <p class="text-sm text-gray-300">Your central hub for innovation, learning, and community in the world of technology.</p>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold mb-3">Quick Links</h4>
+        <ul class="space-y-2 text-sm text-gray-300">
+          <li><a href="#home" class="hover:text-yellow-300 transition-colors">Home</a></li>
+          <li><a href="#clubs" class="hover:text-yellow-300 transition-colors">Clubs</a></li>
+          <li><a href="#about" class="hover:text-yellow-300 transition-colors">About</a></li>
+          <li><a href="#faq" class="hover:text-yellow-300 transition-colors">FAQs</a></li>
+          <li><a href="#" class="hover:text-yellow-300 transition-colors">Our Team</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Typing effect for the main heading
+    const cnTypingText = "Welcome to the Dhwani Student Chapter...";
+    const cnTypingElem = document.getElementById("cn-typing");
+    let cnTypingIdx = 0;
+    function typeWriter() {
+      if (cnTypingIdx < cnTypingText.length) {
+        cnTypingElem.innerHTML += cnTypingText.charAt(cnTypingIdx);
+        cnTypingIdx++;
+        setTimeout(typeWriter, 80);
+      }
+    }
+    window.addEventListener('load', () => {
+      if(cnTypingElem.textContent.trim() === '') typeWriter();
+    });
+
+    // Slideshow logic
+    const slides = [
+      { img: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80' },
+      { img: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=900&q=80' },
+      { img: 'https://images.unsplash.com/photo-1581276879432-15e50529f34b?auto=format&fit=crop&w=900&q=80' }
+    ];
+    let currentSlide = 0;
+    const filmstrip = document.getElementById('slideshow-filmstrip');
+
+    slides.forEach(slide => {
+        const imgElement = document.createElement('img');
+        imgElement.src = slide.img;
+        imgElement.className = 'w-full h-full object-cover flex-shrink-0';
+        filmstrip.appendChild(imgElement);
+    });
+
+    function showSlide(idx) {
+        const offset = -idx * 100;
+        filmstrip.style.transform = `translateX(${offset}%)`;
+        currentSlide = idx;
+    }
+
+    setInterval(() => {
+        const nextSlide = (currentSlide + 1) % slides.length;
+        showSlide(nextSlide);
+    }, 4000);
+
+    showSlide(0);
+
+    // tsParticles
+    tsParticles.load("tsparticles", {
+      fullScreen: { enable: false },
+      background: { color: "#ffffff" },
+      particles: {
+        number: { value: 70 },
+        color: { value: ["#dc2626", "#f97316"] },
+        shape: { type: "circle" },
+        opacity: { value: 0.6 },
+        size: { value: { min: 2, max: 6 } },
+        move: { enable: true, speed: 1.2, direction: "none", outModes: { default: "bounce" } }
+      },
+      interactivity: {
+        events: {
+          onHover: { enable: true, mode: "repulse" },
+          onClick: { enable: true, mode: "push" }
+        },
+        modes: {
+          repulse: { distance: 100 },
+          push: { quantity: 4 }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
