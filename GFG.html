@@ -162,7 +162,6 @@
   </footer>
 
   <script>
-    // Typing effect for the main heading
     const cnTypingText = "Welcome to the  GFG Student Chapter...";
     const cnTypingElem = document.getElementById("cn-typing");
     let cnTypingIdx = 0;
@@ -177,7 +176,6 @@
       if(cnTypingElem.textContent.trim() === '') typeWriter();
     });
 
-    // --- NEW SLIDESHOW LOGIC ---
     const slides = [
       { img: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80' },
       { img: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=900&q=80' },
@@ -186,7 +184,6 @@
     let currentSlide = 0;
     const filmstrip = document.getElementById('slideshow-filmstrip');
 
-    // Populate the slideshow
     slides.forEach(slide => {
         const imgElement = document.createElement('img');
         imgElement.src = slide.img;
@@ -206,9 +203,8 @@
     }, 4000);
 
     showSlide(0);
-    // --- END OF NEW SLIDESHOW LOGIC ---
 
-    // tsParticles configuration
+
     tsParticles.load("tsparticles", {
       background: { color: { value: "transparent" } },
       fpsLimit: 60,
