@@ -61,9 +61,7 @@
   <main class="py-20 px-4 z-10">
     <div class="max-w-6xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 md:p-12 flex flex-col md:flex-row items-center gap-12">
       <div class="w-full md:w-1/2">
-        <h2 id="cn-typing" class="text-4xl font-bold mb-6 text-orange-600 h-24">
-          &nbsp; 
-        </h2>
+        <h2 id="cn-typing" class="text-4xl font-bold mb-6 text-orange-600 h-24">Welcome to the GFG Student Chapter</h2>
         <p class="text-lg text-gray-700 leading-relaxed">
           The Geeks for Geeks Student Chapter at your university is a vibrant community for students passionate about programming, problem-solving, and technical growth. Aligned with the renowned GeeksforGeeks platform, this chapter aims to bridge academic learning with real-world coding practice, equipping members with both technical skills and professional readiness.
           <br><br>
@@ -156,19 +154,7 @@
   </footer>
 
   <script>
-    const cnTypingText = "Welcome to the  GFG Student Chapter...";
-    const cnTypingElem = document.getElementById("cn-typing");
-    let cnTypingIdx = 0;
-    function typeWriter() {
-      if (cnTypingIdx < cnTypingText.length) {
-        cnTypingElem.innerHTML += cnTypingText.charAt(cnTypingIdx);
-        cnTypingIdx++;
-        setTimeout(typeWriter, 80);
-      }
-    }
-    window.addEventListener('load', () => {
-      if(cnTypingElem.textContent.trim() === '') typeWriter();
-    });
+    // Static heading used instead of typing animation for accessibility and simplicity.
 
     const slides = [
       { img: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80' },
