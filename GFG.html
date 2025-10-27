@@ -19,13 +19,7 @@
     }
 
     #tsparticles {
-      position: fixed !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      top: 0;
-      left: 0;
-      z-index: -1;
-      background: transparent !important;
+      background: transparent;
     }
 
     main, nav, section, footer {
@@ -47,7 +41,7 @@
     </defs>
   </svg>
 
-  <div id="tsparticles"></div>
+  <div id="tsparticles" class="fixed inset-0 z-0"></div>
 
   <nav class="bg-gradient-to-r from-red-600 via-red-800 to-black shadow-lg px-8 py-8 flex items-center justify-between z-20">
     <div class="text-3xl font-extrabold text-white">ClubNexus</div>
@@ -67,9 +61,7 @@
   <main class="py-20 px-4 z-10">
     <div class="max-w-6xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 md:p-12 flex flex-col md:flex-row items-center gap-12">
       <div class="w-full md:w-1/2">
-        <h2 id="cn-typing" class="text-4xl font-bold mb-6 text-orange-600 h-24">
-          &nbsp; 
-        </h2>
+        <h2 id="cn-typing" class="text-4xl font-bold mb-6 text-orange-600 h-24">Welcome to the GFG Student Chapter</h2>
         <p class="text-lg text-gray-700 leading-relaxed">
           The Geeks for Geeks Student Chapter at your university is a vibrant community for students passionate about programming, problem-solving, and technical growth. Aligned with the renowned GeeksforGeeks platform, this chapter aims to bridge academic learning with real-world coding practice, equipping members with both technical skills and professional readiness.
           <br><br>
@@ -162,19 +154,7 @@
   </footer>
 
   <script>
-    const cnTypingText = "Welcome to the  GFG Student Chapter...";
-    const cnTypingElem = document.getElementById("cn-typing");
-    let cnTypingIdx = 0;
-    function typeWriter() {
-      if (cnTypingIdx < cnTypingText.length) {
-        cnTypingElem.innerHTML += cnTypingText.charAt(cnTypingIdx);
-        cnTypingIdx++;
-        setTimeout(typeWriter, 80);
-      }
-    }
-    window.addEventListener('load', () => {
-      if(cnTypingElem.textContent.trim() === '') typeWriter();
-    });
+    // Static heading used instead of typing animation for accessibility and simplicity.
 
     const slides = [
       { img: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80' },
@@ -206,6 +186,7 @@
 
 
     tsParticles.load("tsparticles", {
+      fullScreen: { enable: false },
       background: { color: { value: "transparent" } },
       fpsLimit: 60,
       interactivity: {
@@ -220,17 +201,17 @@
         }
       },
       particles: {
-        color: { value: "#ff5722" },
-        links: { enable: true, color: "#ffb385", distance: 150, opacity: 0.4, width: 1 },
+        color: { value: ["#dc2626", "#f97316"] },
+        links: { enable: true, color: "#ffb385", distance: 150, opacity: 0.45, width: 1 },
         collisions: { enable: true },
-        move: { direction: "none", enable: true, outModes: { default: "bounce" }, random: false, speed: 2, straight: false },
-        number: { density: { enable: true, area: 800 }, value: 60 },
-        opacity: { value: 0.5 },
+        move: { direction: "none", enable: true, outModes: { default: "bounce" }, random: false, speed: 1.6, straight: false },
+        number: { density: { enable: true, area: 800 }, value: 70 },
+        opacity: { value: 0.65 },
         shape: { type: "circle" },
         size: { value: { min: 2, max: 6 } }
       },
       detectRetina: true
-    });
+    }).then(() => console.log('tsParticles initialized on #tsparticles')).catch(err => console.error('tsParticles init error', err));
   </script>
 </body>
 </html>
