@@ -18,8 +18,6 @@
       background-color: #fdf8f6;
     }
 
-    /* Let the container be positioned via Tailwind classes in the markup.
-       The canvas will be attached into #tsparticles when fullScreen is false. */
     #tsparticles {
       background: transparent;
     }
@@ -201,7 +199,6 @@
     showSlide(0);
 
 
-    // tsParticles configuration — attach canvas into the #tsparticles element (fullScreen: false)
     tsParticles.load("tsparticles", {
       fullScreen: { enable: false },
       background: { color: { value: "transparent" } },
