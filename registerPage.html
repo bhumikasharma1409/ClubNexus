@@ -139,17 +139,15 @@
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 md:p-6">
-    <!-- Go to Homepage Button -->
-<div class="absolute top-4 right-6">
-  <a href="index.html" 
-     class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
-     Go to Homepage
-  </a>
-</div>
+    <div class="absolute top-4 right-6">
+        <a href="index.html" 
+            class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
+            Go to Homepage
+        </a>
+    </div>
 
     <div class="relative w-full max-w-md">
         
-        <!-- Logo Section -->
         <div class="text-center mb-10 floating">
             <div class="inline-block">
                 <h1 class="text-5xl md:text-6xl font-black gradient-text mb-2 tracking-tight">
@@ -163,7 +161,6 @@
         </div>
 
         
-        <!-- Success Modal -->
         <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div class="bg-white rounded-3xl p-8 max-w-md w-full card-shadow relative animate-scale">
                 <button 
@@ -193,7 +190,7 @@
             </div>
         </div>
 
-        <!-- Error Modal -->
+        
         <div id="errorModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div class="bg-white rounded-3xl p-8 max-w-md w-full card-shadow relative animate-scale">
                 <div class="text-center">
@@ -214,14 +211,13 @@
             </div>
         </div>
 
-        <!-- Registration Form -->
+        
         <div class="bg-white rounded-3xl p-8 md:p-10 card-shadow relative overflow-hidden">
             <div class="decorative-circle circle-1"></div>
             <div class="decorative-circle circle-2"></div>
             
             <form id="registrationForm" class="space-y-5 relative z-10">
                 
-                <!-- Full Name -->
                 <div class="space-y-2">
                     <label for="name" class="block text-gray-800 text-sm font-semibold">
                         Full Name
@@ -239,7 +235,7 @@
                     </p>
                 </div>
 
-                <!-- Email -->
+                
                 <div class="space-y-2">
                     <label for="email" class="block text-gray-800 text-sm font-semibold">
                         Email Address
@@ -257,7 +253,7 @@
                     </p>
                 </div>
 
-                <!-- Year and Batch -->
+                
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2">
                         <label for="year" class="block text-gray-800 text-sm font-semibold">
@@ -294,7 +290,7 @@
                     </div>
                 </div>
 
-                <!-- Course -->
+                
                 <div class="space-y-2">
                     <label for="course" class="block text-gray-800 text-sm font-semibold">
                         Course
@@ -320,7 +316,7 @@
                     <p id="courseError" class="hidden text-red-600 text-xs mt-1.5 ml-1">Please select your course</p>
                 </div>
 
-                <!-- Password -->
+                
                 <div class="space-y-2">
                     <label for="password" class="block text-gray-800 text-sm font-semibold">
                         Password
@@ -337,7 +333,7 @@
                         Min. 8 characters with uppercase, lowercase, number & special character
                     </p>
                     
-                    <!-- Strength Indicator -->
+                    
                     <div class="mt-3">
                         <div class="flex gap-1.5">
                             <div id="strength1" class="h-1.5 flex-1 rounded-full bg-gray-200 transition-all"></div>
@@ -349,7 +345,7 @@
                     </div>
                 </div>
 
-                <!-- Confirm Password -->
+                
                 <div class="space-y-2">
                     <label for="confirmPassword" class="block text-gray-800 text-sm font-semibold">
                         Confirm Password
@@ -367,7 +363,7 @@
                     </p>
                 </div>
 
-                <!-- Submit Button -->
+                
                 <button 
                     type="submit" 
                     class="btn-primary w-full text-white font-bold py-4 px-6 rounded-xl mt-8 text-sm tracking-wide relative"
@@ -376,7 +372,7 @@
                 </button>
             </form>
 
-            <!-- Divider -->
+            
             <div class="relative my-6 z-10">
                 <div class="absolute inset-0 flex items-center">
                     <div class="w-full border-t border-gray-200"></div>
@@ -386,7 +382,7 @@
                 </div>
             </div>
 
-            <!-- Social Login Buttons -->
+            
             <div class="grid grid-cols-2 gap-4 relative z-10">
                 <button type="button" id="googleBtn" class="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-200 rounded-xl hover:border-red-200 hover:bg-red-50 transition text-sm font-semibold text-gray-700">
                     <svg class="w-5 h-5" viewBox="0 0 24 24">
@@ -405,7 +401,7 @@
                 </button>
             </div>
 
-            <!-- Login Link -->
+            
             <div class="text-center mt-6 relative z-10">
                 <p class="text-gray-600 text-sm">
                     Already have an account? 
@@ -416,7 +412,7 @@
             </div>
         </div>
 
-        <!-- Footer -->
+        
         <p class="text-center text-gray-500 text-xs mt-8">
             By registering, you agree to our Terms & Privacy Policy
         </p>
@@ -427,7 +423,7 @@
         const password = document.getElementById('password');
         const confirmPassword = document.getElementById('confirmPassword');
 
-        // Password strength checker with visual feedback
+        
         password.addEventListener('input', function() {
             const val = this.value;
             let strength = 0;
@@ -474,7 +470,7 @@
             }
         });
 
-        // Validation functions
+        
         function validateName() {
             const name = document.getElementById('name');
             const error = document.getElementById('nameError');
@@ -543,7 +539,7 @@
             }
         }
 
-        // Real-time validation
+        
         document.getElementById('name').addEventListener('blur', validateName);
         document.getElementById('email').addEventListener('blur', validateEmail);
         document.getElementById('password').addEventListener('blur', validatePassword);
@@ -551,11 +547,11 @@
         document.getElementById('year').addEventListener('change', () => validateSelect('year', 'yearError'));
         document.getElementById('course').addEventListener('change', () => validateSelect('course', 'courseError'));
 
-        // Form submission with API
+        
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            // Validate all fields
+            
             const isNameValid = validateName();
             const isEmailValid = validateEmail();
             const isYearValid = validateSelect('year', 'yearError');
@@ -570,12 +566,12 @@
                 document.getElementById('batchError').classList.add('hidden');
             }
 
-            // Stop if validation fails
+            
             if (!isNameValid || !isEmailValid || !isYearValid || !isBatchValid || !isCourseValid || !isPasswordValid || !isConfirmPasswordValid) {
                 return;
             }
 
-            // Prepare form data
+            
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
@@ -586,8 +582,7 @@
             };
 
             try {
-                // API call to backend
-                // Replace this URL with your actual backend API endpoint
+                
                 const response = await fetch('http://localhost:5000/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -600,55 +595,45 @@
                     console.log('Registration successful:', data);
                     console.log('Form data sent:', formData);
                     
-                    // Show success modal
+                    
                     document.getElementById('successModal').classList.remove('hidden');
                     
-                    // Reset form
+                    
                     form.reset();
                     
-                    // Reset strength bars
+                    
                     const bars = document.querySelectorAll('[id^="strength"]');
                     bars.forEach(bar => {
                         bar.className = 'h-1.5 flex-1 rounded-full bg-gray-200 transition-all';
                     });
                     document.getElementById('strengthText').textContent = '';
                 } else {
-                    // Show error modal
+                    
                     document.getElementById('errorMessage').textContent = data.message || 'Registration failed. Please try again.';
                     document.getElementById('errorModal').classList.remove('hidden');
                 }
             } catch (error) {
                 console.error('Error during registration:', error);
-                // Show error modal
+                
                 document.getElementById('errorMessage').textContent = 'Unable to connect to server. Please check your connection and try again.';
                 document.getElementById('errorModal').classList.remove('hidden');
             }
         });
 
-        // Go to Home Page button handler
         document.getElementById('goToHomeBtn').addEventListener('click', function() {
-            // Redirect to home page - replace with your actual home page URL
-            window.location.href = 'index.html'; // Change this to your home page
+            window.location.href = 'index.html'; 
         });
 
-        // Close error modal button handler
+        
         document.getElementById('closeErrorBtn').addEventListener('click', function() {
             document.getElementById('errorModal').classList.add('hidden');
         });
 
-        // Google Sign-In Handler
         document.getElementById('googleBtn').addEventListener('click', async function() {
             console.log('Google Sign-In initiated');
             
-            // In a real application, you would:
-            // 1. Redirect to Google OAuth endpoint
-            // 2. Handle the callback
-            // 3. Exchange code for token
-            // 4. Create user account with Google data
-            
-            // Simulated Google OAuth flow
             try {
-                // This would be your actual Google OAuth endpoint
+                
                 const googleAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' + new URLSearchParams({
                     client_id: 'YOUR_GOOGLE_CLIENT_ID',
                     redirect_uri: window.location.origin + '/auth/google/callback',
@@ -661,8 +646,7 @@
                 console.log('Google OAuth URL:', googleAuthUrl);
                 alert('Google Sign-In: In production, this would redirect to Google OAuth.\n\nFor demo purposes, check the console for the OAuth URL.');
                 
-                // Uncomment the line below in production:
-                // window.location.href = googleAuthUrl;
+                
                 
             } catch (error) {
                 console.error('Google Sign-In error:', error);
@@ -670,31 +654,24 @@
             }
         });
 
-        // GitHub Sign-In Handler
+        
         document.getElementById('githubBtn').addEventListener('click', async function() {
             console.log('GitHub Sign-In initiated');
             
-            // In a real application, you would:
-            // 1. Redirect to GitHub OAuth endpoint
-            // 2. Handle the callback
-            // 3. Exchange code for token
-            // 4. Create user account with GitHub data
             
-            // Simulated GitHub OAuth flow
             try {
-                // This would be your actual GitHub OAuth endpoint
+                
                 const githubAuthUrl = 'https://github.com/login/oauth/authorize?' + new URLSearchParams({
                     client_id: 'YOUR_GITHUB_CLIENT_ID',
                     redirect_uri: window.location.origin + '/auth/github/callback',
                     scope: 'user:email',
-                    state: Math.random().toString(36).substring(7) // Random state for security
+                    state: Math.random().toString(36).substring(7) 
                 });
                 
                 console.log('GitHub OAuth URL:', githubAuthUrl);
                 alert('GitHub Sign-In: In production, this would redirect to GitHub OAuth.\n\nFor demo purposes, check the console for the OAuth URL.');
                 
-                // Uncomment the line below in production:
-                // window.location.href = githubAuthUrl;
+                
                 
             } catch (error) {
                 console.error('GitHub Sign-In error:', error);
