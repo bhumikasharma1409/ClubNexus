@@ -1,108 +1,724 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClubNexus - Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffffff 0%, #fef2f2 50%, #ffffff 100%);
+        }
+
+        .card-shadow {
+            box-shadow: 
+                0 20px 60px -10px rgba(220, 38, 38, 0.15),
+                0 10px 30px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-field {
+            background: #ffffff;
+            border: 2px solid #fee2e2;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-field:focus {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+        }
+
+        .input-field:hover {
+            border-color: #fca5a5;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            box-shadow: 
+                0 10px 25px -5px rgba(220, 38, 38, 0.4),
+                0 8px 10px -6px rgba(220, 38, 38, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 20px 35px -5px rgba(220, 38, 38, 0.5),
+                0 10px 15px -6px rgba(220, 38, 38, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #1f2937;
+            -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            right: -100px;
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            bottom: -100px;
+            left: -50px;
+        }
+
+        select option {
+            background: white;
+        }
+
+        @keyframes scale {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .animate-scale {
+            animation: scale 0.3s ease-out;
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-cover bg-center flex items-center justify-center relative" 
-      style="background-image: url('chitkara.jpg'); background-position: center -80px;">
+<body class="min-h-screen flex items-center justify-center p-4 md:p-6">
+    <div class="absolute top-4 right-6">
+        <a href="index.html" 
+            class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
+            Go to Homepage
+        </a>
+    </div>
 
-  <!-- Dark overlay -->
-  <div class="absolute inset-0 bg-black/40"></div>
+    <div class="relative w-full max-w-md">
+        
+        <div class="text-center mb-10 floating">
+            <div class="inline-block">
+                <h1 class="text-5xl md:text-6xl font-black gradient-text mb-2 tracking-tight">
+                    ClubNexus
+                </h1>
+                <div class="h-1 w-24 mx-auto bg-gradient-to-r from-transparent via-red-600 to-transparent rounded-full"></div>
+            </div>
+            <p class="text-gray-600 text-sm mt-4 font-medium tracking-wide">
+                Your gateway to campus events
+            </p>
+        </div>
 
-  <!-- Back Button -->
-  <a href="index.html" 
-     class="absolute top-4 right-4 bg-gradient-to-r from-orange-500 to-red-600 text-white px-4 py-2 rounded-lg shadow-md hover:opacity-90 transition transform hover:scale-105">
-    Back to Home
-  </a>
+        
+        <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-3xl p-8 max-w-md w-full card-shadow relative animate-scale">
+                <button 
+                    id="closeSuccessBtn"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
+                    aria-label="Close"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+                <div class="text-center">
+                    <div class="w-20 h-20 rounded-full bg-green-100 mx-auto flex items-center justify-center mb-4">
+                        <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Successfully Registered!</h2>
+                    <p class="text-gray-600 mb-6">Welcome to ClubNexus! Your account has been created successfully.</p>
+                    <button 
+                        id="goToHomeBtn"
+                        class="btn-primary w-full text-white font-bold py-4 px-6 rounded-xl text-sm tracking-wide"
+                    >
+                        Go to Home Page
+                    </button>
+                </div>
+            </div>
+        </div>
 
-  <!-- Register Card -->
-  <div class="relative bg-white/95 p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-200 backdrop-blur">
-    <h1 class="text-3xl font-extrabold text-center bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent mb-2">
-      Create Account
-    </h1>
-    <p class="text-center text-gray-600 text-sm mb-6">Join us to manage clubs and events</p>
+        
+        <div id="errorModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-3xl p-8 max-w-md w-full card-shadow relative animate-scale">
+                <div class="text-center">
+                    <div class="w-20 h-20 rounded-full bg-red-100 mx-auto flex items-center justify-center mb-4">
+                        <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Registration Failed</h2>
+                    <p id="errorMessage" class="text-gray-600 mb-6">An error occurred during registration. Please try again.</p>
+                    <button 
+                        id="closeErrorBtn"
+                        class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-4 px-6 rounded-xl text-sm tracking-wide transition"
+                    >
+                        Try Again
+                    </button>
+                </div>
+            </div>
+        </div>
 
+        
+        <div class="bg-white rounded-3xl p-8 md:p-10 card-shadow relative overflow-hidden">
+            <div class="decorative-circle circle-1"></div>
+            <div class="decorative-circle circle-2"></div>
+            
+            <form id="registrationForm" class="space-y-5 relative z-10">
+                
+                <div class="space-y-2">
+                    <label for="name" class="block text-gray-800 text-sm font-semibold">
+                        Full Name
+                    </label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        placeholder="Enter your full name"
+                        class="input-field w-full px-4 py-3.5 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none text-sm"
+                        required
+                    >
+                    <p id="nameError" class="hidden text-red-600 text-xs mt-1.5 ml-1">
+                        Please enter your  name (min. 2 characters)
+                    </p>
+                </div>
 
-    <!-- Register Form -->
+                
+                <div class="space-y-2">
+                    <label for="email" class="block text-gray-800 text-sm font-semibold">
+                        Email Address
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="your.email@college.edu"
+                        class="input-field w-full px-4 py-3.5 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none text-sm"
+                        required
+                    >
+                    <p id="emailError" class="hidden text-red-600 text-xs mt-1.5 ml-1">
+                        Please enter a valid email address
+                    </p>
+                </div>
 
-    <form id="registerForm" class="space-y-5" onsubmit="return validateForm()">
-      <div class="grid grid-cols-2 gap-4">
-        <input type="text" id="firstName" placeholder="First Name" 
-               class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
-        <input type="text" id="lastName" placeholder="Last Name" 
-               class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
-      </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label for="year" class="block text-gray-800 text-sm font-semibold">
+                            Year
+                        </label>
+                        <select 
+                            id="year" 
+                            name="year" 
+                            class="input-field w-full px-4 py-3.5 rounded-xl text-gray-800 focus:outline-none cursor-pointer text-sm appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%23dc2626%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27m6 8 4 4 4-4%27/%3e%3c/svg%3e')] bg-[length:1.5em] bg-[right_0.5rem_center] bg-no-repeat pr-10"
+                            required
+                        >
+                            <option value="">Select</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                        <p id="yearError" class="hidden text-red-600 text-xs mt-1.5 ml-1">Required</p>
+                    </div>
 
-      <input type="email" id="email" placeholder="Email" 
-             class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
+                    <div class="space-y-2">
+                        <label for="batch" class="block text-gray-800 text-sm font-semibold">
+                            Batch
+                        </label>
+                        <input 
+                            type="text" 
+                            id="batch" 
+                            name="batch" 
+                            placeholder="2021-2025"
+                            class="input-field w-full px-4 py-3.5 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none text-sm"
+                            required
+                        >
+                        <p id="batchError" class="hidden text-red-600 text-xs mt-1.5 ml-1">Required</p>
+                    </div>
+                </div>
 
-      <div class="grid grid-cols-2 gap-4">
-        <input type="password" id="password" placeholder="Password" 
-               class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
-        <input type="password" id="confirmPassword" placeholder="Confirm Password" 
-               class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
-      </div>
+                
+                <div class="space-y-2">
+                    <label for="course" class="block text-gray-800 text-sm font-semibold">
+                        Course
+                    </label>
+                    <select 
+                        id="course" 
+                        name="course" 
+                        class="input-field w-full px-4 py-3.5 rounded-xl text-gray-800 focus:outline-none cursor-pointer text-sm appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%23dc2626%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27m6 8 4 4 4-4%27/%3e%3c/svg%3e')] bg-[length:1.5em] bg-[right_0.5rem_center] bg-no-repeat pr-10"
+                        required
+                    >
+                        <option value="">Select your course</option>
+                        <option value="CSE">Computer Science Engineering</option>
+                        <option value="ECE">Electronics & Communication</option>
+                        <option value="ME">Mechanical Engineering</option>
+                        <option value="CE">Civil Engineering</option>
+                        <option value="EE">Electrical Engineering</option>
+                        <option value="IT">Information Technology</option>
+                        <option value="BBA">Business Administration</option>
+                        <option value="BCA">Computer Applications</option>
+                        <option value="MBA">MBA</option>
+                        <option value="MCA">MCA</option>
+                    </select>
+                    <p id="courseError" class="hidden text-red-600 text-xs mt-1.5 ml-1">Please select your course</p>
+                </div>
 
-      <div class="grid grid-cols-2 gap-4">
-        <select id="branch" 
-                class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
-          <option value="">Select Branch</option>
-          <option>CSE</option>
-          <option>ECE</option>
-          <option>ME</option>
-          <option>CE</option>
-          <option>Other</option>
-        </select>
-        <select id="year" 
-                class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" required>
-          <option value="">Select Year</option>
-          <option>1st</option>
-          <option>2nd</option>
-          <option>3rd</option>
-          <option>4th</option>
-        </select>
-      </div>
+                
+                <div class="space-y-2">
+                    <label for="password" class="block text-gray-800 text-sm font-semibold">
+                        Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Create a strong password"
+                        class="input-field w-full px-4 py-3.5 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none text-sm"
+                        required
+                    >
+                    <p id="passwordError" class="hidden text-red-600 text-xs mt-1.5 ml-1">
+                        Min. 8 characters with uppercase, lowercase, number & special character
+                    </p>
+                    
+                    
+                    <div class="mt-3">
+                        <div class="flex gap-1.5">
+                            <div id="strength1" class="h-1.5 flex-1 rounded-full bg-gray-200 transition-all"></div>
+                            <div id="strength2" class="h-1.5 flex-1 rounded-full bg-gray-200 transition-all"></div>
+                            <div id="strength3" class="h-1.5 flex-1 rounded-full bg-gray-200 transition-all"></div>
+                            <div id="strength4" class="h-1.5 flex-1 rounded-full bg-gray-200 transition-all"></div>
+                        </div>
+                        <p id="strengthText" class="text-xs mt-2 ml-1 font-medium"></p>
+                    </div>
+                </div>
 
-      <div class="flex items-center gap-2 text-sm">
-        <input type="checkbox" id="terms" 
-               class="h-4 w-4 text-orange-600 border-gray-300 rounded focus:ring-red-500" required>
-        <label class="text-gray-700">I agree to the <a href="#" class="text-orange-600 hover:underline">Terms & Conditions</a></label>
-      </div>
+                
+                <div class="space-y-2">
+                    <label for="confirmPassword" class="block text-gray-800 text-sm font-semibold">
+                        Confirm Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        name="confirmPassword" 
+                        placeholder="Re-enter your password"
+                        class="input-field w-full px-4 py-3.5 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none text-sm"
+                        required
+                    >
+                    <p id="confirmPasswordError" class="hidden text-red-600 text-xs mt-1.5 ml-1">
+                        Passwords do not match
+                    </p>
+                </div>
 
-      <button type="submit" 
-              class="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-2 rounded-lg hover:opacity-90 transition transform hover:scale-[1.02] shadow-md">
-        Create Account
-      </button>
+                
+                <button 
+                    type="submit" 
+                    id="submitBtn"
+                    class="btn-primary w-full text-white font-bold py-4 px-6 rounded-xl mt-8 text-sm tracking-wide relative flex items-center justify-center gap-3"
+                >
+                    <svg id="submitSpinner" class="w-5 h-5 animate-spin hidden" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="white" stroke-width="4" fill="none"></circle>
+                        <path class="opacity-75" fill="white" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    <span id="submitText">Create Account</span>
+                </button>
+            </form>
 
-      <p class="text-center text-sm text-gray-600">
+            
+            <div class="relative my-6 z-10">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-200"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-4 bg-white text-gray-500">or continue with</span>
+                </div>
+            </div>
 
-        Already have an account? <a href="loginpage.html" class="text-orange-600 hover:underline">Sign in</a>
-      </p>
+            
+            <div class="grid grid-cols-2 gap-4 relative z-10">
+                <button type="button" id="googleBtn" class="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-200 rounded-xl hover:border-red-200 hover:bg-red-50 transition text-sm font-semibold text-gray-700">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Google
+                </button>
+                <button type="button" id="githubBtn" class="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-200 rounded-xl hover:border-red-200 hover:bg-red-50 transition text-sm font-semibold text-gray-700">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    GitHub
+                </button>
+            </div>
 
-  Already have an account? <a href="loginpage.html" class="text-orange-600 hover:underline">Login</a>
-</p>
+            
+            <div class="text-center mt-6 relative z-10">
+                <p class="text-gray-600 text-sm">
+                    Already have an account? 
+                    <a href="loginPage.html" class="text-red-600 font-semibold hover:text-red-700 transition ml-1">
+                        Login
+                    </a>
+                </p>
+            </div>
+        </div>
 
+        
+        <p class="text-center text-gray-500 text-xs mt-8">
+            By registering, you agree to our Terms & Privacy Policy
+        </p>
+    </div>
 
+    <script>
+        const form = document.getElementById('registrationForm');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
 
-    </form>
+        
+        password.addEventListener('input', function() {
+            const val = this.value;
+            let strength = 0;
+            
+            if (val.length >= 8) strength++;
+            if (val.match(/[a-z]/)) strength++;
+            if (val.match(/[A-Z]/)) strength++;
+            if (val.match(/[0-9]/)) strength++;
+            if (val.match(/[^a-zA-Z0-9]/)) strength++;
 
-    <p id="errorMsg" class="text-center text-red-600 font-medium mt-3 hidden"></p>
-  </div>
+            const bars = [
+                document.getElementById('strength1'),
+                document.getElementById('strength2'),
+                document.getElementById('strength3'),
+                document.getElementById('strength4')
+            ];
+            const strengthText = document.getElementById('strengthText');
 
-  <script>
-  function validateForm() {
-    let password = document.getElementById("password").value;
-    let confirmPassword = document.getElementById("confirmPassword").value;
+            bars.forEach(bar => {
+                bar.className = 'h-1.5 flex-1 rounded-full bg-gray-200 transition-all';
+            });
 
-    if (password !== confirmPassword) {
-      alert("❌ Passwords do not match!");
-      return false; 
-    }
+            if (strength <= 2) {
+                bars[0].className = 'h-1.5 flex-1 rounded-full bg-red-500 transition-all';
+                strengthText.className = 'text-xs mt-2 ml-1 font-medium text-red-600';
+                strengthText.textContent = 'Weak password';
+            } else if (strength === 3) {
+                bars[0].className = 'h-1.5 flex-1 rounded-full bg-yellow-500 transition-all';
+                bars[1].className = 'h-1.5 flex-1 rounded-full bg-yellow-500 transition-all';
+                strengthText.className = 'text-xs mt-2 ml-1 font-medium text-yellow-600';
+                strengthText.textContent = 'Moderate password';
+            } else if (strength === 4) {
+                bars.slice(0, 3).forEach(bar => {
+                    bar.className = 'h-1.5 flex-1 rounded-full bg-blue-500 transition-all';
+                });
+                strengthText.className = 'text-xs mt-2 ml-1 font-medium text-blue-600';
+                strengthText.textContent = 'Good password';
+            } else {
+                bars.forEach(bar => {
+                    bar.className = 'h-1.5 flex-1 rounded-full bg-green-500 transition-all';
+                });
+                strengthText.className = 'text-xs mt-2 ml-1 font-medium text-green-600';
+                strengthText.textContent = 'Strong password';
+            }
+        });
 
-    alert("✅ Registration Successful!");
-    return true;  
-  }
-</script>
+        
+        function validateName() {
+            const name = document.getElementById('name');
+            const error = document.getElementById('nameError');
+            
+            if (name.value.trim().length < 2) {
+                error.classList.remove('hidden');
+                return false;
+            } else {
+                error.classList.add('hidden');
+                return true;
+            }
+        }
+
+        function validateEmail() {
+            const email = document.getElementById('email');
+            const error = document.getElementById('emailError');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!emailRegex.test(email.value)) {
+                error.classList.remove('hidden');
+                return false;
+            } else {
+                error.classList.add('hidden');
+                return true;
+            }
+        }
+
+        function validatePassword() {
+            const pwd = document.getElementById('password');
+            const error = document.getElementById('passwordError');
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&*#^()\-_=+<>.,;:])[A-Za-z\d@$!%?&*#^()\-_=+<>.,;:]{8,}$/;
+            
+            if (!passwordRegex.test(pwd.value)) {
+                error.classList.remove('hidden');
+                return false;
+            } else {
+                error.classList.add('hidden');
+                return true;
+            }
+        }
+
+        function validateConfirmPassword() {
+            const pwd = document.getElementById('password');
+            const cpwd = document.getElementById('confirmPassword');
+            const error = document.getElementById('confirmPasswordError');
+            
+            if (pwd.value !== cpwd.value) {
+                error.classList.remove('hidden');
+                return false;
+            } else {
+                error.classList.add('hidden');
+                return true;
+            }
+        }
+
+        function validateSelect(fieldId, errorId) {
+            const field = document.getElementById(fieldId);
+            const error = document.getElementById(errorId);
+            
+            if (!field.value) {
+                error.classList.remove('hidden');
+                return false;
+            } else {
+                error.classList.add('hidden');
+                return true;
+            }
+        }
+
+        
+        document.getElementById('name').addEventListener('blur', validateName);
+        document.getElementById('email').addEventListener('blur', validateEmail);
+        document.getElementById('password').addEventListener('blur', validatePassword);
+        document.getElementById('confirmPassword').addEventListener('blur', validateConfirmPassword);
+        document.getElementById('year').addEventListener('change', () => validateSelect('year', 'yearError'));
+        document.getElementById('course').addEventListener('change', () => validateSelect('course', 'courseError'));
+
+        
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // basic validations
+            const isNameValid = validateName();
+            const isEmailValid = validateEmail();
+            const isYearValid = validateSelect('year', 'yearError');
+            const isBatchValid = document.getElementById('batch').value.trim() !== '';
+            const isCourseValid = validateSelect('course', 'courseError');
+            const isPasswordValid = validatePassword();
+            const isConfirmPasswordValid = validateConfirmPassword();
+
+            if (!isBatchValid) {
+                document.getElementById('batchError').classList.remove('hidden');
+            } else {
+                document.getElementById('batchError').classList.add('hidden');
+            }
+
+            if (!isNameValid || !isEmailValid || !isYearValid || !isBatchValid || !isCourseValid || !isPasswordValid || !isConfirmPasswordValid) {
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const submitSpinner = document.getElementById('submitSpinner');
+            const submitText = document.getElementById('submitText');
+
+            const formData = {
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                year: document.getElementById('year').value,
+                batch: document.getElementById('batch').value.trim(),
+                course: document.getElementById('course').value,
+                password: document.getElementById('password').value
+            };
+
+            // UI: disable and show spinner
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+            submitSpinner.classList.remove('hidden');
+            submitText.textContent = 'Creating...';
+
+            try {
+                const response = await fetch('http://localhost:5000/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json().catch(() => ({}));
+
+                if (response.ok) {
+                    // save user (without password) locally for session-like behavior
+                    if (data.user) {
+                        try { localStorage.setItem('clubnexus_user', JSON.stringify(data.user)); } catch (e) { /* ignore storage errors */ }
+                    }
+
+                    document.getElementById('successModal').classList.remove('hidden');
+
+                    // reset form and UI
+                    form.reset();
+                    const bars = document.querySelectorAll('[id^="strength"]');
+                    bars.forEach(bar => {
+                        bar.className = 'h-1.5 flex-1 rounded-full bg-gray-200 transition-all';
+                    });
+                    document.getElementById('strengthText').textContent = '';
+
+                    // restore button state
+                    submitSpinner.classList.add('hidden');
+                    submitText.textContent = 'Create Account';
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+
+                    // auto-redirect after a short delay
+                    setTimeout(() => { window.location.href = 'index.html'; }, 1800);
+                } else {
+                    // handle known server errors inline
+                    const message = data.message || 'Registration failed. Please try again.';
+
+                    if (response.status === 409) {
+                        // email already exists -> show inline error and focus
+                        const emailErr = document.getElementById('emailError');
+                        emailErr.textContent = message;
+                        emailErr.classList.remove('hidden');
+                        document.getElementById('email').focus();
+                    } else {
+                        document.getElementById('errorMessage').textContent = message;
+                        document.getElementById('errorModal').classList.remove('hidden');
+                    }
+
+                    // restore button
+                    submitSpinner.classList.add('hidden');
+                    submitText.textContent = 'Create Account';
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                }
+            } catch (error) {
+                console.error('Error during registration:', error);
+                document.getElementById('errorMessage').textContent = 'Unable to connect to server. Please check your connection and try again.';
+                document.getElementById('errorModal').classList.remove('hidden');
+
+                // restore button
+                submitSpinner.classList.add('hidden');
+                submitText.textContent = 'Create Account';
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+            }
+        });
+
+        document.getElementById('goToHomeBtn').addEventListener('click', function() {
+            window.location.href = 'index.html'; 
+        });
+
+        
+        document.getElementById('closeErrorBtn').addEventListener('click', function() {
+            document.getElementById('errorModal').classList.add('hidden');
+        });
+
+        document.getElementById('googleBtn').addEventListener('click', async function() {
+            console.log('Google Sign-In initiated');
+            
+            try {
+                
+                const googleAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' + new URLSearchParams({
+                    client_id: 'YOUR_GOOGLE_CLIENT_ID',
+                    redirect_uri: window.location.origin + '/auth/google/callback',
+                    response_type: 'code',
+                    scope: 'email profile',
+                    access_type: 'offline',
+                    prompt: 'consent'
+                });
+                
+                console.log('Google OAuth URL:', googleAuthUrl);
+                alert('Google Sign-In: In production, this would redirect to Google OAuth.\n\nFor demo purposes, check the console for the OAuth URL.');
+                
+                
+                
+            } catch (error) {
+                console.error('Google Sign-In error:', error);
+                alert('Google Sign-In failed. Please try again.');
+            }
+        });
+
+        
+        document.getElementById('githubBtn').addEventListener('click', async function() {
+            console.log('GitHub Sign-In initiated');
+            
+            
+            try {
+                
+                const githubAuthUrl = 'https://github.com/login/oauth/authorize?' + new URLSearchParams({
+                    client_id: 'YOUR_GITHUB_CLIENT_ID',
+                    redirect_uri: window.location.origin + '/auth/github/callback',
+                    scope: 'user:email',
+                    state: Math.random().toString(36).substring(7) 
+                });
+                
+                console.log('GitHub OAuth URL:', githubAuthUrl);
+                alert('GitHub Sign-In: In production, this would redirect to GitHub OAuth.\n\nFor demo purposes, check the console for the OAuth URL.');
+                
+                
+                
+            } catch (error) {
+                console.error('GitHub Sign-In error:', error);
+                alert('GitHub Sign-In failed. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

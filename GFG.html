@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ClubNexus - ACM Chapter</title>
+  <title>ClubNexus - GFG Chapter</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   
@@ -19,13 +19,7 @@
     }
 
     #tsparticles {
-      position: fixed !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      top: 0;
-      left: 0;
-      z-index: -1;
-      background: transparent !important;
+      background: transparent;
     }
 
     main, nav, section, footer {
@@ -47,13 +41,17 @@
     </defs>
   </svg>
 
-  <div id="tsparticles"></div>
+  <div id="tsparticles" class="fixed inset-0 z-0"></div>
 
   <nav class="bg-gradient-to-r from-red-600 via-red-800 to-black shadow-lg px-8 py-8 flex items-center justify-between z-20">
     <div class="text-3xl font-extrabold text-white">ClubNexus</div>
     <ul class="flex space-x-14 absolute left-1/2 transform -translate-x-1/2">
-      <li><a href="#" class="text-white hover:text-yellow-300 text-lg font-medium transition-colors">Home</a></li>
-      <li><a href="nonTechnical.html" class="text-white hover:text-yellow-300 text-lg font-medium transition-colors">Non-Technical Clubs</a></li>
+      <li><a href="#index.html" class="text-white hover:text-yellow-300 text-lg font-medium transition-colors">Home</a></li>
+      <li><a href="#nonTechnical.html" class="text-white hover:text-yellow-300 text-lg font-medium transition-colors">Non-Technical Clubs</a></li>
+      <li><a href="index.html#about" class="text-white hover:text-yellow-300 text-lg font-medium transition-colors">About</a></li>
+      <li><a href="index.html#faq" class="text-white hover:text-yellow-300 text-lg font-medium transition-colors">FAQs</a></li>
+      <li><a href="#dashboard" class="text-white hover:text-yellow-300 text-lg font-medium transition-colors">Dashboard</a></li>
+    </ul>
     </ul>
     <div>
       <img src="https://via.placeholder.com/40" alt="Profile" class="w-14 h-14 rounded-full border-4 border-white cursor-pointer shadow-md">
@@ -63,13 +61,10 @@
   <main class="py-20 px-4 z-10">
     <div class="max-w-6xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 md:p-12 flex flex-col md:flex-row items-center gap-12">
       <div class="w-full md:w-1/2">
-        <h2 id="cn-typing" class="text-4xl font-bold mb-6 text-orange-600 h-24">
-          &nbsp; 
-        </h2>
+        <h2 id="cn-typing" class="text-4xl font-bold mb-6 text-orange-600 h-24">Welcome to the GFG Student Chapter</h2>
         <p class="text-lg text-gray-700 leading-relaxed">
-          Geeks for Geeks (GFG) Student Chapter is a thriving community for coding enthusiasts. This club is dedicated to mastering data structures, algorithms, and problem-solving through workshops, coding challenges, and interview preparation sessions. Members collaborate, learn, and grow together to excel in the tech industry.
+          The Geeks for Geeks Student Chapter at your university is a vibrant community for students passionate about programming, problem-solving, and technical growth. Aligned with the renowned GeeksforGeeks platform, this chapter aims to bridge academic learning with real-world coding practice, equipping members with both technical skills and professional readiness.
           <br><br>
-          Join us to enhance your coding skills, prepare for technical interviews, and connect with like-minded peers passionate about technology.
         </p>
       </div>
       <div class="w-full md:w-1/2 h-80 rounded-xl overflow-hidden shadow-md">
@@ -82,37 +77,37 @@
   <section class="w-full flex flex-col items-center py-16 z-10">
     <h2 class="text-4xl font-bold text-gray-800 mb-12">Our Latest Events</h2>
     <div class="flex flex-wrap justify-center gap-10 w-full max-w-7xl">
-      <div class="w-96 bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-green-200">
-        <img class="w-full h-56 object-cover" src="https://chitkara.acm.org/assets/images/IMG_9792.jpg" alt="DSA Bootcamp">
+      <div class="w-96 bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-red-200">
+        <img class="w-full h-56 object-cover" src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=400&q=80" alt="Hackathon 2025">
         <div class="p-6">
-          <p class="text-sm text-gray-500 mb-1">October 15, 2025</p>
-          <h3 class="text-2xl font-bold text-gray-900 mb-2">DSA Bootcamp</h3>
+          <p class="text-sm text-gray-500 mb-1">September 10, 2025</p>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">Hackathon 2025: Innovate & Create</h3>
           <p class="text-gray-700 mb-4 text-sm leading-relaxed">
-            Master the fundamentals of Data Structures and Algorithms in our intensive bootcamp. Learn, practice, and excel.
+            Join our flagship annual hackathon! This is a 24-hour marathon of creation, where brilliant minds come together to build amazing projects from scratch. You'll have the chance to solve real-world problems, network with top industry sponsors, and compete for an incredible prize pool.
           </p>
-          <a href="#" class="font-semibold text-green-600 hover:text-green-800 transition-colors">Learn More &rarr;</a>
+          <a href="#" class="font-semibold text-red-600 hover:text-red-800 transition-colors">Learn More &rarr;</a>
         </div>
       </div>
-      <div class="w-96 bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-green-200">
-        <img class="w-full h-56 object-cover" src="https://chitkara.acm.org/assets/images/eventPhoto_10.jpeg" alt="Coding Marathon">
+      <div class="w-96 bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-red-200">
+        <img class="w-full h-56 object-cover" src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&w=400&q=80" alt="AI Bootcamp">
         <div class="p-6">
-          <p class="text-sm text-gray-500 mb-1">November 5, 2025</p>
-          <h3 class="text-2xl font-bold text-gray-900 mb-2">Coding Marathon</h3>
+          <p class="text-sm text-gray-500 mb-1">September 20-21, 2025</p>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">The Ultimate AI Bootcamp</h3>
           <p class="text-gray-700 mb-4 text-sm leading-relaxed">
-            Participate in our 24-hour coding marathon. Solve exciting challenges and compete with the best minds.
+            Dive deep into the world of Artificial Intelligence in our intensive 2-day bootcamp. This event is designed for both beginners and intermediates, covering the core fundamentals of Machine Learning, neural networks, and practical data science. You'll learn to implement models with Python and TensorFlow.
           </p>
-          <a href="#" class="font-semibold text-green-600 hover:text-green-800 transition-colors">Learn More &rarr;</a>
+          <a href="#" class="font-semibold text-red-600 hover:text-red-800 transition-colors">Learn More &rarr;</a>
         </div>
       </div>
-      <div class="w-96 bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-green-200">
-        <img class="w-full h-56 object-cover" src="https://chitkara.acm.org/assets/images/IMG_4719.jpg" alt="Tech Interview Prep">
+      <div class="w-96 bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-red-200">
+        <img class="w-full h-56 object-cover" src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=400&q=80" alt="Web Dev Workshop">
         <div class="p-6">
-          <p class="text-sm text-gray-500 mb-1">December 10, 2025</p>
-          <h3 class="text-2xl font-bold text-gray-900 mb-2">Tech Interview Prep</h3>
+          <p class="text-sm text-gray-500 mb-1">October 5, 2025</p>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">Modern Web Dev Mastery</h3>
           <p class="text-gray-700 mb-4 text-sm leading-relaxed">
-            Prepare for your dream job with our Tech Interview Prep sessions. Learn tips, tricks, and strategies to succeed.
+            Our hands-on workshop will guide you through building a sleek, responsive, and powerful web application from the ground up. We will be utilizing the latest industry-standard frameworks, including Next.js for the frontend and backend, and Prisma for database management.
           </p>
-          <a href="#" class="font-semibold text-green-600 hover:text-green-800 transition-colors">Learn More &rarr;</a>
+          <a href="#" class="font-semibold text-red-600 hover:text-red-800 transition-colors">Learn More &rarr;</a>
         </div>
       </div>
     </div>
@@ -127,8 +122,11 @@
         <div>
             <h4 class="text-lg font-semibold mb-3">Quick Links</h4>
             <ul class="space-y-2 text-sm text-gray-300">
-                <li><a href="#" class="hover:text-yellow-300 transition-colors">Home</a></li>
-                <li><a href="nonTechnical.html" class="hover:text-yellow-300 transition-colors">Non-Technical Clubs</a></li>
+                <li><a href="#index.html" class="hover:text-yellow-300 transition-colors">Home</a></li>
+                <li><a href="#nonTechnical.html" class="hover:text-yellow-300 transition-colors">Non Technical Clubs</a></li>
+                <li><a href="#index.html#about" class="hover:text-yellow-300 transition-colors">About</a></li>
+                <li><a href="index.html#faq" class="hover:text-yellow-300 transition-colors">FAQs</a></li>
+                <li><a href="#dashboard" class="hover:text-yellow-300 transition-colors">Dashboard</a></li>
                 
             </ul>
         </div>
@@ -156,31 +154,16 @@
   </footer>
 
   <script>
-    // Typing effect for the main heading
-    const cnTypingText = "Welcome to the GFG Student Chapter...";
-    const cnTypingElem = document.getElementById("cn-typing");
-    let cnTypingIdx = 0;
-    function typeWriter() {
-      if (cnTypingIdx < cnTypingText.length) {
-        cnTypingElem.innerHTML += cnTypingText.charAt(cnTypingIdx);
-        cnTypingIdx++;
-        setTimeout(typeWriter, 80);
-      }
-    }
-    window.addEventListener('load', () => {
-      if(cnTypingElem.textContent.trim() === '') typeWriter();
-    });
+    // Static heading used instead of typing animation for accessibility and simplicity.
 
-    // --- NEW SLIDESHOW LOGIC ---
     const slides = [
-      { img: 'https://chitkara.acm.org/assets/images/IMG_9792.jpg' },
-      { img: 'https://chitkara.acm.org/assets/images/eventPhoto_10.jpeg' },
-      { img: 'https://chitkara.acm.org/assets/images/IMG_4719.jpg' }
+      { img: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80' },
+      { img: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=900&q=80' },
+      { img: 'https://images.unsplash.com/photo-1581276879432-15e50529f34b?auto=format&fit=crop&w=900&q=80' }
     ];
     let currentSlide = 0;
     const filmstrip = document.getElementById('slideshow-filmstrip');
 
-    // Populate the slideshow
     slides.forEach(slide => {
         const imgElement = document.createElement('img');
         imgElement.src = slide.img;
@@ -200,10 +183,10 @@
     }, 4000);
 
     showSlide(0);
-    // --- END OF NEW SLIDESHOW LOGIC ---
 
-    // tsParticles configuration
+
     tsParticles.load("tsparticles", {
+      fullScreen: { enable: false },
       background: { color: { value: "transparent" } },
       fpsLimit: 60,
       interactivity: {
@@ -218,17 +201,17 @@
         }
       },
       particles: {
-        color: { value: "#ff5722" },
-        links: { enable: true, color: "#ffb385", distance: 150, opacity: 0.4, width: 1 },
+        color: { value: ["#dc2626", "#f97316"] },
+        links: { enable: true, color: "#ffb385", distance: 150, opacity: 0.45, width: 1 },
         collisions: { enable: true },
-        move: { direction: "none", enable: true, outModes: { default: "bounce" }, random: false, speed: 2, straight: false },
-        number: { density: { enable: true, area: 800 }, value: 60 },
-        opacity: { value: 0.5 },
+        move: { direction: "none", enable: true, outModes: { default: "bounce" }, random: false, speed: 1.6, straight: false },
+        number: { density: { enable: true, area: 800 }, value: 70 },
+        opacity: { value: 0.65 },
         shape: { type: "circle" },
         size: { value: { min: 2, max: 6 } }
       },
       detectRetina: true
-    });
+    }).then(() => console.log('tsParticles initialized on #tsparticles')).catch(err => console.error('tsParticles init error', err));
   </script>
 </body>
 </html>
