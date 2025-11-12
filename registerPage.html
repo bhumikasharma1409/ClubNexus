@@ -231,7 +231,7 @@
                         required
                     >
                     <p id="nameError" class="hidden text-red-600 text-xs mt-1.5 ml-1">
-                        Please enter your full name (min. 2 characters)
+                        Please enter your  name (min. 2 characters)
                     </p>
                 </div>
 
@@ -366,9 +366,14 @@
                 
                 <button 
                     type="submit" 
-                    class="btn-primary w-full text-white font-bold py-4 px-6 rounded-xl mt-8 text-sm tracking-wide relative"
+                    id="submitBtn"
+                    class="btn-primary w-full text-white font-bold py-4 px-6 rounded-xl mt-8 text-sm tracking-wide relative flex items-center justify-center gap-3"
                 >
-                    Create Account
+                    <svg id="submitSpinner" class="w-5 h-5 animate-spin hidden" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="white" stroke-width="4" fill="none"></circle>
+                        <path class="opacity-75" fill="white" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    <span id="submitText">Create Account</span>
                 </button>
             </form>
 
@@ -551,7 +556,7 @@
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            
+            // basic validations
             const isNameValid = validateName();
             const isEmailValid = validateEmail();
             const isYearValid = validateSelect('year', 'yearError');
@@ -566,57 +571,93 @@
                 document.getElementById('batchError').classList.add('hidden');
             }
 
-            
             if (!isNameValid || !isEmailValid || !isYearValid || !isBatchValid || !isCourseValid || !isPasswordValid || !isConfirmPasswordValid) {
                 return;
             }
 
-            
+            const submitBtn = document.getElementById('submitBtn');
+            const submitSpinner = document.getElementById('submitSpinner');
+            const submitText = document.getElementById('submitText');
+
             const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
                 year: document.getElementById('year').value,
-                batch: document.getElementById('batch').value,
+                batch: document.getElementById('batch').value.trim(),
                 course: document.getElementById('course').value,
                 password: document.getElementById('password').value
             };
 
+            // UI: disable and show spinner
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+            submitSpinner.classList.remove('hidden');
+            submitText.textContent = 'Creating...';
+
             try {
-                
                 const response = await fetch('http://localhost:5000/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
                 });
 
-                const data = await response.json();
+                const data = await response.json().catch(() => ({}));
 
                 if (response.ok) {
-                    console.log('Registration successful:', data);
-                    console.log('Form data sent:', formData);
-                    
-                    
+                    // save user (without password) locally for session-like behavior
+                    if (data.user) {
+                        try { localStorage.setItem('clubnexus_user', JSON.stringify(data.user)); } catch (e) { /* ignore storage errors */ }
+                    }
+
                     document.getElementById('successModal').classList.remove('hidden');
-                    
-                    
+
+                    // reset form and UI
                     form.reset();
-                    
-                    
                     const bars = document.querySelectorAll('[id^="strength"]');
                     bars.forEach(bar => {
                         bar.className = 'h-1.5 flex-1 rounded-full bg-gray-200 transition-all';
                     });
                     document.getElementById('strengthText').textContent = '';
+
+                    // restore button state
+                    submitSpinner.classList.add('hidden');
+                    submitText.textContent = 'Create Account';
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+
+                    // auto-redirect after a short delay
+                    setTimeout(() => { window.location.href = 'index.html'; }, 1800);
                 } else {
-                    
-                    document.getElementById('errorMessage').textContent = data.message || 'Registration failed. Please try again.';
-                    document.getElementById('errorModal').classList.remove('hidden');
+                    // handle known server errors inline
+                    const message = data.message || 'Registration failed. Please try again.';
+
+                    if (response.status === 409) {
+                        // email already exists -> show inline error and focus
+                        const emailErr = document.getElementById('emailError');
+                        emailErr.textContent = message;
+                        emailErr.classList.remove('hidden');
+                        document.getElementById('email').focus();
+                    } else {
+                        document.getElementById('errorMessage').textContent = message;
+                        document.getElementById('errorModal').classList.remove('hidden');
+                    }
+
+                    // restore button
+                    submitSpinner.classList.add('hidden');
+                    submitText.textContent = 'Create Account';
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
                 }
             } catch (error) {
                 console.error('Error during registration:', error);
-                
                 document.getElementById('errorMessage').textContent = 'Unable to connect to server. Please check your connection and try again.';
                 document.getElementById('errorModal').classList.remove('hidden');
+
+                // restore button
+                submitSpinner.classList.add('hidden');
+                submitText.textContent = 'Create Account';
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
             }
         });
 

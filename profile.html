@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClubNexus - Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-b from-rose-50 to-white min-h-screen flex items-center justify-center font-[Inter,sans-serif]">
+  <div class="w-full max-w-lg bg-white border border-gray-200 rounded-2xl shadow-xl p-8">
+    <h1 class="text-3xl font-extrabold text-rose-600 text-center mb-6">👤 Your Profile</h1>
+
+    <!-- User Details Container -->
+    <div id="profile-container" class="space-y-3 text-gray-700 text-lg">
+      <!-- Profile details will be shown here -->
+    </div>
+
+    <!-- Buttons -->
+    <div class="mt-8 flex justify-between items-center border-t pt-4">
+      <button
+        onclick="goHome()"
+        class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 border text-sm font-medium transition"
+      >
+        ⬅ Back to Home
+      </button>
+      <button
+        onclick="logout()"
+        class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-sm font-medium shadow-sm transition"
+      >
+        🚪 Logout
+      </button>
+    </div>
+  </div>
+
+  <script>
+  // Utility: parse query param
+  function getQueryParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+  }
+
+  // Try to load passed data from query param 'data'
+  const raw = getQueryParam('data');
+  let user = null;
+
+  if (raw) {
+    try {
+      // decode: decodeURIComponent -> atob(base64) -> JSON.parse
+      const json = atob(decodeURIComponent(raw));
+      user = JSON.parse(json);
+
+      // Save into THIS origin's localStorage so profile and index can read it
+      localStorage.setItem('clubnexus_user', JSON.stringify(user));
+      console.log('Profile: saved user from query param into localStorage:', user);
+    } catch (err) {
+      console.error('Failed to decode profile data from URL:', err);
+    }
+  } else {
+    // no query param — try to read from localStorage (maybe previously saved)
+    try {
+      const stored = localStorage.getItem('clubnexus_user');
+      if (stored) user = JSON.parse(stored);
+      console.log('Profile: read user from localStorage:', user);
+    } catch (err) {
+      console.error('Error reading clubnexus_user from localStorage:', err);
+    }
+  }
+
+  // Render to the page
+  const container = document.getElementById('profile-container');
+  if (user && typeof user === 'object') {
+    container.innerHTML = `
+      <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-sm">
+        <p><strong class="text-rose-600">Name:</strong> ${user.name || '—'}</p>
+        <p><strong class="text-rose-600">Email:</strong> ${user.email || '—'}</p>
+        <p><strong class="text-rose-600">Year:</strong> ${user.year || '—'}</p>
+        <p><strong class="text-rose-600">Batch:</strong> ${user.batch || '—'}</p>
+        <p><strong class="text-rose-600">Course:</strong> ${user.course || '—'}</p>
+      </div>
+    `;
+  } else {
+    container.innerHTML = `
+      <div class="text-center text-gray-500">
+        <p>No user data found.</p>
+        <p class="text-sm mt-2">Please register first.</p>
+      </div>
+    `;
+  }
+
+  // expose back/home/logout functions (unchanged except goHome uses index in same folder)
+  function goHome() { window.location.href = "index.html"; }
+  function logout() {
+    if (confirm("Are you sure you want to log out?")) {
+      localStorage.removeItem("clubnexus_user");
+      alert("You have been logged out successfully!");
+      window.location.href = "index.html";
+    }
+  }
+  window.goHome = goHome;
+  window.logout = logout;
+</script>
+</body>
+</html>
