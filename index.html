@@ -36,6 +36,58 @@
 
   </style>
 </head>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const profileSection = document.getElementById("profileSection");
+    const signupBtn = document.getElementById("signupBtn");
+    const profileBtn = document.getElementById("profileBtn");
+    const profileDropdown = document.getElementById("profileDropdown");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const viewProfileBtn = document.getElementById("viewProfileBtn");
+    const userName = document.getElementById("userName");
+
+    // Check if user is saved in localStorage
+    const savedUser = JSON.parse(localStorage.getItem("clubnexus_user"));
+
+    if (savedUser) {
+      signupBtn.classList.add("hidden");
+      profileSection.classList.remove("hidden");
+      userName.textContent = savedUser.name || "User";
+    }
+
+    // Toggle dropdown
+    profileBtn.addEventListener("click", () => {
+      profileDropdown.classList.toggle("hidden");
+    });
+
+    // Click outside to close dropdown
+    window.addEventListener("click", (e) => {
+      if (!profileSection.contains(e.target)) {
+        profileDropdown.classList.add("hidden");
+      }
+    });
+
+    // View Profile: show alert or open profile modal/page
+    viewProfileBtn.addEventListener("click", () => {
+      const u = JSON.parse(localStorage.getItem("clubnexus_user"));
+      if (!u) {
+        alert("No user found. Please register first.");
+        return;
+      }
+
+      alert(
+        `👤 Profile Details:\n\nName: ${u.name}\nEmail: ${u.email}\nYear: ${u.year}\nBatch: ${u.batch}\nCourse: ${u.course}`
+      );
+    });
+
+    // Logout
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("clubnexus_user");
+      location.reload(); // refresh page
+    });
+  });
+</script>
+
 <body>
   
   <!-- Particle Background -->
@@ -44,6 +96,7 @@
   <!-- Navbar -->
 <nav class="fixed top-0 left-0 w-full bg-gradient-to-r from-red-600 via-red-800 to-black shadow-lg px-8 py-6 flex items-center justify-between z-20">
   <img src="logo.png" alt="" class="h-16 w-auto">
+  
   <ul class="flex space-x-14 absolute left-1/2 transform -translate-x-1/2">
     <li><a href="#home" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">Home</a></li>
     <li><a href="#clubs" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">Clubs</a></li>
@@ -51,21 +104,21 @@
     <li><a href="#faq" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">FAQs</a></li>
     <li><a href="#dashboard" class="text-white font-serif hover:text-yellow-300 text-lg font-medium">Dashboard</a></li>
   </ul>
-  
-  <!-- Right Side: Profile + Sign Up Button -->
-  <div class="flex items-center space-x-4">
-    <!-- Profile Circle -->
-    <div class="relative w-14 h-14">
-      <div class="absolute h-10 w-10 bg-white rounded-full border-4 border-white shadow-md flex items-center justify-center overflow-hidden">
-        <img src="pfp.jpg" alt="Profile" class="w-10 h-10 object-cover rounded-full" />
-      </div>
-    </div>
+
+  <div class="flex space-x-4">
+    <a id="profilePage"
+       href="profile.html" 
+       class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-800 text-white text-sm font-semibold rounded-lg shadow hover:opacity-90 transition">
+      Profile
+    </a>
 
     <!-- Sign Up Button -->
-    <a href="registerPage.html" 
+    <a id="signupBtn"
+       href="http://localhost:5173/" 
        class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-800 text-white text-sm font-semibold rounded-lg shadow hover:opacity-90 transition">
       Sign Up
     </a>
+  </div>
   </div>
 </nav>
 
@@ -332,7 +385,7 @@
     slider.style.transform = `translateX(-${index * 100}%)`;
   }
 
-  setInterval(autoScroll, 2000);
+  setInterval(autoScroll, 3000);
 </script>
 
   <!-- Particles Script -->
