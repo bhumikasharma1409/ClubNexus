@@ -6,10 +6,11 @@ export default function NonTechnicalClubs() {
   const [clubs, setClubs] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5001/api/nontechnical-clubs")
+    // This block is now complete
+    fetch("/api/nontechnical-clubs")
       .then((res) => res.json())
       .then((data) => setClubs(data))
-      .catch((err) => console.error("Error fetching clubs:", err));
+      .catch((err) => console.error("Error fetching non-technical clubs:", err));
   }, []);
 
   return (

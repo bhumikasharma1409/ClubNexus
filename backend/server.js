@@ -1,166 +1,216 @@
 import express from "express";
 import cors from "cors";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import Joi from "joi";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import path from "path";
+import { fileURLToPath } from "url";
 
+// --- Configuration and Setup ---
+dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// All Technical Clubs Data
-const technicalClubs = [
-  { 
-    id: 1, 
-    name: "Coding Ninjas", 
-    img: "cn.jpg", 
-    desc: "Sharpen coding skills with contests, projects, and mentorship.",
-    insta: "https://www.instagram.com/codingninjas_cuiet?igsh=MWVrbGxrOWxwc2Frag==",
-    linkedin: "https://www.linkedin.com/company/codingninjas-cuiet/",
-    link: "CodingNinjas.html"
-  },
-  { 
-    id: 2, 
-    name: "IEEE", 
-    img: "ieee.webp", 
-    desc: "Innovate with technology, research, and professional networking.",
-    insta: "https://www.instagram.com/ieeeciet?igsh=MWxqMmJtcDU4em9zcw==",
-    linkedin: "https://www.linkedin.com/company/ieee-ciet-student-branch/",
-    link: "IEEE.html"
-  },
-  { 
-    id: 3, 
-    name: "GFG Student Chapter", 
-    img: "gfg.jpeg", 
-    desc: "Dive into open source contributions and problem solving.",
-    insta: "https://www.instagram.com/gfg_cuiet?igsh=bnptdWtsZTRlcWFq",
-    linkedin: "#",
-    link: "GFG.html"
-  },
-  { 
-    id: 4, 
-    name: "ACM", 
-    img: "acm.jpg", 
-    desc: "Advance computing with workshops, papers, and events.",
-    insta: "https://www.instagram.com/acm_cuiet?igsh=MW50Zzc1ZWd0bHJxYQ==",
-    linkedin: "https://www.linkedin.com/company/chitkara-acm-student-chapter/",
-    link: "ACM.html"
-  },
-  { 
-    id: 5, 
-    name: "Open Source Chandigarh", 
-    img: "open.jpg", 
-    desc: "Contribute to real-world projects and collaborate globally.",
-    insta: "https://www.instagram.com/opensourcechandigarh?igsh=NHZldWJkbmVleTBs",
-    linkedin: "https://www.linkedin.com/company/open-source-chandigarh/",
-    link: "OpenSource.html"
-  },
-  { 
-    id: 6, 
-    name: "Bit N Bytes", 
-    img: "bits.webp", 
-    desc: "Explore coding, gaming, and fun digital competitions.",
-    insta: "https://www.instagram.com/bits_nbytes?igsh=aWtwNWZscW5kZmsy",
-    linkedin: "https://www.linkedin.com/company/bits-n-bytes-chitkara/",
-    link: "BitsNBytes.html"
-  },
-  { 
-    id: 7, 
-    name: "GDSC", 
-    img: "google.jpg", 
-    desc: "Learn and build using Google technologies with peers.",
-    insta: "#",
-    linkedin: "#",
-    link: "GDSC.html"
-  },
-  { 
-    id: 8, 
-    name: "Coding Blocks", 
-    img: "codingblocks.jpeg", 
-    desc: "Master programming with bootcamps, courses, and events.",
-    insta: "https://www.instagram.com/codingblocks_cuiet?igsh=MXZtNDR6YmV5dnJrdg==",
-    linkedin: "https://www.linkedin.com/company/coding-blocks-cuiet-chapter/",
-    link: "CodingBlocks.html"
-  }
-];
+// ES Module equivalent for __dirname (for serving static files)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// --- Database Connection ---
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected successfully."))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
+// --- Mongoose Schemas ---
 
-const nonTechnicalClubs = [
-  {
-    id: 1,
-    name: "Literayllis",
-    img: "literayllis.jpeg",
-    desc: "The official literary society that celebrates poetry, debate, and storytelling.",
-    insta: "https://www.instagram.com/c2s2_literayllis?igsh=N3ZlcTNhOGF3d3Yz",
-    link: "Literayllis.html"
-  },
-  {
-    id: 2,
-    name: "Dhwani",
-    img: "dhwani.jpeg",
-    desc: "The music club that unites singers and instrumentalists to create soulful melodies.",
-    insta: "https://www.instagram.com/c2s2__dhwani?igsh=MXFhNmoxaXV6N2k1YQ==",
-    link: "Dhwani.html"
-  },
-  {
-    id: 3,
-    name: "Nati",
-    img: "nati.jpg",
-    desc: "The dramatics club, showcasing stage plays, skits, and street theatre performances.",
-    insta: "https://www.instagram.com/c2s2_nati_?igsh=MXNneGVsOGtyY2VyeQ==",
-    link: "Nati.html"
-  },
-  {
-    id: 4,
-    name: "Custody",
-    img: "custody.jpeg",
-    desc: "The dance club, where passion meets rhythm and creativity takes the stage.",
-    insta: "https://www.instagram.com/c2s2_custody?igsh=aWNsMnJ5aDN4cXhh",
-    link: "Custody.html"
-  },
-  {
-    id: 5,
-    name: "The Bhangra Regiment",
-    img: "bhangra.jpeg",
-    desc: "A high-energy bhangra crew spreading Punjabi culture through dance and enthusiasm.",
-    insta: "https://www.instagram.com/c2s2_thebhangraregiment?igsh=bXZudDZxNTk0ZWti",
-    link: "BhangraRegiment.html"
-  },
-  {
-    id: 6,
-    name: "Reflection",
-    img: "reflection.jpeg",
-    desc: "The photography and cinematography club capturing creativity through the lens.",
-    insta: "https://www.instagram.com/c2s2_reflection?igsh=MXQxdnlmamU1cDQxcQ==",
-    link: "Reflection.html"
-  },
-  {
-    id: 7,
-    name: "Lethal Giddha Squad",
-    img: "giddha.jpeg",
-    desc: "A dynamic all-girls team reviving traditional Punjabi giddha with a modern touch.",
-    insta: "https://www.instagram.com/c2s2_lethal_giddha_squad?igsh=ODZkMGx3bzNhbXdo",
-    link: "Giddha.html"
-  },
-  {
-    id: 8,
-    name: "Natraj",
-    img: "natraj.jpeg",
-    desc: "The classical dance club dedicated to Bharatanatyam, Kathak, and Odissi traditions.",
-    insta: "https://www.instagram.com/c2s2_natraj?igsh=MWl6em1mczYwdnM4aQ==",
-    link: "Natraj.html"
-  }
-];
-
-
-// API Endpoint
-app.get("/api/technical-clubs", (req, res) => {
-  res.json(technicalClubs);
-});
-app.get("/api/nontechnical-clubs", (req, res) => {
-  res.json(nonTechnicalClubs);
+// Schema for both club types
+const clubSchema = new mongoose.Schema({
+  id: { type: Number, required: true, unique: true },
+  name: { type: String, required: true },
+  img: String,
+  desc: String,
+  insta: String,
+  linkedin: String,
+  link: String,
 });
 
-// Start Server
-const PORT = 5001;
+// Models for the two club collections
+const TechnicalClub = mongoose.model("TechnicalClub", clubSchema);
+const NonTechnicalClub = mongoose.model("NonTechnicalClub", clubSchema);
+
+// Schema for Users
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true, minlength: 2 },
+  email: { type: String, required: true, unique: true, lowercase: true },
+  year: { type: String, required: true },
+  batch: { type: String, required: true },
+  course: { type: String, required: true },
+  password: { type: String, required: true, minlength: 6 },
+});
+
+const User = mongoose.model("User", userSchema);
+
+// --- API Routes for Clubs ---
+
+// Get all Technical Clubs
+app.get("/api/technical-clubs", async (req, res) => {
+  try {
+    const clubs = await TechnicalClub.find({});
+    res.json(clubs);
+  } catch (err) {
+    console.error("Error fetching technical clubs:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Get all Non-Technical Clubs
+app.get("/api/nontechnical-clubs", async (req, res) => {
+  try {
+    const clubs = await NonTechnicalClub.find({});
+    res.json(clubs);
+  } catch (err) {
+    console.error("Error fetching non-technical clubs:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// --- API Routes for Authentication ---
+
+// Validation Schema for Registration
+const registerSchema = Joi.object({
+  name: Joi.string().min(2).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+  year: Joi.string().required(),
+  batch: Joi.string().required(),
+  course: Joi.string().required(),
+});
+
+// POST /auth/register
+app.post("/auth/register", async (req, res) => {
+  // 1. Validate input
+  const { error } = registerSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
+  const { name, email, password, year, batch, course } = req.body;
+
+  try {
+    // 2. Check if user already exists
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: "Email already in use." });
+    }
+
+    // 3. Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // 4. Create new user
+    user = new User({
+      name,
+      email,
+      password: hashedPassword,
+      year,
+      batch,
+      course,
+    });
+
+    // 5. Save user to DB
+    await user.save();
+
+    // 6. Create and send token
+    const payload = { user: { id: user.id } };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "3600s", // 1 hour
+    });
+
+    res.status(201).json({
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (err) {
+    console.error("Registration error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Validation Schema for Login
+const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
+
+// POST /auth/login
+app.post("/auth/login", async (req, res) => {
+  // 1. Validate input
+  const { error } = loginSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
+  const { email, password } = req.body;
+
+  try {
+    // 2. Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // 3. Compare passwords
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // 4. Create and send token
+    const payload = { user: { id: user.id } };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "3600s",
+    });
+
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// --- Deployment: Serve React App ---
+// This part is for serving your built React app from the 'frontend/dist' folder
+const frontendDistPath = path.join(__dirname, "..", "frontend", "dist");
+
+// Serve static files
+app.use(express.static(frontendDistPath));
+
+// Fallback: For any route not matched by API, send index.html
+// This lets React Router handle client-side routing
+app.get("*", (req, res) => {
+  res.sendFile(path.join(frontendDistPath, "index.html"), (err) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+  });
+});
+
+// --- Start Server ---
+const PORT = process.env.PORT || 5001; // Use 5001 as local fallback
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
