@@ -14,7 +14,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ES Module equivalent for __dirname (for serving static files)
+// ES Module equivalent for __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -26,7 +26,6 @@ mongoose
 
 // --- Mongoose Schemas ---
 
-// Schema for both club types
 const clubSchema = new mongoose.Schema({
   id: { type: Number, required: true, unique: true },
   name: { type: String, required: true },
@@ -37,25 +36,31 @@ const clubSchema = new mongoose.Schema({
   link: String,
 });
 
-// Models for the two club collections
 const TechnicalClub = mongoose.model("TechnicalClub", clubSchema);
 const NonTechnicalClub = mongoose.model("NonTechnicalClub", clubSchema);
 
-// Schema for Users
+// UPDATED User Schema for Google Auth
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true, minlength: 2 },
+  name: { type: String, required: true },
   email: { type: String, required: true, unique: true, lowercase: true },
-  year: { type: String, required: true },
-  batch: { type: String, required: true },
-  course: { type: String, required: true },
-  password: { type: String, required: true, minlength: 6 },
+  
+  // These are optional because Google Sign-In won't provide them
+  year: { type: String },
+  batch: { type: String },
+  course: { type: String },
+
+  // Password is no longer "required" at schema level,
+  // because a user can sign in with Google instead.
+  password: { type: String, minlength: 6 },
+  
+  // This field will link their Google account (it's new)
+  googleId: { type: String, sparse: true, unique: true } 
 });
 
 const User = mongoose.model("User", userSchema);
 
-// --- API Routes for Clubs ---
 
-// Get all Technical Clubs
+// --- API Routes for Clubs ---
 app.get("/api/technical-clubs", async (req, res) => {
   try {
     const clubs = await TechnicalClub.find({});
@@ -66,7 +71,6 @@ app.get("/api/technical-clubs", async (req, res) => {
   }
 });
 
-// Get all Non-Technical Clubs
 app.get("/api/nontechnical-clubs", async (req, res) => {
   try {
     const clubs = await NonTechnicalClub.find({});
@@ -79,7 +83,7 @@ app.get("/api/nontechnical-clubs", async (req, res) => {
 
 // --- API Routes for Authentication ---
 
-// Validation Schema for Registration
+// POST /auth/register
 const registerSchema = Joi.object({
   name: Joi.string().min(2).required(),
   email: Joi.string().email().required(),
@@ -89,9 +93,7 @@ const registerSchema = Joi.object({
   course: Joi.string().required(),
 });
 
-// POST /auth/register
 app.post("/auth/register", async (req, res) => {
-  // 1. Validate input
   const { error } = registerSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -100,17 +102,14 @@ app.post("/auth/register", async (req, res) => {
   const { name, email, password, year, batch, course } = req.body;
 
   try {
-    // 2. Check if user already exists
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ message: "Email already in use." });
     }
 
-    // 3. Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // 4. Create new user
     user = new User({
       name,
       email,
@@ -120,22 +119,14 @@ app.post("/auth/register", async (req, res) => {
       course,
     });
 
-    // 5. Save user to DB
     await user.save();
 
-    // 6. Create and send token
     const payload = { user: { id: user.id } };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "3600s", // 1 hour
-    });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "3600s" });
 
     res.status(201).json({
       token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      },
+      user: { id: user.id, name: user.name, email: user.email },
     });
   } catch (err) {
     console.error("Registration error:", err);
@@ -143,15 +134,13 @@ app.post("/auth/register", async (req, res) => {
   }
 });
 
-// Validation Schema for Login
+// POST /auth/login
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
 
-// POST /auth/login
 app.post("/auth/login", async (req, res) => {
-  // 1. Validate input
   const { error } = loginSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -160,31 +149,27 @@ app.post("/auth/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // 2. Find user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
+    
+    // Check if user has a password (they might be Google-only)
+    if (!user.password) {
+      return res.status(400).json({ message: "Please sign in with Google." });
+    }
 
-    // 3. Compare passwords
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // 4. Create and send token
     const payload = { user: { id: user.id } };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "3600s",
-    });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "3600s" });
 
     res.json({
       token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      },
+      user: { id: user.id, name: user.name, email: user.email },
     });
   } catch (err) {
     console.error("Login error:", err);
@@ -192,15 +177,61 @@ app.post("/auth/login", async (req, res) => {
   }
 });
 
-// --- Deployment: Serve React App ---
-// This part is for serving your built React app from the 'frontend/dist' folder
-const frontendDistPath = path.join(__dirname, "..", "frontend", "dist");
 
-// Serve static files
+// *** NEW ROUTE FOR GOOGLE AUTH ***
+// POST /auth/google
+app.post("/auth/google", async (req, res) => {
+  const { email, name, googleId } = req.body;
+
+  if (!email || !name || !googleId) {
+    return res.status(400).json({ message: "Google auth info missing." });
+  }
+
+  try {
+    // 1. Find user by email
+    let user = await User.findOne({ email: email });
+
+    if (user) {
+      // 2. User exists. If they don't have a googleId, add it.
+      if (!user.googleId) {
+        user.googleId = googleId;
+        await user.save();
+      }
+      // If they do have a googleId, we just log them in.
+    } else {
+      // 3. No user found, create a new one
+      user = new User({
+        name,
+        email,
+        googleId,
+      });
+      await user.save();
+    }
+
+    // 4. User is found OR created. Log them in.
+    const payload = { user: { id: user.id } };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "3600s" });
+
+    res.status(200).json({
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+
+  } catch (err) {
+    console.error("Google auth error:", err);
+    res.status(500).json({ message: "Server error during Google auth" });
+  }
+});
+
+
+// --- Deployment: Serve React App ---
+const frontendDistPath = path.join(__dirname, "..", "frontend", "dist");
 app.use(express.static(frontendDistPath));
 
-// Fallback: For any route not matched by API, send index.html
-// This lets React Router handle client-side routing
 app.get("*", (req, res) => {
   res.sendFile(path.join(frontendDistPath, "index.html"), (err) => {
     if (err) {
@@ -210,7 +241,7 @@ app.get("*", (req, res) => {
 });
 
 // --- Start Server ---
-const PORT = process.env.PORT || 5001; // Use 5001 as local fallback
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

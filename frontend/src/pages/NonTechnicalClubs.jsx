@@ -4,14 +4,33 @@ import ClubCard from "../components/ClubCard";
 
 export default function NonTechnicalClubs() {
   const [clubs, setClubs] = useState([]);
+  const [error, setError] = useState(null); // Added error state
 
   useEffect(() => {
-    // This block is now complete
-    fetch("/api/nontechnical-clubs")
-      .then((res) => res.json())
-      .then((data) => setClubs(data))
-      .catch((err) => console.error("Error fetching non-technical clubs:", err));
-  }, []);
+    // This is the updated fetch call
+    fetch("/api/nontechnical-clubs") // <-- Correct relative path
+      .then((res) => {
+        if (!res.ok) {
+          // Handle HTTP errors like 500 or 404
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        // Ensure the data is an array before setting it
+        if (Array.isArray(data)) {
+          setClubs(data);
+        } else {
+          console.error("Fetched data is not an array:", data);
+          setError("Data format error. See console.");
+        }
+      })
+      .catch((err) => {
+        // Catch network errors or the error thrown above
+        console.error("Error fetching non-technical clubs:", err);
+        setError(err.message);
+      });
+  }, []); // Empty dependency array means this runs once on mount
 
   return (
     <>
@@ -19,7 +38,7 @@ export default function NonTechnicalClubs() {
 
       {/* Page Wrapper */}
       <div className="relative z-10 min-h-screen w-full">
-        <div className="h-28"></div>
+        <div className="h-28"></div> {/* Spacer for fixed navbar */}
 
         {/* Header Section */}
         <div className="text-center my-6">
@@ -38,20 +57,31 @@ export default function NonTechnicalClubs() {
           </p>
         </div>
 
-        {/* Club Cards Grid */}
-        <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-          {clubs.map((club) => (
-            <ClubCard
-              key={club.id}
-              img={club.img}
-              name={club.name}
-              desc={club.desc}
-              insta={club.insta}
-              linkedin={club.linkedin}
-              link={club.link}
-            />
-          ))}
-        </div>
+        {/* Show an error message if something went wrong */}
+        {error && (
+          <div className="text-center my-10 p-4 bg-red-100 text-red-700 max-w-md mx-auto rounded-lg">
+            <strong>Error:</strong> Failed to load club data. ({error})
+          </div>
+        )}
+
+        {/* Club Cards Grid: Show loading or the clubs */}
+        {clubs.length > 0 ? (
+          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            {clubs.map((club) => (
+              <ClubCard
+                key={club.id}
+                img={club.img}
+                name={club.name}
+                desc={club.desc}
+                insta={club.insta}
+                linkedin={club.linkedin} // Note: this prop exists but may be unused for non-tech
+                link={club.link}
+              />
+            ))}
+          </div>
+        ) : (
+          !error && <p className="text-center text-gray-500">Loading clubs...</p>
+        )}
       </div>
     </>
   );

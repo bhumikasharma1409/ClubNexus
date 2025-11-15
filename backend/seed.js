@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// --- Create __dirname for ES Modules ---
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // --- Data to Seed ---
 const technicalClubs = [
@@ -25,7 +31,7 @@ const nonTechnicalClubs = [
 ];
 
 // --- Mongoose Setup (simplified for script) ---
-dotenv.config({ path: path.resolve(__dirname, './.env') }); // Make sure it finds the .env
+dotenv.config();
 
 const clubSchema = new mongoose.Schema({
   id: { type: Number, required: true, unique: true },
@@ -48,6 +54,9 @@ const seedDatabase = async () => {
 
     // Clear existing data
     await TechnicalClub.deleteMany({});
+    //
+    // 👇 THIS IS THE FIX (Removed the 's')
+    //
     await NonTechnicalClub.deleteMany({});
     console.log("Cleared existing club data.");
 
