@@ -1,22 +1,44 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/logo.png";
-import pfp from "../assets/pfp.jpg";
 import { useAuth } from "../context/AuthContext"; // Import useAuth
 
-export default function NavbarTechnical() {
+export default function NavbarTechnical({ page }) {
   const { user, logout } = useAuth(); // Get user and logout function
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-gradient-to-r from-red-700 via-red-800 to-black shadow-lg px-10 py-6 flex items-center justify-between z-30">
       {/* Left: Logo */}
       <Link to="/" className="flex items-center space-x-2">
-        <img src={logo} alt="ClubNexus Logo" className="h-14 w-auto" />
+        {/* Use image from /public folder */}
+        <img src="/logo.png" alt="ClubNexus Logo" className="h-14 w-auto" />
       </Link>
 
-      {/* Center: Menu ... (no change here) */}
+      {/* Center: Menu */}
       <ul className="flex space-x-14 text-lg font-semibold font-serif text-white absolute left-1/2 transform -translate-x-1/2">
-        {/* ... menu items ... */}
+        <li>
+          <Link
+            to="/technical-clubs"
+            className={`pb-2 ${
+              page === "technical"
+                ? "border-b-4 border-white"
+                : "hover:border-b-4 hover:border-gray-300"
+            } transition-all`}
+          >
+            Technical
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/nontechnical-clubs"
+            className={`pb-2 ${
+              page === "nontechnical"
+                ? "border-b-4 border-white"
+                : "hover:border-b-4 hover:border-gray-300"
+            } transition-all`}
+          >
+            Non-Technical
+          </Link>
+        </li>
       </ul>
 
       {/* Right: Profile + Auth */}
@@ -25,7 +47,7 @@ export default function NavbarTechnical() {
           // --- User is Logged In ---
           <>
             <img
-              src={pfp} // You can replace this with user.avatar later
+              src="/pfp.jpg" // Use image from /public folder
               alt="User Profile"
               className="h-10 w-10 rounded-full border-4 border-white shadow-md object-cover"
             />

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/NavbarTechnical";
 import ClubCard from "../components/ClubCard";
+import ParticlesBg from "../components/ParticlesBg"; // 1. Import ParticlesBg
 
 export default function TechnicalClubs() {
   const [clubs, setClubs] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("/api/technical-clubs") // <-- This relative path is correct
+    fetch("/api/technical-clubs")
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -30,6 +31,7 @@ export default function TechnicalClubs() {
 
   return (
     <>
+      <ParticlesBg /> {/* 2. Add ParticlesBg component back */}
       <Navbar page="technical"/>
       <div className="relative z-10 min-h-screen w-full">
         <div className="h-28"></div> {/* Spacer for fixed navbar */}
@@ -61,7 +63,7 @@ export default function TechnicalClubs() {
                 desc={club.desc}
                 insta={club.insta}
                 linkedin={club.linkedin}
-                link={club.link}
+                link={club.link} // This prop is now being passed
               />
             ))}
           </div>
