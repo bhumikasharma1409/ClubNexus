@@ -11,11 +11,11 @@ const __dirname = path.dirname(__filename);
 const technicalClubs = [
   { id: 1, name: "Coding Ninjas", img: "cn.jpg", desc: "Sharpen coding skills with contests, projects, and mentorship.", insta: "https://www.instagram.com/codingninjas_cuiet?igsh=MWVrbGxrOWxwc2Frag==", linkedin: "https://www.linkedin.com/company/codingninjas-cuiet/", link: "CodingNinjas.html" },
   { id: 2, name: "IEEE", img: "ieee.webp", desc: "Innovate with technology, research, and professional networking.", insta: "https://www.instagram.com/ieeeciet?igsh=MWxqMmJtcDU4em9zcw==", linkedin: "https://www.linkedin.com/company/ieee-ciet-student-branch/", link: "IEEE.html" },
-  { id: 3, name: "GFG Student Chapter", img: "gfg.jpeg", desc: "Dive into open source contributions and problem solving.", insta: "https://www.instagram.com/gfg_cuiet?igsh=bnptdWtsZTRlcWFq", linkedin: "#", link: "GFG.html" },
+  { id: 3, name: "GFG Student Chapter", img: "gfg.jpeg", desc: "Dive into open source contributions and problem solving.", insta: "https://www.instagram.com/gfg_cuiet?igsh=bnptdWtsZTRlcWFq", linkedin: "https://www.linkedin.com/company/gfg-cuiet/", link: "GFG.html" },
   { id: 4, name: "ACM", img: "acm.jpg", desc: "Advance computing with workshops, papers, and events.", insta: "https://www.instagram.com/acm_cuiet?igsh=MW50Zzc1ZWd0bHJxYQ==", linkedin: "https://www.linkedin.com/company/chitkara-acm-student-chapter/", link: "ACM.html" },
   { id: 5, name: "Open Source Chandigarh", img: "open.jpg", desc: "Contribute to real-world projects and collaborate globally.", insta: "https://www.instagram.com/opensourcechandigarh?igsh=NHZldWJkbmVleTBs", linkedin: "https://www.linkedin.com/company/open-source-chandigarh/", link: "OpenSource.html" },
   { id: 6, name: "Bit N Bytes", img: "bits.webp", desc: "Explore coding, gaming, and fun digital competitions.", insta: "https://www.instagram.com/bits_nbytes?igsh=aWtwNWZscW5kZmsy", linkedin: "https://www.linkedin.com/company/bits-n-bytes-chitkara/", link: "BitsNBytes.html" },
-  { id: 7, name: "GDSC", img: "google.jpg", desc: "Learn and build using Google technologies with peers.", insta: "#", linkedin: "#", link: "GDSC.html" },
+  { id: 7, name: "GDSC", img: "google.jpg", desc: "Learn and build using Google technologies with peers.", insta: "https://www.instagram.com/gdsc_chitkara/", linkedin: "https://www.linkedin.com/company/dsc-chitkara-university/", link: "GDSC.html" },
   { id: 8, name: "Coding Blocks", img: "codingblocks.jpeg", desc: "Master programming with bootcamps, courses, and events.", insta: "https://www.instagram.com/codingblocks_cuiet?igsh=MXZtNDR6YmV5dnJrdg==", linkedin: "https://www.linkedin.com/company/coding-blocks-cuiet-chapter/", link: "CodingBlocks.html" }
 ];
 
