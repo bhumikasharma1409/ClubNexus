@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // ADDED: For footer links
-import Navbar from '../components/Navbar'; // CHANGED: Use main navbar
-import Slideshow from '../components/Slideshow'; // ADDED: New component
-import EventCard from '../components/EventCard'; // ADDED: New component
+import { Link } from 'react-router-dom'; 
+import Navbar from '../components/Navbar'; 
+import Slideshow from '../components/Slideshow'; 
+import EventCard from '../components/EventCard'; 
 
-// --- MOCK DATA ---
-// (In a real app, you might fetch this from your backend)
+
 
 const slideshowImages = [
   '/open.jpg',
@@ -34,11 +33,11 @@ const upcomingEvents = [
     description: 'See the amazing open-source projects being built right here on campus. Get inspired and find a project to join!'
   }
 ];
-// --- END MOCK DATA ---
+
 
 export default function OpenSource() {
   const pageStyle = {
-    backgroundImage: "url('/eight.jpg')", // Default tech background
+    backgroundImage: "url('/eight.jpg')", 
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',
@@ -56,7 +55,7 @@ export default function OpenSource() {
           {/* --- 1. HEADER (Name & Tagline) --- */}
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
             <img 
-              src="/open.jpg" // From seed.js
+              src="/open.jpg" 
               alt="Open Source Chandigarh" 
               className="w-48 h-48 rounded-full object-cover border-4 border-red-500 shadow-lg"
             />

@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // ADDED: For footer links
-import Navbar from '../components/Navbar'; // CHANGED: Use main navbar
-import Slideshow from '../components/Slideshow'; // ADDED: New component
-import EventCard from '../components/EventCard'; // ADDED: New component
+import { Link } from 'react-router-dom'; 
+import Navbar from '../components/Navbar'; 
+import Slideshow from '../components/Slideshow'; 
+import EventCard from '../components/EventCard'; 
 
-// --- MOCK DATA ---
-// (In a real app, you might fetch this from your backend)
+
 
 const slideshowImages = [
   '/fourth.jpg',
@@ -33,11 +32,11 @@ const upcomingEvents = [
     description: 'Auditions for our biggest show of the year. Prepare a 90-second routine in any style. Show us what you\'ve got!'
   }
 ];
-// --- END MOCK DATA ---
+
 
 export default function CustodyClub() {
   const pageStyle = {
-    backgroundImage: "url('/book.jpg')", // Default background
+    backgroundImage: "url('/book.jpg')", 
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',

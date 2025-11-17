@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext.jsx"; // <-- FIX: Added .jsx extension
+import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate, Link } from "react-router-dom";
-import ParticlesBg from "../components/ParticlesBg.jsx"; // <-- FIX: Added .jsx extension
+import ParticlesBg from "../components/ParticlesBg.jsx"; 
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -10,7 +10,7 @@ export default function Login() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // For password toggle
+  const [showPassword, setShowPassword] = useState(false); 
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ export default function Login() {
     setError("");
     setLoading(true);
 
-    // --- YOUR EXISTING LOGIC (UNCHANGED) ---
+
     try {
       const res = await fetch("/auth/login", {
         method: "POST",
@@ -41,16 +41,15 @@ export default function Login() {
       }
 
       login(data.user, data.token);
-      navigate("/"); // Redirect to home
+      navigate("/"); 
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-    // --- END OF YOUR LOGIC ---
+
   };
 
-  // Styles from Register.jsx
   const inputFieldClass = "input-field w-full px-4 py-3.5 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none text-sm";
   const btnPrimaryClass = "btn-primary w-full text-white font-bold py-4 px-6 rounded-xl mt-8 text-sm tracking-wide relative flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed";
 

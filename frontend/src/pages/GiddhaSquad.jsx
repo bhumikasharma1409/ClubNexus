@@ -1,16 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // ADDED: For footer links
-import Navbar from '../components/Navbar'; // CHANGED: Use main navbar
-import Slideshow from '../components/Slideshow'; // ADDED: New component
-import EventCard from '../components/EventCard'; // ADDED: New component
+import { Link } from 'react-router-dom'; 
+import Navbar from '../components/Navbar'; 
+import Slideshow from '../components/Slideshow'; 
+import EventCard from '../components/EventCard'; 
 
-// --- MOCK DATA ---
-// (In a real app, you might fetch this from your backend)
+
 
 const slideshowImages = [
-  '/sixth.jpg', // Using this as it's a cultural dance photo
-  '/seventh.jpg', // Rangrezz photo
-  '/fifth.jpg', // Nati photo
+  '/sixth.jpg', 
+  '/seventh.jpg', 
+  '/fifth.jpg', 
 ];
 
 const upcomingEvents = [
@@ -33,11 +32,11 @@ const upcomingEvents = [
     description: 'We are holding auditions for our main team to perform at the upcoming University Cultural Fest. Show us your passion!'
   }
 ];
-// --- END MOCK DATA ---
+
 
 export default function GiddhaSquad() {
   const pageStyle = {
-    backgroundImage: "url('/book.jpg')", // Default non-tech background
+    backgroundImage: "url('/book.jpg')", 
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',
@@ -55,7 +54,7 @@ export default function GiddhaSquad() {
           {/* --- 1. HEADER (Name & Tagline) --- */}
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
             <img 
-              src="/giddha.jpeg" // From seed.js
+              src="/giddha.jpeg" 
               alt="Giddha Squad" 
               className="w-48 h-48 rounded-full object-cover border-4 border-pink-500 shadow-lg"
             />

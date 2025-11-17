@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // ADDED: For footer links
-import Navbar from '../components/Navbar'; // CHANGED: Use main navbar
-import Slideshow from '../components/Slideshow'; // ADDED: New component
-import EventCard from '../components/EventCard'; // ADDED: New component
+import { Link } from 'react-router-dom'; 
+import Navbar from '../components/Navbar'; 
+import Slideshow from '../components/Slideshow'; 
+import EventCard from '../components/EventCard'; 
 
-// --- MOCK DATA ---
-// (In a real app, you might fetch this from your backend)
+
 
 const slideshowImages = [
   '/gfg.jpeg',
@@ -34,11 +33,11 @@ const upcomingEvents = [
     description: 'Practice your technical interviews with peers and mentors. Get valuable feedback on your problem-solving and communication skills.'
   }
 ];
-// --- END MOCK DATA ---
+
 
 export default function GFG() {
   const pageStyle = {
-    backgroundImage: "url('/eight.jpg')", // Default tech background
+    backgroundImage: "url('/eight.jpg')", 
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',

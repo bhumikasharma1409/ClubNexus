@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // ADDED: For footer links
-import Navbar from '../components/Navbar'; // CHANGED: Use main navbar
-import Slideshow from '../components/Slideshow'; // ADDED: New component
-import EventCard from '../components/EventCard'; // ADDED: New component
+import { Link } from 'react-router-dom'; 
+import Navbar from '../components/Navbar'; 
+import Slideshow from '../components/Slideshow'; 
+import EventCard from '../components/EventCard'; 
 
-// --- MOCK DATA ---
-// (In a real app, you might fetch this from your backend)
+
 
 const slideshowImages = [
   '/fourth.jpg',
@@ -33,11 +32,11 @@ const upcomingEvents = [
     description: 'A unique event blending live music and spoken word poetry. Performers collaborate to create soulful performances.'
   }
 ];
-// --- END MOCK DATA ---
+
 
 export default function Dhwani() {
   const pageStyle = {
-    backgroundImage: "url('/book.jpg')", // Gets 'book.jpg' from frontend/public/
+    backgroundImage: "url('/book.jpg')", 
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',
@@ -55,7 +54,7 @@ export default function Dhwani() {
           {/* --- 1. HEADER (Name & Tagline) --- */}
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
             <img 
-              src="/dhwani.jpeg" // Gets image from frontend/public/
+              src="/dhwani.jpeg" 
               alt="Dhwani Club" 
               className="w-48 h-48 rounded-full object-cover border-4 border-red-500 shadow-lg"
             />

@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // ADDED: For footer links
-import Navbar from '../components/Navbar'; // CHANGED: Use main navbar
-import Slideshow from '../components/Slideshow'; // ADDED: New component
-import EventCard from '../components/EventCard'; // ADDED: New component
+import { Link } from 'react-router-dom'; 
+import Navbar from '../components/Navbar'; 
+import Slideshow from '../components/Slideshow';
+import EventCard from '../components/EventCard'; 
 
-// --- MOCK DATA ---
-// (In a real app, you might fetch this from your backend)
+
 
 const slideshowImages = [
   '/eight.jpg',
@@ -34,11 +33,11 @@ const upcomingEvents = [
     description: 'Learn to build modern, fast, and dynamic web applications using the React library. Basic JavaScript knowledge is recommended.'
   }
 ];
-// --- END MOCK DATA ---
+
 
 export default function CodingBlocks() {
   const pageStyle = {
-    backgroundImage: "url('/eight.jpg')", // Default tech background
+    backgroundImage: "url('/eight.jpg')", 
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',
@@ -56,7 +55,7 @@ export default function CodingBlocks() {
           {/* --- 1. HEADER (Name & Tagline) --- */}
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
             <img 
-              src="/codingblocks.jpeg" // From seed.js
+              src="/codingblocks.jpeg" 
               alt="Coding Blocks Club" 
               className="w-48 h-48 rounded-full object-cover border-4 border-gray-300 shadow-lg"
             />

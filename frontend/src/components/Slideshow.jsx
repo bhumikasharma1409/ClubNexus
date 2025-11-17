@@ -8,9 +8,9 @@ export default function Slideshow({ images }) {
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 4000); // Change slide every 4 seconds
+    }, 4000); 
 
-    return () => clearInterval(interval); // Clean up on unmount
+    return () => clearInterval(interval); 
   }, [images]);
 
   if (!images || images.length === 0) {

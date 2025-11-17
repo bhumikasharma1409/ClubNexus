@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // ADDED: For footer links
-import Navbar from '../components/Navbar'; // CHANGED: Use main navbar
-import Slideshow from '../components/Slideshow'; // ADDED: New component
-import EventCard from '../components/EventCard'; // ADDED: New component
+import { Link } from 'react-router-dom'; 
+import Navbar from '../components/Navbar';
+import Slideshow from '../components/Slideshow'; 
+import EventCard from '../components/EventCard'; 
 
-// --- MOCK DATA ---
-// (In a real app, you might fetch this from your backend)
+
 
 const slideshowImages = [
   '/lit1.jpeg',
@@ -34,11 +33,11 @@ const upcomingEvents = [
     description: 'Join our monthly book club discussion. This month, we are exploring the themes of destiny and dreams in Paulo Coelho\'s "The Alchemist".'
   }
 ];
-// --- END MOCK DATA ---
+
 
 export default function Literayllis() {
   const pageStyle = {
-    backgroundImage: "url('/lit2.jpg')", // From Litreyllis.html
+    backgroundImage: "url('/lit2.jpg')", 
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',

@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // Import useAuth
+import { useAuth } from "../context/AuthContext"; 
 
 export default function NavbarTechnical({ page }) {
-  const { user, logout } = useAuth(); // Get user and logout function
+  const { user, logout } = useAuth(); 
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-gradient-to-r from-red-700 via-red-800 to-black shadow-lg px-10 py-6 flex items-center justify-between z-30">
@@ -44,10 +44,10 @@ export default function NavbarTechnical({ page }) {
       {/* Right: Profile + Auth */}
       <div className="flex items-center space-x-4">
         {user ? (
-          // --- User is Logged In ---
+
           <>
             <img
-              src="/pfp.jpg" // Use image from /public folder
+              src="/pfp.jpg" 
               alt="User Profile"
               className="h-10 w-10 rounded-full border-4 border-white shadow-md object-cover"
             />
@@ -60,7 +60,7 @@ export default function NavbarTechnical({ page }) {
             </button>
           </>
         ) : (
-          // --- User is Logged Out ---
+
           <>
             <Link
               to="/login"

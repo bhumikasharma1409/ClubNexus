@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import Slideshow from '../components/Slideshow';
 import EventCard from '../components/EventCard';
 
-// --- MOCK DATA ---
+
 const slideshowImages = [
   '/fifth.jpg',
   '/seven.jpg',
@@ -31,7 +31,7 @@ const upcomingEvents = [
     description: 'We are casting for our next major stage production. Prepare a 2-minute monologue. Open to all students.'
   }
 ];
-// --- END MOCK DATA ---
+
 
 export default function Nati() {
   const pageStyle = {

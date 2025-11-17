@@ -44,10 +44,10 @@ export default function NavbarNonTechnical({ page }) {
       {/* Right: Profile + Auth */}
       <div className="flex items-center space-x-4">
         {user ? (
-          // --- User is Logged In ---
+
           <>
             <img
-              src="/pfp.jpg" // Use image from /public folder
+              src="/pfp.jpg" 
               alt="User Profile"
               className="h-10 w-10 rounded-full border-4 border-white shadow-md object-cover"
             />
@@ -60,7 +60,7 @@ export default function NavbarNonTechnical({ page }) {
             </button>
           </>
         ) : (
-          // --- User is Logged Out ---
+
           <>
             <Link
               to="/login"
