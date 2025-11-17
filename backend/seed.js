@@ -3,11 +3,11 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// --- Create __dirname for ES Modules ---
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// --- Data to Seed ---
+
 const technicalClubs = [
   { id: 1, name: "Coding Ninjas", img: "cn.jpg", desc: "Sharpen coding skills with contests, projects, and mentorship.", insta: "https://www.instagram.com/codingninjas_cuiet?igsh=MWVrbGxrOWxwc2Frag==", linkedin: "https://www.linkedin.com/company/codingninjas-cuiet/", link: "CodingNinjas.html" },
   { id: 2, name: "IEEE", img: "ieee.webp", desc: "Innovate with technology, research, and professional networking.", insta: "https://www.instagram.com/ieeeciet?igsh=MWxqMmJtcDU4em9zcw==", linkedin: "https://www.linkedin.com/company/ieee-ciet-student-branch/", link: "IEEE.html" },
@@ -30,7 +30,7 @@ const nonTechnicalClubs = [
   { id: 8, name: "Natraj", img: "natraj.jpeg", desc: "The classical dance club dedicated to Bharatanatyam, Kathak, and Odissi traditions.", insta: "https://www.instagram.com/c2s2_natraj?igsh=MWl6em1mczYwdnM4aQ==", link: "Natraj.html" }
 ];
 
-// --- Mongoose Setup (simplified for script) ---
+
 dotenv.config();
 
 const clubSchema = new mongoose.Schema({
@@ -46,21 +46,19 @@ const clubSchema = new mongoose.Schema({
 const TechnicalClub = mongoose.model("TechnicalClub", clubSchema);
 const NonTechnicalClub = mongoose.model("NonTechnicalClub", clubSchema);
 
-// --- Seeding Function ---
+
 const seedDatabase = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB connected for seeding...");
 
-    // Clear existing data
+
     await TechnicalClub.deleteMany({});
-    //
-    // 👇 THIS IS THE FIX (Removed the 's')
-    //
+
     await NonTechnicalClub.deleteMany({});
     console.log("Cleared existing club data.");
 
-    // Insert new data
+
     await TechnicalClub.insertMany(technicalClubs);
     await NonTechnicalClub.insertMany(nonTechnicalClubs);
     console.log("Database seeded successfully!");

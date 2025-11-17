@@ -8,23 +8,23 @@ import jwt from "jsonwebtoken";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// --- Configuration and Setup ---
+
 dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ES Module equivalent for __dirname
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// --- Database Connection ---
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected successfully."))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// --- Mongoose Schemas ---
+
 
 const clubSchema = new mongoose.Schema({
   id: { type: Number, required: true, unique: true },
@@ -39,28 +39,27 @@ const clubSchema = new mongoose.Schema({
 const TechnicalClub = mongoose.model("TechnicalClub", clubSchema);
 const NonTechnicalClub = mongoose.model("NonTechnicalClub", clubSchema);
 
-// UPDATED User Schema for Google Auth
+
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true, lowercase: true },
   
-  // These are optional because Google Sign-In won't provide them
+
   year: { type: String },
   batch: { type: String },
   course: { type: String },
 
-  // Password is no longer "required" at schema level,
-  // because a user can sign in with Google instead.
+
   password: { type: String, minlength: 6 },
   
-  // This field will link their Google account (it's new)
+
   googleId: { type: String, sparse: true, unique: true } 
 });
 
 const User = mongoose.model("User", userSchema);
 
 
-// --- API Routes for Clubs ---
+
 app.get("/api/technical-clubs", async (req, res) => {
   try {
     const clubs = await TechnicalClub.find({});
@@ -81,9 +80,8 @@ app.get("/api/nontechnical-clubs", async (req, res) => {
   }
 });
 
-// --- API Routes for Authentication ---
 
-// POST /auth/register
+
 const registerSchema = Joi.object({
   name: Joi.string().min(2).required(),
   email: Joi.string().email().required(),
@@ -134,7 +132,7 @@ app.post("/auth/register", async (req, res) => {
   }
 });
 
-// POST /auth/login
+
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
@@ -154,7 +152,7 @@ app.post("/auth/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
     
-    // Check if user has a password (they might be Google-only)
+
     if (!user.password) {
       return res.status(400).json({ message: "Please sign in with Google." });
     }
@@ -178,8 +176,7 @@ app.post("/auth/login", async (req, res) => {
 });
 
 
-// *** NEW ROUTE FOR GOOGLE AUTH ***
-// POST /auth/google
+
 app.post("/auth/google", async (req, res) => {
   const { email, name, googleId } = req.body;
 
@@ -188,18 +185,18 @@ app.post("/auth/google", async (req, res) => {
   }
 
   try {
-    // 1. Find user by email
+
     let user = await User.findOne({ email: email });
 
     if (user) {
-      // 2. User exists. If they don't have a googleId, add it.
+
       if (!user.googleId) {
         user.googleId = googleId;
         await user.save();
       }
-      // If they do have a googleId, we just log them in.
+
     } else {
-      // 3. No user found, create a new one
+
       user = new User({
         name,
         email,
@@ -208,7 +205,7 @@ app.post("/auth/google", async (req, res) => {
       await user.save();
     }
 
-    // 4. User is found OR created. Log them in.
+
     const payload = { user: { id: user.id } };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "3600s" });
 
@@ -228,7 +225,7 @@ app.post("/auth/google", async (req, res) => {
 });
 
 
-// --- Deployment: Serve React App ---
+
 const frontendDistPath = path.join(__dirname, "..", "frontend", "dist");
 app.use(express.static(frontendDistPath));
 
@@ -240,7 +237,7 @@ app.get("*", (req, res) => {
   });
 });
 
-// --- Start Server ---
+
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
