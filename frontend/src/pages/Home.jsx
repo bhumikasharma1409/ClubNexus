@@ -118,13 +118,27 @@ export default function Home() {
                 </a>
               </div>
             </div>
-            <div className="flex justify-center">
-              <img 
-                src="/creative.png" 
-                alt="Campus Life Illustration" 
-                className="w-full max-w-md floating"
-              />
-            </div>
+            <div className="flex justify-center mt-6">
+  <img 
+    src="/chitkara.jpg" 
+    alt="Campus Life Illustration" 
+    
+    className="
+      w-[500px]            
+      md:w-[650px]         
+      lg:w-[750px]        
+      rounded-2xl          
+      shadow-2xl           
+      transition-transform 
+      duration-500 
+      ease-in-out 
+      hover:scale-105      
+      hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] 
+      floating             
+    "
+  />
+</div>
+
           </div>
         </div>
       </section>
