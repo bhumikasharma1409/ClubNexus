@@ -1,13 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// Core Pages
+
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import TechnicalClubs from "./pages/TechnicalClubs";
 import NonTechnicalClubs from "./pages/NonTechnicalClubs";
 
-// Non-Technical Club Pages
+
 import Dhwani from "./pages/Dhwani";
 import Literayllis from "./pages/Literayllis";
 import Nati from "./pages/Nati";
@@ -15,7 +15,7 @@ import BhangraRegiment from "./pages/BhangraRegiment";
 import GiddhaSquad from "./pages/GiddhaSquad";
 import Natraj from "./pages/NatrajClub";
 
-// Technical Club Pages
+
 import CodingNinjas from "./pages/CodingNinjas";
 import IEEE from "./pages/IEEE";
 import GFG from "./pages/GFG";

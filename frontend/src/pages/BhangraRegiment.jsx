@@ -1,15 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // ADDED: For footer links
-import Navbar from '../components/Navbar'; // CHANGED: Use main navbar
-import Slideshow from '../components/Slideshow'; // ADDED: New component
-import EventCard from '../components/EventCard'; // ADDED: New component
+import { Link } from 'react-router-dom'; 
+import Navbar from '../components/Navbar'; 
+import Slideshow from '../components/Slideshow'; 
+import EventCard from '../components/EventCard'; 
 
-// --- MOCK DATA ---
-// We can use the images from your /public folder
+
 const slideshowImages = [
-  '/sixth.jpg',     // The main bhangra team photo
-  '/chitkara.jpg',  // The campus photo
-  '/creative.png'   // Placeholder
+  '/sixth.jpg',     
+  '/chitkara.jpg',  
+  '/creative.png'   
 ];
 
 const upcomingEvents = [
@@ -32,11 +31,11 @@ const upcomingEvents = [
     description: 'Catch our surprise flash mob performance in the main campus square. Come feel the energy!'
   }
 ];
-// --- END MOCK DATA ---
+
 
 export default function BhangraRegiment() {
   const pageStyle = {
-    backgroundImage: "url('/chitkara.jpg')", // Background from old HTML
+    backgroundImage: "url('/chitkara.jpg')", 
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',

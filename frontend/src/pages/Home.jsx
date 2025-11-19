@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar'; // Import the new homepage navbar
+import Navbar from '../components/Navbar'; 
 import ParticlesBg from '../components/ParticlesBg';
-import FeaturedClubCard from '../components/FeaturedClubCard'; // Import the new card
+import FeaturedClubCard from '../components/FeaturedClubCard'; 
 
-// FAQ Accordion Item Component
+
 const FaqItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -35,19 +35,18 @@ const FaqItem = ({ question, answer }) => {
   );
 };
 
-// Main Home Component
 export default function Home() {
   const [technicalClubs, setTechnicalClubs] = useState([]);
   const [nonTechnicalClubs, setNonTechnicalClubs] = useState([]);
 
   useEffect(() => {
-    // Fetch technical clubs
+
     fetch('/api/technical-clubs')
       .then((res) => res.json())
       .then((data) => setTechnicalClubs(data))
       .catch((err) => console.error("Failed to fetch technical clubs:", err));
 
-    // Fetch non-technical clubs
+ 
     fetch('/api/nontechnical-clubs')
       .then((res) => res.json())
       .then((data) => setNonTechnicalClubs(data))

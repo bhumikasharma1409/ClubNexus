@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
+import { Sequelize, DataTypes } from "sequelize";
 import dotenv from "dotenv";
 import Joi from "joi";
 import bcrypt from "bcryptjs";
@@ -8,61 +8,78 @@ import jwt from "jsonwebtoken";
 import path from "path";
 import { fileURLToPath } from "url";
 
-
 dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// --- 1. MYSQL CONNECTION SETUP (Sequelize) ---
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASS,
+  {
+    host: process.env.DB_HOST,
+    dialect: "mysql",
+    logging: false, // Set to console.log to see raw SQL queries
+  }
+);
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected successfully."))
-  .catch((err) => console.error("MongoDB connection error:", err));
+// Test Connection
+sequelize.authenticate()
+  .then(() => console.log("✅ MySQL connected successfully."))
+  .catch((err) => console.error("❌ MySQL connection error:", err));
 
+// --- 2. DEFINE MODELS (Tables) ---
 
-
-const clubSchema = new mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
-  name: { type: String, required: true },
-  img: String,
-  desc: String,
-  insta: String,
-  linkedin: String,
-  link: String,
+// Technical Club Model
+const TechnicalClub = sequelize.define("TechnicalClub", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  name: { type: DataTypes.STRING, allowNull: false },
+  img: { type: DataTypes.STRING },
+  desc: { type: DataTypes.TEXT },
+  insta: { type: DataTypes.STRING },
+  linkedin: { type: DataTypes.STRING },
+  link: { type: DataTypes.STRING },
 });
 
-const TechnicalClub = mongoose.model("TechnicalClub", clubSchema);
-const NonTechnicalClub = mongoose.model("NonTechnicalClub", clubSchema);
-
-
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true, lowercase: true },
-  
-
-  year: { type: String },
-  batch: { type: String },
-  course: { type: String },
-
-
-  password: { type: String, minlength: 6 },
-  
-
-  googleId: { type: String, sparse: true, unique: true } 
+// Non-Technical Club Model
+const NonTechnicalClub = sequelize.define("NonTechnicalClub", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  name: { type: DataTypes.STRING, allowNull: false },
+  img: { type: DataTypes.STRING },
+  desc: { type: DataTypes.TEXT },
+  insta: { type: DataTypes.STRING },
+  linkedin: { type: DataTypes.STRING }, // Optional if not present in seed
+  link: { type: DataTypes.STRING },
 });
 
-const User = mongoose.model("User", userSchema);
+// User Model
+const User = sequelize.define("User", {
+  name: { type: DataTypes.STRING, allowNull: false },
+  email: { type: DataTypes.STRING, allowNull: false, unique: true },
+  password: { type: DataTypes.STRING }, // Can be null if using Google Auth only
+  year: { type: DataTypes.STRING },
+  batch: { type: DataTypes.STRING },
+  course: { type: DataTypes.STRING },
+  googleId: { type: DataTypes.STRING, unique: true },
+});
 
+// Sync Database (Creates tables if they don't exist)
+// force: false ensures we don't delete data on every restart
+sequelize.sync({ force: false }).then(() => {
+  console.log("✅ Database & Tables synced.");
+});
 
+// --- 3. API ROUTES ---
 
+// Get Technical Clubs
 app.get("/api/technical-clubs", async (req, res) => {
   try {
-    const clubs = await TechnicalClub.find({});
+    const clubs = await TechnicalClub.findAll();
     res.json(clubs);
   } catch (err) {
     console.error("Error fetching technical clubs:", err);
@@ -70,9 +87,10 @@ app.get("/api/technical-clubs", async (req, res) => {
   }
 });
 
+// Get Non-Technical Clubs
 app.get("/api/nontechnical-clubs", async (req, res) => {
   try {
-    const clubs = await NonTechnicalClub.find({});
+    const clubs = await NonTechnicalClub.findAll();
     res.json(clubs);
   } catch (err) {
     console.error("Error fetching non-technical clubs:", err);
@@ -80,7 +98,7 @@ app.get("/api/nontechnical-clubs", async (req, res) => {
   }
 });
 
-
+// --- AUTHENTICATION ROUTES ---
 
 const registerSchema = Joi.object({
   name: Joi.string().min(2).required(),
@@ -100,15 +118,18 @@ app.post("/auth/register", async (req, res) => {
   const { name, email, password, year, batch, course } = req.body;
 
   try {
-    let user = await User.findOne({ email });
-    if (user) {
+    // Check if user exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
       return res.status(400).json({ message: "Email already in use." });
     }
 
+    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    user = new User({
+    // Create User
+    const user = await User.create({
       name,
       email,
       password: hashedPassword,
@@ -116,8 +137,6 @@ app.post("/auth/register", async (req, res) => {
       batch,
       course,
     });
-
-    await user.save();
 
     const payload = { user: { id: user.id } };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "3600s" });
@@ -131,7 +150,6 @@ app.post("/auth/register", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
 
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -147,11 +165,10 @@ app.post("/auth/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    
 
     if (!user.password) {
       return res.status(400).json({ message: "Please sign in with Google." });
@@ -175,8 +192,6 @@ app.post("/auth/login", async (req, res) => {
   }
 });
 
-
-
 app.post("/auth/google", async (req, res) => {
   const { email, name, googleId } = req.body;
 
@@ -185,26 +200,20 @@ app.post("/auth/google", async (req, res) => {
   }
 
   try {
-
-    let user = await User.findOne({ email: email });
+    let user = await User.findOne({ where: { email } });
 
     if (user) {
-
       if (!user.googleId) {
         user.googleId = googleId;
         await user.save();
       }
-
     } else {
-
-      user = new User({
+      user = await User.create({
         name,
         email,
         googleId,
       });
-      await user.save();
     }
-
 
     const payload = { user: { id: user.id } };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "3600s" });
@@ -217,15 +226,13 @@ app.post("/auth/google", async (req, res) => {
         email: user.email,
       },
     });
-
   } catch (err) {
     console.error("Google auth error:", err);
     res.status(500).json({ message: "Server error during Google auth" });
   }
 });
 
-
-
+// --- SERVE FRONTEND ---
 const frontendDistPath = path.join(__dirname, "..", "frontend", "dist");
 app.use(express.static(frontendDistPath));
 
@@ -236,7 +243,6 @@ app.get("*", (req, res) => {
     }
   });
 });
-
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {

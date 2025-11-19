@@ -1,16 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // ADDED: For footer links
-import Navbar from '../components/Navbar'; // CHANGED: Use main navbar
-import Slideshow from '../components/Slideshow'; // ADDED: New component
-import EventCard from '../components/EventCard'; // ADDED: New component
+import { Link } from 'react-router-dom'; 
+import Navbar from '../components/Navbar'; 
+import Slideshow from '../components/Slideshow'; 
+import EventCard from '../components/EventCard'; 
 
-// --- MOCK DATA ---
-// (In a real app, you might fetch this from your backend)
+
 
 const slideshowImages = [
-  '/seven.jpg', // Rangrezz photo, shows classical dance
-  '/fourth.jpg', // Stage performance
-  '/fifth.jpg',  // Another group photo
+  '/seven.jpg', 
+  '/fourth.jpg', 
+  '/fifth.jpg',  
 ];
 
 const upcomingEvents = [
@@ -37,7 +36,7 @@ const upcomingEvents = [
 
 export default function NatrajClub() {
   const pageStyle = {
-    backgroundImage: "url('/book.jpg')", // Default background
+    backgroundImage: "url('/book.jpg')", 
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',

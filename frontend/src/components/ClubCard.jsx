@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// Updated to display the image and match the new red theme
 export default function ClubCard({ id, img, name, desc, insta, linkedin, link }) {
   const navigate = useNavigate();
 
@@ -42,7 +41,7 @@ export default function ClubCard({ id, img, name, desc, insta, linkedin, link })
               href={insta}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()} // Prevents card click
+              onClick={(e) => e.stopPropagation()} 
               className="text-gray-400 hover:text-pink-600 transition-colors"
             >
               <i className="fab fa-instagram fa-lg"></i>
@@ -53,7 +52,7 @@ export default function ClubCard({ id, img, name, desc, insta, linkedin, link })
               href={linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()} // Prevents card click
+              onClick={(e) => e.stopPropagation()} 
               className="text-gray-400 hover:text-blue-700 transition-colors"
             >
               <i className="fab fa-linkedin fa-lg"></i>

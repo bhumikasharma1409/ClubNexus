@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext.jsx'; // Using auth to conditionally show links
+import { useAuth } from '../context/AuthContext.jsx'; 
 
 export default function Navbar() {
-  const { user, logout } = useAuth(); // Get user state
+  const { user, logout } = useAuth(); 
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-gradient-to-r from-red-600 via-red-800 to-black shadow-lg px-8 py-6 flex items-center justify-between z-50">

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom'; // Import Link for footer
-import Navbar from "../components/Navbar.jsx"; // 1. Using the new Navbar
+import { Link } from 'react-router-dom'; 
+import Navbar from "../components/Navbar.jsx"; 
 import ClubCard from "../components/ClubCard.jsx";
-import ParticlesBg from "../components/ParticlesBg.jsx"; // 2. Adding Particles
+import ParticlesBg from "../components/ParticlesBg.jsx"; 
 
 export default function NonTechnicalClubs() {
   const [clubs, setClubs] = useState([]);

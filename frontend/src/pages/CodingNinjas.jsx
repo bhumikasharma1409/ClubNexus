@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import Slideshow from '../components/Slideshow';
 import EventCard from '../components/EventCard';
 
-// --- MOCK DATA ---
+
 const slideshowImages = [
   '/first.jpg',
   '/second.jpg',
@@ -32,7 +32,7 @@ const upcomingEvents = [
     description: 'Join us for a virtual session with a Chitkara alum,. now a Software Engineer at Google, to discuss interview prep and work culture.'
   }
 ];
-// --- END MOCK DATA ---
+
 
 export default function CodingNinjas() {
   const pageStyle = {
