@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import AdminEvents from "./pages/AdminEvents";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -56,6 +57,9 @@ export default function App() {
           <Route path="/club/bits-n-bytes" element={<BitsNBytes />} />
           <Route path="/club/gdsc" element={<GDSC />} />
           <Route path="/club/coding-blocks" element={<CodingBlocks />} />
+
+
+          <Route path="/admin-events" element={<AdminEvents />} />
 
         </Routes>
       </div>
