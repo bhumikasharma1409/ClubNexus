@@ -1,5 +1,5 @@
-// src/App.jsx
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -47,16 +47,18 @@ export default function App() {
         <Route path="/club/giddha-squad" element={<GiddhaSquad />} />
         <Route path="/club/natraj" element={<Natraj />} />
 
-        {/* Technical Club Routes */}
-        <Route path="/club/coding-ninjas" element={<CodingNinjas />} />
-        <Route path="/club/ieee" element={<IEEE />} />
-        <Route path="/club/gfg" element={<GFG />} />
-        <Route path="/club/acm" element={<ACM />} />
-        <Route path="/club/open-source" element={<OpenSource />} />
-        <Route path="/club/bits-n-bytes" element={<BitsNBytes />} />
-        <Route path="/club/gdsc" element={<GDSC />} />
-        <Route path="/club/coding-blocks" element={<CodingBlocks />} />
-      </Routes>
-    </div>
+          {/* Technical Club Routes */}
+          <Route path="/club/coding-ninjas" element={<CodingNinjas />} />
+          <Route path="/club/ieee" element={<IEEE />} />
+          <Route path="/club/gfg" element={<GFG />} />
+          <Route path="/club/acm" element={<ACM />} />
+          <Route path="/club/open-source" element={<OpenSource />} />
+          <Route path="/club/bits-n-bytes" element={<BitsNBytes />} />
+          <Route path="/club/gdsc" element={<GDSC />} />
+          <Route path="/club/coding-blocks" element={<CodingBlocks />} />
+
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
