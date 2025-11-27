@@ -10,7 +10,7 @@ export default function AdminEvents() {
     {
       title: "Web Dev Bootcamp",
       date: "12 Dec",
-      registrations: 87,
+      registrations: 87, 
       status: "Upcoming",
     },
   ];

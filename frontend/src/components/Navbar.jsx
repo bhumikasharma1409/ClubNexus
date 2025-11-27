@@ -4,7 +4,10 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
+  const auth = useAuth();
+const user = auth?.user;
+const logout = auth?.logout;
+
   const navigate = useNavigate();
   const location = useLocation();
 
