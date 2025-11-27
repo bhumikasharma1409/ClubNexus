@@ -5,6 +5,7 @@ require("dotenv").config();
 const mongoose = require("./src/config/db");
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
