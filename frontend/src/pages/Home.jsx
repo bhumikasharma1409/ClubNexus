@@ -306,7 +306,7 @@ export default function Home() {
 
             {/* TECHNICAL BOX WITH OUTER GLOW */}
             <AnimatedSection className="relative flex-1 min-w-[260px] max-w-[480px]" delay="0.12s">
-              <div className="relative rounded-2xl p-6 shadow-md overflow-hidden bg-gradient-to-r from-[#ffe5e5] via-[#fff1f1] to-white border border-transparent">
+              <div className="relative rounded-2xl p-6 shadow-md overflow-hidden bg-gradient-to-r from-[#ffe5e5] via-[#fff1f1] to-white border border-transparent hover:shadow-xl hover:scale-105 transform transition-all duration-200">
                 <h3 className="text-2xl font-serif font-bold text-black mb-1">Technical Clubs</h3>
                 <p className="text-sm text-yellow-800 mb-6">Innovate, build, and code with the brightest minds on campus.</p>
 
@@ -315,7 +315,7 @@ export default function Home() {
                     <Link
                       key={club.id ?? i}
                       to={`/club/${slugify(club.name)}`}
-                      className="flex items-center gap-3 p-3 rounded-lg bg-white/6 border border-white/6 hover:border-yellow-300 hover:shadow-md transition-all duration-150"
+                      className="flex items-center gap-3 p-3 rounded-lg bg-white/6 border border-white/6 transition-all duration-150"
                     >
                       <div className="w-9 h-9 rounded-full overflow-hidden bg-white/8 flex items-center justify-center flex-shrink-0 ring-1 ring-white/10">
                         <img
@@ -345,7 +345,7 @@ export default function Home() {
 
             {/* NON TECHNICAL BOX WITH OUTER GLOW */}
             <AnimatedSection className="relative flex-1 min-w-[260px] max-w-[480px]" delay="0.24s">
-              <div className="relative rounded-2xl p-6 shadow-md overflow-hidden bg-gradient-to-r from-[#ffe5e5] via-[#fff1f1] to-white border border-transparent">
+              <div className="relative rounded-2xl p-6 shadow-md overflow-hidden bg-gradient-to-r from-[#ffe5e5] via-[#fff1f1] to-white border border-transparent hover:shadow-xl hover:scale-105 transform transition-all duration-200">
                 <h3 className="text-2xl font-serif font-bold text-black mb-1">Non-Technical Clubs</h3>
                 <p className="text-sm text-yellow-800 mb-6">Explore your passion in arts, culture, dance, and more.</p>
 
@@ -354,7 +354,7 @@ export default function Home() {
                     <Link
                       key={club.id ?? i}
                       to={`/club/${slugify(club.name)}`}
-                      className="flex items-center gap-3 p-3 rounded-lg bg-white/6 border border-white/6 hover:border-yellow-300 hover:shadow-md transition-all duration-150"
+                      className="flex items-center gap-3 p-3 rounded-lg bg-white/6 border border-white/6 transition-all duration-150"
                     >
                       <div className="w-9 h-9 rounded-full overflow-hidden bg-white/8 flex items-center justify-center flex-shrink-0 ring-1 ring-white/10">
                         <img
@@ -375,7 +375,7 @@ export default function Home() {
                     to="/nontechnical-clubs"
                     className="inline-block text-sm font-serif font-bold py-2 px-5 rounded-full bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white hover:opacity-95 transition-shadow shadow-lg"
                   >
-                    View All Cultural Clubs →
+                    View All Non-Technical Clubs →
                   </Link>
                 </div>
 
