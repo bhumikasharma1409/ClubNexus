@@ -1,61 +1,57 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
-const clubs = [
-  { id: "t1", name: "Coding Ninja", password: "Bhumika@1234" },
-  { id: "t2", name: "ACM", password: "ACM@1234" },
-  { id: "t3", name: "IEEE", password: "IEEE@1234" },
-  { id: "t4", name: "GFG", password: "GFG@1234" },
-  { id: "t5", name: "Open Source", password: "OS@1234" },
-  { id: "t6", name: "Bits n Byte", password: "BNB@1234" },
-  { id: "t7", name: "GDSC", password: "GDSC@1234" },
-  { id: "t8", name: "Coding Blocks", password: "CB@1234" },
-  { id: "t9", name: "OSA", password: "OSA@1234" }
-];
+import { Link, useNavigate } from "react-router-dom";
 
 export default function AdminLogin() {
-  const [name, setName] = useState("");
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
-  const [club, setClub] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Email Validation (Chitkara Admin Email Pattern)
-  const collegeEmailRegex =
-    /^[a-z]+[0-9]{4}\.[a-z]+[0-9]{2}@chitkara\.edu\.in$/;
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate email
-    if (!collegeEmailRegex.test(email)) {
-      setError("Invalid college admin email format.");
-      return;
-    }
-
-    if (!club) {
-      setError("Please select your club.");
-      return;
-    }
-
-    // Validate password for selected club
-    const selectedClub = clubs.find((c) => c.name === club);
-    if (selectedClub.password !== password) {
-      setError("Incorrect admin password.");
-      return;
-    }
 
     setError("");
 
-    // SUCCESS → redirect
-    alert("Admin Login Successful!");
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      });
+
+      const data = await res.json();
+      console.log("LOGIN RESPONSE:", data);
+
+      if (!res.ok) {
+        setError(data.message || "Invalid Credentials");
+        return;
+      }
+
+      // Save token + admin into localStorage
+      localStorage.setItem("adminToken", data.token);
+      localStorage.setItem("adminData", JSON.stringify(data.admin));
+
+      // Redirect to admin dashboard
+      navigate("/admin-dashboard");
+
+
+    } catch (err) {
+      setError("Server error. Try again later.");
+      console.error(err);
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 via-white to-red-100 p-6">
       <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-2 overflow-hidden">
 
-        {/* LEFT SIDE */}
+        {/* LEFT */}
         <div className="bg-gradient-to-b from-red-600 to-black text-white p-10 flex flex-col justify-center">
           <h1 className="text-4xl font-extrabold">Welcome Admin</h1>
           <h2 className="text-5xl font-extrabold mt-2">ClubNexus</h2>
@@ -64,7 +60,7 @@ export default function AdminLogin() {
           </p>
         </div>
 
-        {/* RIGHT SIDE */}
+        {/* RIGHT */}
         <div className="p-10">
           <h2 className="text-3xl font-bold mb-6">Admin Login</h2>
 
@@ -75,51 +71,23 @@ export default function AdminLogin() {
           )}
 
           <form className="space-y-5" onSubmit={handleSubmit}>
-            {/* NAME */}
-            <div>
-              <label className="font-medium">Full Name</label>
-              <input
-                type="text"
-                className="w-full border rounded-lg p-3 mt-1"
-                placeholder="Your full name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
 
             {/* EMAIL */}
             <div>
-              <label className="font-medium">College Email</label>
+              <label className="font-medium">Admin Email</label>
               <input
                 type="email"
                 className="w-full border rounded-lg p-3 mt-1"
-                placeholder="yourname0000.becse24@chitkara.edu.in"
+                placeholder="admin@codingclub.edu"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
 
-            {/* CLUB SELECT */}
-            <div>
-              <label className="font-medium">You are admin of</label>
-              <select
-                className="w-full border rounded-lg p-3 mt-1"
-                value={club}
-                onChange={(e) => setClub(e.target.value)}
-                required
-              >
-                <option value="">Select Club</option>
-                {clubs.map((c) => (
-                  <option key={c.id} value={c.name}>{c.name}</option>
-                ))}
-              </select>
-            </div>
-
             {/* PASSWORD */}
             <div>
-              <label className="font-medium">Admin Password</label>
+              <label className="font-medium">Password</label>
               <input
                 type="password"
                 className="w-full border rounded-lg p-3 mt-1"
@@ -130,7 +98,7 @@ export default function AdminLogin() {
               />
             </div>
 
-            {/* SUBMIT BUTTON */}
+            {/* SUBMIT */}
             <button
               type="submit"
               className="w-full py-3 rounded-lg bg-gradient-to-r from-red-600 to-black text-white font-semibold text-lg shadow-lg hover:opacity-90"
@@ -139,7 +107,7 @@ export default function AdminLogin() {
             </button>
           </form>
 
-          {/* USER LOGIN BELOW */}
+          {/* USER LOGIN */}
           <div className="mt-6 text-center">
             <p className="text-gray-600">Not an admin?</p>
             <Link

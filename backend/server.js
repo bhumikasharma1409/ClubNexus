@@ -1,26 +1,31 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const connectDB = require('./src/config/db');
 
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
-const mongoose = require("./src/config/db");
+const authRoutes = require('./src/routes/authRoutes');
+const adminRoutes = require('./src/routes/adminRoutes');
+const eventRoutes = require('./src/routes/eventRoutes');
+const clubRoutes = require('./src/routes/clubRoutes');
 
 const app = express();
+connectDB();
 
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use("/api/auth", require("./src/routes/authRoutes"));
-app.use("/api/events", require("./src/routes/eventRoutes"));
+// serve uploaded posters
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.get("/", (req, res) => {
-  res.send("Backend running...");
-});
+// routes
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/clubs', clubRoutes);
+
+// health
+app.get('/', (req, res) => res.send('ClubNexus backend running'));
 
 const PORT = process.env.PORT || 5001;
-mongoose.connection.once('open', () => {
-  app.listen(PORT, () => console.log("Server running on port " + PORT));
-});
-
-
-
+app.listen(PORT, () => console.log(`Server listening on ${PORT}`));

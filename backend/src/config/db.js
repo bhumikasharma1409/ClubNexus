@@ -1,15 +1,13 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
 
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('MongoDB connected');
+  } catch (err) {
+    console.error('Mongo connect error', err);
+    process.exit(1);
+  }
+};
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ClubNexus';
-
-mongoose.connect(MONGODB_URI);
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
-
-module.exports = mongoose;
+module.exports = connectDB;

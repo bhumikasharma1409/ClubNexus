@@ -1,11 +1,7 @@
-const express = require("express");
-const { getEvents, addEvent } = require("../controllers/eventController");
-const { authMiddleware } = require("../middlewares/authMiddleware");
-
+const express = require('express');
 const router = express.Router();
+const { listEventsForClub } = require('../controllers/eventController');
 
-router.get("/", getEvents);
-router.post("/", authMiddleware, addEvent);
+router.get('/club/:clubId', listEventsForClub);
 
 module.exports = router;
-
