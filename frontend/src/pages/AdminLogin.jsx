@@ -40,7 +40,7 @@ export default function AdminLogin() {
 
     // Validate password for selected club
     const selectedClub = clubs.find((c) => c.name === club);
-    if (selectedClub.password !== password) {
+    if (!selectedClub || selectedClub.password !== password) {
       setError("Incorrect admin password.");
       return;
     }
@@ -53,10 +53,23 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 via-white to-red-100 p-6">
+      <style>{`
+        /* Left hero uses chitkara.webp with a black transparent overlay.
+           Place chitkara.webp in /public (url('/chitkara.webp')) or adjust path. */
+        .left-hero {
+          background:
+            linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+            url('/chitkara.webp');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+      `}</style>
+
       <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-2 overflow-hidden">
 
-        {/* LEFT SIDE */}
-        <div className="bg-gradient-to-b from-red-600 to-black text-white p-10 flex flex-col justify-center">
+        {/* LEFT SIDE (image + overlay) */}
+        <div className="left-hero text-white p-10 flex flex-col justify-center">
           <h1 className="text-4xl font-extrabold">Welcome Admin</h1>
           <h2 className="text-5xl font-extrabold mt-2">ClubNexus</h2>
           <p className="mt-4 text-sm bg-white/20 p-4 rounded-lg backdrop-blur-md">
