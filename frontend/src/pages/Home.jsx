@@ -84,7 +84,10 @@ const AnimatedSection = ({ children, className = '', delay = '0s', threshold = 0
 };
 
 /* -------------------------
-   FaqItem Component
+   Ultra Fast FaqItem Component
+   ------------------------- */
+/* -------------------------
+   FaqItem — fully aligned + padded + bold
    ------------------------- */
 const FaqItem = ({ question, answer, isOpen, onClick }) => {
   return (
@@ -92,12 +95,18 @@ const FaqItem = ({ question, answer, isOpen, onClick }) => {
       <h2>
         <button
           type="button"
-          className="flex items-center justify-between w-full py-4 text-left text-gray-700 font-serif font-medium"
+          className="flex items-center justify-between w-full py-4 px-6 
+                     text-left text-gray-800 font-serif font-bold transition-colors"
           onClick={onClick}
+          aria-expanded={isOpen}
         >
-          <span className="text-lg">{question}</span>
+          <span className="text-lg font-serif font-bold leading-snug break-words">
+            {question}
+          </span>
+
           <svg
-            className={`w-5 h-5 transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
+            className={`w-5 h-5 flex-shrink-0 transform transition-transform duration-200 
+                       ${isOpen ? 'rotate-180' : ''}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -107,14 +116,22 @@ const FaqItem = ({ question, answer, isOpen, onClick }) => {
         </button>
       </h2>
 
-      <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-screen' : 'max-h-0'}`}>
-        <div className="py-4 border-t border-gray-200 font-serif">
-          <p className="text-gray-500">{answer}</p>
+      <div
+        className={`grid transition-all duration-200 ease-out 
+                      ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
+      >
+        <div className="overflow-hidden">
+          <div className="px-6 pb-4">
+            <p className="text-gray-700 font-serif leading-relaxed break-words">
+              {answer}
+            </p>
+          </div>
         </div>
       </div>
     </div>
   );
 };
+
 
 /* -------------------------
    Helpers
@@ -136,29 +153,43 @@ export default function Home() {
   const [nonTechnicalClubs, setNonTechnicalClubs] = useState([]);
   const [faqOpen, setFaqOpen] = useState([false, false, false, false]);
 
-  // SLIDESHOW STATE
+    // SLIDESHOW STATE
   const slides = [
-    '/first.jpg',
-    '/fourth.jpg',
     '/second.jpg',
+    
+    
     '/fifth.jpg',
     '/third.jpg',
+    '/fourth.jpg',
     '/sixth.jpg',
     '/seven.jpg',
     '/eight.jpg',
   ];
+
+  // clone first slide at the end for smooth infinite loop
+  const slidesExtended = [...slides, slides[0]];
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const slideIntervalRef = useRef(null);
+  const trackRef = useRef(null);
 
-  // start auto-play with 2s interval
+  // --- ADDED GUARD ---
+  const isSnappingRef = useRef(false);
+
+  // autoplay: increment index (but guard while snapping)
   useEffect(() => {
-    if (slideIntervalRef.current) {
-      clearInterval(slideIntervalRef.current);
-    }
+    if (slideIntervalRef.current) clearInterval(slideIntervalRef.current);
 
     slideIntervalRef.current = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 2000); // 2000ms = 2s
+      // don't increment while we're snapping back
+      if (isSnappingRef.current) return;
+
+      setCurrentSlide((prev) => {
+        // clamp so we never go beyond the cloned index
+        if (prev >= slides.length) return prev;
+        return prev + 1;
+      });
+    }, 2000);
 
     return () => {
       if (slideIntervalRef.current) {
@@ -168,10 +199,54 @@ export default function Home() {
     };
   }, [slides.length]);
 
-  // optional: allow manual jump (not required but handy)
+  // transitionend handler: when we've finished animating into the cloned slide,
+  // snap the track instantly to the real first slide (0) without animation,
+  // then restore transition and keep state in sync.
+  useEffect(() => {
+    const node = trackRef.current;
+    if (!node) return;
+
+    const onTransitionEnd = (e) => {
+      // only act for the transform transition (ignore other transitions)
+      if (e.propertyName !== 'transform') return;
+
+      if (currentSlide === slides.length) {
+        // mark that we're snapping to avoid interval increments
+        isSnappingRef.current = true;
+
+        // disable transition, snap transform to 0 (first real slide)
+        node.style.transition = 'none';
+        node.style.transform = `translateX(0)`; // instant snap
+
+        // force reflow so the instant transform is applied immediately
+        // eslint-disable-next-line no-unused-expressions
+        node.getBoundingClientRect();
+
+        // next frame: restore transition and sync React state to 0
+        requestAnimationFrame(() => {
+          node.style.transition = 'transform 600ms ease';
+          // Keep UI/state consistent
+          setCurrentSlide(0);
+
+          // release snapping guard on next tick
+          setTimeout(() => {
+            isSnappingRef.current = false;
+          }, 0);
+        });
+      }
+    };
+
+    node.addEventListener('transitionend', onTransitionEnd);
+    return () => node.removeEventListener('transitionend', onTransitionEnd);
+  }, [currentSlide, slides.length]);
+
+  // manual dot click
   const goToSlide = (idx) => {
-    setCurrentSlide(idx % slides.length);
+    // ensure transition is enabled for manual jumps
+    if (trackRef.current) trackRef.current.style.transition = 'transform 600ms ease';
+    setCurrentSlide(idx);
   };
+
 
   useEffect(() => {
     fetch('/api/technical-clubs')
@@ -263,34 +338,36 @@ export default function Home() {
           </p>
         </AnimatedSection>
 
-        <AnimatedSection className="mt-10 md:mt-0 md:ml-12 w-full md:w-4/5 lg:w-2/3 relative overflow-hidden rounded-2xl shadow-xl h-72 md:h-96" delay="0.24s" threshold={0.05}>
+                <AnimatedSection className="mt-10 md:mt-0 md:ml-12 w-full md:w-4/5 lg:w-2/3 relative overflow-hidden rounded-2xl shadow-xl h-72 md:h-96" delay="0.24s" threshold={0.05}>
           {/* Slider */}
           <div className="hero-slider">
             <div
+              ref={trackRef}
               className="hero-slider-track"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               aria-hidden={false}
             >
-              {slides.map((src, i) => (
+              {slidesExtended.map((src, i) => (
                 <div className="hero-slide" key={i}>
                   <img src={src} alt={`slide-${i}`} />
                 </div>
               ))}
             </div>
 
-            {/* small dots (optional) */}
+            {/* small dots */}
             <div className="absolute left-1/2 -translate-x-1/2 bottom-3 flex space-x-2">
               {slides.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => goToSlide(idx)}
-                  className={`w-2 h-2 rounded-full ${currentSlide === idx ? 'bg-white' : 'bg-white/40'}`}
+                  className={`w-2 h-2 rounded-full ${currentSlide % slides.length === idx ? 'bg-white' : 'bg-white/40'}`}
                   aria-label={`Go to slide ${idx + 1}`}
                 />
               ))}
             </div>
           </div>
         </AnimatedSection>
+
       </main>
 
       {/* CLUBS */}
@@ -312,9 +389,8 @@ export default function Home() {
 
                 <div className="grid grid-cols-2 gap-2 mb-6">
                   {(technicalClubs && technicalClubs.length ? technicalClubs : defaultTech).slice(0, 8).map((club, i) => (
-                    <Link
+                    <div
                       key={club.id ?? i}
-                      to={`/club/${slugify(club.name)}`}
                       className="flex items-center gap-3 p-3 rounded-lg bg-white/6 border border-white/6 transition-all duration-150"
                     >
                       <div className="w-9 h-9 rounded-full overflow-hidden bg-white/8 flex items-center justify-center flex-shrink-0 ring-1 ring-white/10">
@@ -327,7 +403,7 @@ export default function Home() {
                       </div>
 
                       <span className="text-sm font-serif font-semibold text-black truncate">{club.name}</span>
-                    </Link>
+                    </div>
                   ))}
                 </div>
 
@@ -351,9 +427,8 @@ export default function Home() {
 
                 <div className="grid grid-cols-2 gap-2 mb-6">
                   {(nonTechnicalClubs && nonTechnicalClubs.length ? nonTechnicalClubs : defaultNonTech).slice(0, 8).map((club, i) => (
-                    <Link
+                    <div
                       key={club.id ?? i}
-                      to={`/club/${slugify(club.name)}`}
                       className="flex items-center gap-3 p-3 rounded-lg bg-white/6 border border-white/6 transition-all duration-150"
                     >
                       <div className="w-9 h-9 rounded-full overflow-hidden bg-white/8 flex items-center justify-center flex-shrink-0 ring-1 ring-white/10">
@@ -366,7 +441,7 @@ export default function Home() {
                       </div>
 
                       <span className="text-sm font-serif font-semibold text-black truncate">{club.name}</span>
-                    </Link>
+                    </div>
                   ))}
                 </div>
 
@@ -443,71 +518,39 @@ export default function Home() {
 
           <div className="mt-14 space-y-5">
             <AnimatedSection className="group border border-gray-200 rounded-2xl shadow-md bg-white/80 backdrop-blur-md transition hover:shadow-xl overflow-hidden" delay="0.1s">
-              <button
+              <FaqItem
+                question="What is ClubNexus?"
+                answer="ClubNexus is a digital hub designed to connect students with clubs and events in their college. It serves as a central platform where you can explore different groups, view upcoming activities, and get the latest updates. Instead of searching on notice boards or WhatsApp groups, everything is organized neatly in one place for convenience."
+                isOpen={faqOpen[0]}
                 onClick={() => toggleFaq(0)}
-                className="w-full flex justify-between items-center px-6 py-5 text-left text-lg font-serif font-semibold text-gray-800"
-              >
-                <span>What is ClubNexus?</span>
-                <span className={`faq-icon transition-transform duration-300 text-red-500 ${faqOpen[0] ? 'transform rotate-45' : ''}`}>{faqOpen[0] ? '−' : '+'}</span>
-              </button>
-              <div className={`faq-answer overflow-hidden px-6 text-gray-600 transition-all duration-500 ease-in-out ${faqOpen[0] ? 'max-h-96 py-4' : 'max-h-0'}`}>
-                <p>
-                  ClubNexus is a digital hub designed to connect students with clubs and events in their college.
-                  It serves as a central platform where you can explore different groups, view upcoming activities, and get the latest updates.
-                  Instead of searching on notice boards or WhatsApp groups, everything is organized neatly in one place for convenience.
-                </p>
-              </div>
+              />
             </AnimatedSection>
 
             <AnimatedSection className="group border border-gray-200 rounded-2xl shadow-md bg-white/80 backdrop-blur-md transition hover:shadow-xl overflow-hidden" delay="0.2s">
-              <button
+              <FaqItem
+                question="How can I register for a club?"
+                answer="Registering is simple — just head over to the 'Clubs' section, choose your favorite club, and click on its registration link. Some clubs may redirect you to an official form, while others might allow direct registration within ClubNexus itself. You'll also get confirmation details and updates so you never miss an important announcement."
+                isOpen={faqOpen[1]}
                 onClick={() => toggleFaq(1)}
-                className="w-full flex justify-between items-center px-6 py-5 text-left text-lg font-serif font-semibold text-gray-800"
-              >
-                <span>How can I register for a club?</span>
-                <span className={`faq-icon transition-transform duration-300 text-red-500 ${faqOpen[1] ? 'transform rotate-45' : ''}`}>{faqOpen[1] ? '−' : '+'}</span>
-              </button>
-              <div className={`faq-answer overflow-hidden px-6 text-gray-600 transition-all duration-500 ease-in-out ${faqOpen[1] ? 'max-h-96 py-4' : 'max-h-0'}`}>
-                <p>
-                  Registering is simple — just head over to the “Clubs” section, choose your favorite club, and click on its registration link.
-                  Some clubs may redirect you to an official form, while others might allow direct registration within ClubNexus itself.
-                  You'll also get confirmation details and updates so you never miss an important announcement.
-                </p>
-              </div>
+              />
             </AnimatedSection>
 
             <AnimatedSection className="group border border-gray-200 rounded-2xl shadow-md bg-white/80 backdrop-blur-md transition hover:shadow-xl overflow-hidden" delay="0.3s">
-              <button
+              <FaqItem
+                question="Is ClubNexus free to use?"
+                answer="Yes, ClubNexus is completely free for all students. Our goal is to make it easy for everyone to discover clubs, register for events, and connect with peers without any barriers. All you need is your college identity to get started, and you're good to go!"
+                isOpen={faqOpen[2]}
                 onClick={() => toggleFaq(2)}
-                className="w-full flex justify-between items-center px-6 py-5 text-left text-lg font-serif font-semibold text-gray-800"
-              >
-                <span>Is ClubNexus free to use?</span>
-                <span className={`faq-icon transition-transform duration-300 text-red-500 ${faqOpen[2] ? 'transform rotate-45' : ''}`}>{faqOpen[2] ? '−' : '+'}</span>
-              </button>
-              <div className={`faq-answer overflow-hidden px-6 text-gray-600 transition-all duration-500 ease-in-out ${faqOpen[2] ? 'max-h-96 py-4' : 'max-h-0'}`}>
-                <p>
-                  Yes, ClubNexus is completely free for all students.
-                  Our goal is to make it easy for everyone to discover clubs, register for events, and connect with peers without any barriers.
-                  All you need is your college identity to get started, and you’re good to go!
-                </p>
-              </div>
+              />
             </AnimatedSection>
 
             <AnimatedSection className="group border border-gray-200 rounded-2xl shadow-md bg-white/80 backdrop-blur-md transition hover:shadow-xl overflow-hidden" delay="0.4s">
-              <button
+              <FaqItem
+                question="Can I join multiple clubs?"
+                answer="Absolutely! ClubNexus encourages students to explore multiple interests. You might be passionate about coding but also want to try music, arts, or debating. Joining more than one club helps you build diverse skills, meet new people, and enrich your college journey."
+                isOpen={faqOpen[3]}
                 onClick={() => toggleFaq(3)}
-                className="w-full flex justify-between items-center px-6 py-5 text-left text-lg font-serif font-semibold text-gray-800"
-              >
-                <span>Can I join multiple clubs?</span>
-                <span className={`faq-icon transition-transform duration-300 text-red-500 ${faqOpen[3] ? 'transform rotate-45' : ''}`}>{faqOpen[3] ? '−' : '+'}</span>
-              </button>
-              <div className={`faq-answer overflow-hidden px-6 text-gray-600 transition-all duration-500 ease-in-out ${faqOpen[3] ? 'max-h-96 py-4' : 'max-h-0'}`}>
-                <p>
-                  Absolutely! ClubNexus encourages students to explore multiple interests.
-                  You might be passionate about coding but also want to try music, arts, or debating.
-                  Joining more than one club helps you build diverse skills, meet new people, and enrich your college journey.
-                </p>
-              </div>
+              />
             </AnimatedSection>
           </div>
         </div>

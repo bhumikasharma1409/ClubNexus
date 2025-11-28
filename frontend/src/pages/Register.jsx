@@ -1,10 +1,45 @@
-import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext"; 
-import { useNavigate, Link } from "react-router-dom";
-import ParticlesBg from "../components/ParticlesBg"; 
+// src/pages/Register.jsx
+import React, { useState, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import ParticlesBg from "../components/ParticlesBg";
+
+/**
+ * Register page — improved UI
+ */
+
+const collegeEmailRegex = /^[a-z]+[0-9]{4}\.[a-z]+[0-9]{2}@chitkara\.edu\.in$/;
+
+const courses = [
+  { value: "CSE", label: "Computer Science Engineering" },
+  { value: "ECE", label: "Electronics & Communication" },
+  { value: "ME", label: "Mechanical Engineering" },
+  { value: "CE", label: "Civil Engineering" },
+  { value: "EE", label: "Electrical Engineering" },
+  { value: "IT", label: "Information Technology" },
+  { value: "BBA", label: "Business Administration" },
+  { value: "BCA", label: "Computer Applications" },
+  { value: "MBA", label: "MBA" },
+  { value: "MCA", label: "MCA" },
+];
+
+function getStoredUsers() {
+  try {
+    const raw = localStorage.getItem("clubnexus_users");
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+function saveUser(user) {
+  const users = getStoredUsers();
+  users.push(user);
+  localStorage.setItem("clubnexus_users", JSON.stringify(users));
+}
 
 export default function Register() {
-  const [formData, setFormData] = useState({
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
@@ -12,348 +47,299 @@ export default function Register() {
     batch: "",
     course: "",
   });
-  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); 
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  const [error, setError] = useState("");
+
+  const users = useMemo(() => getStoredUsers(), []);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
+    const { id, value } = e.target;
+    setForm((p) => ({ ...p, [id]: value }));
+    setError("");
   };
 
-  const handleSubmit = async (e) => {
+  const passwordStrength = useMemo(() => {
+    const p = form.password || "";
+    if (p.length >= 10 && /[A-Z]/.test(p) && /\d/.test(p) && /[^A-Za-z0-9]/.test(p)) return "strong";
+    if (p.length >= 7 && ((/[A-Z]/.test(p) && /\d/.test(p)) || (/\d/.test(p) && /[^A-Za-z0-9]/.test(p)))) return "medium";
+    if (p.length > 0) return "weak";
+    return "";
+  }, [form.password]);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-
-    try {
-      const res = await fetch("/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Failed to register");
-      }
-
-      login(data.user, data.token);
-      navigate("/");
-    } catch (err) {
-      setError(err.message);
-    } finally {
+    if (!form.name.trim()) {
+      setError("Please enter your full name.");
       setLoading(false);
+      return;
     }
 
+    const email = (form.email || "").trim().toLowerCase();
+    if (!email) {
+      setError("Please enter your college email.");
+      setLoading(false);
+      return;
+    }
+    if (!collegeEmailRegex.test(email)) {
+      setError("Invalid college email format. Example: name0000.course24(year)@chitkara.edu.in");
+      setLoading(false);
+      return;
+    }
+
+    if (!form.password || form.password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      setLoading(false);
+      return;
+    }
+
+    if (!form.year) {
+      setError("Please select your year.");
+      setLoading(false);
+      return;
+    }
+    if (!form.batch.trim()) {
+      setError("Please enter your batch (e.g., 2021-2025).");
+      setLoading(false);
+      return;
+    }
+    if (!form.course) {
+      setError("Please select your course.");
+      setLoading(false);
+      return;
+    }
+
+    const exists = users.find((u) => u.email.toLowerCase() === email);
+    if (exists) {
+      setError("An account with this email already exists. Please login.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      saveUser({
+        name: form.name.trim(),
+        email,
+        password: form.password,
+        year: form.year,
+        batch: form.batch.trim(),
+        course: form.course,
+        createdAt: new Date().toISOString(),
+      });
+      setLoading(false);
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to save your account. Try again.");
+      setLoading(false);
+    }
   };
-
-
-  const inputFieldClass = "input-field w-full px-4 py-3.5 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none text-sm";
-  const btnPrimaryClass = "btn-primary w-full text-white font-bold py-4 px-6 rounded-xl mt-8 text-sm tracking-wide relative flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed";
 
   return (
     <>
       <ParticlesBg />
-      <style>{`
-        body {
-            background: linear-gradient(135deg, #ffffff 0%, #fef2f2 50%, #ffffff 100%);
-        }
-        .card-shadow {
-            box-shadow: 
-                0 20px 60px -10px rgba(220, 38, 38, 0.15),
-                0 10px 30px -5px rgba(0, 0, 0, 0.05);
-        }
-        .input-field {
-            background: #ffffff;
-            border: 2px solid #fee2e2;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .input-field:focus {
-            border-color: #dc2626;
-            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
-        }
-        .input-field:hover {
-            border-color: #fca5a5;
-        }
-        .gradient-text {
-            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-            box-shadow: 
-                0 10px 25px -5px rgba(220, 38, 38, 0.4),
-                0 8px 10px -6px rgba(220, 38, 38, 0.3);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+      <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-red-50 via-white to-red-100">
+        <style>{`
+          .card {
+            border-radius: 1rem;
             overflow: hidden;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 
-                0 20px 35px -5px rgba(220, 38, 38, 0.5),
-                0 10px 15px -6px rgba(220, 38, 38, 0.4);
-        }
-        .btn-primary:active { transform: translateY(0); }
-        .floating { animation: floating 3s ease-in-out infinite; }
-        @keyframes floating {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-        }
-        .decorative-circle {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(220, 38, 38, 0.1) 0%, transparent 70%);
-            pointer-events: none;
-        }
-        .circle-1 { width: 300px; height: 300px; top: -150px; right: -100px; }
-        .circle-2 { width: 200px; height: 200px; bottom: -100px; left: -50px; }
-        .select-arrow {
-          appearance: none;
-          background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%23dc2626%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27m6 8 4 4 4-4%27/%3e%3c/svg%3e");
-          background-size: 1.5em;
-          background-position: right 0.5rem center;
-          background-repeat: no-repeat;
-        }
-      `}</style>
-      
-      <div className="min-h-screen flex items-center justify-center p-4 md:p-6 relative z-10">
-        <div className="absolute top-4 right-6">
-          <Link
-            to="/"
-            className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition"
-          >
-            Go to Homepage
-          </Link>
-        </div>
+            box-shadow: 0 18px 50px -20px rgba(0,0,0,0.4), 0 8px 30px rgba(0,0,0,0.06);
+          }
 
-        <div className="relative w-full max-w-md">
-          <div className="text-center mb-10 floating">
-            <div className="inline-block">
-              <h1 className="text-5xl md:text-6xl font-black gradient-text mb-2 tracking-tight">
-                ClubNexus
-              </h1>
-              <div className="h-1 w-24 mx-auto bg-gradient-to-r from-transparent via-red-600 to-transparent rounded-full"></div>
+          /* UPDATED LEFT HERO WITH IMAGE + BLACK OVERLAY */
+          .left-hero {
+            background:
+              linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+              url('/chitkara.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+          }
+
+          .input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border-radius: 0.6rem;
+            border: 1px solid rgba(16,24,40,0.06);
+            background: white;
+            font-size: 15px;
+            outline: none;
+            transition: box-shadow .18s ease, border-color .18s ease;
+          }
+          .input:focus { box-shadow: 0 8px 30px rgba(16,24,40,0.06); border-color: rgba(220,38,38,0.85); }
+          .select {
+            appearance: none;
+            padding-right: 3rem;
+            background-image: linear-gradient(45deg, transparent 50%, transparent 50%),
+                              linear-gradient(135deg, transparent 50%, transparent 50%),
+                              linear-gradient(to right, rgba(0,0,0,0.06), rgba(0,0,0,0.02));
+            background-position: calc(100% - 1.1rem) center, calc(100% - 0.85rem) center, right center;
+            background-size: 8px 8px, 8px 8px, 1px 1.2rem;
+            background-repeat: no-repeat;
+          }
+          .icon-box {
+            width: 44px; height: 44px; display:flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.06); border-radius: 0.6rem;
+          }
+          .strength-dot { width: 8px; height: 8px; border-radius: 999px; display:inline-block; margin-right:6px; }
+        `}</style>
+
+        <div className="w-full max-w-6xl card bg-white grid grid-cols-1 md:grid-cols-2">
+          
+          {/* LEFT HERO SECTION WITH IMAGE */}
+          <div className="left-hero text-white p-10 md:p-12 flex flex-col justify-center gap-6">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">Welcome to</h1>
+              <h2 className="text-5xl md:text-6xl font-extrabold mt-1">ClubNexus</h2>
             </div>
-            <p className="text-gray-600 text-sm mt-4 font-medium tracking-wide">
-              Your gateway to campus events
+
+            <p className="mt-2 bg-white/12 p-4 rounded-lg max-w-[95%]">
+              Join the community — discover clubs, sign up for events, and connect with other students.
             </p>
+
+            <div className="mt-6">
+              <ul className="text-sm space-y-2">
+                <li>• Use your official college email</li>
+              </ul>
+            </div>
           </div>
 
-          <div className="bg-white rounded-3xl p-8 md:p-10 card-shadow relative overflow-hidden">
-            <div className="decorative-circle circle-1"></div>
-            <div className="decorative-circle circle-2"></div>
-            
-            {error && <p className="text-red-600 text-center mb-4 text-sm font-medium">{error}</p>}
+          {/* RIGHT FORM */}
+          <div className="p-8 md:p-12 bg-white relative">
+            <h3 className="text-2xl font-bold mb-4">Create Account</h3>
 
-            <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
-              <div className="space-y-2">
-                <label
-                  htmlFor="name"
-                  className="block text-gray-800 text-sm font-semibold"
-                >
-                  Full Name
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  placeholder="Enter your full name"
-                  onChange={handleChange}
-                  required
-                  className={inputFieldClass}
-                />
+            {error && (
+              <div className="mb-4 rounded-md bg-red-50 border border-red-100 p-3 text-red-700 text-sm">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              
+              {/* NAME */}
+              <div>
+                <label className="text-sm font-medium block mb-2">Full Name</label>
+                <div className="flex gap-3 items-center">
+                  <div className="icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 12a5 5 0 100-10 5 5 0 000 10z" stroke="rgba(0,0,0,0.5)" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M21 21a8 8 0 10-18 0" stroke="rgba(0,0,0,0.5)" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <input id="name" value={form.name} onChange={handleChange} className="input" placeholder="Your full name" />
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <label
-                  htmlFor="email"
-                  className="block text-gray-800 text-sm font-semibold"
-                >
-                  Email Address
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="your.email@college.edu"
-                  onChange={handleChange}
-                  required
-                  className={inputFieldClass}
-                />
+              {/* EMAIL */}
+              <div>
+                <label className="text-sm font-medium block mb-2">College Email</label>
+                <div className="flex gap-3 items-center">
+                  <div className="icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path d="M3 8l9 6 9-6" stroke="rgba(0,0,0,0.5)" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+                      <rect x="3" y="4" width="18" height="16" rx="2" stroke="rgba(0,0,0,0.5)" strokeWidth="1.25"/>
+                    </svg>
+                  </div>
+                  <input id="email" value={form.email} onChange={handleChange} className="input" placeholder="yourname0000.becse24@chitkara.edu.in" />
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label
-                    htmlFor="year"
-                    className="block text-gray-800 text-sm font-semibold"
-                  >
-                    Year
-                  </label>
-                  <select
-                    id="year"
-                    onChange={handleChange}
-                    required
-                    className={`${inputFieldClass} select-arrow cursor-pointer`}
-                  >
-                    <option value="">Select</option>
+              {/* YEAR + BATCH */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium block mb-2">Year</label>
+                  <select id="year" value={form.year} onChange={handleChange} className="input select">
+                    <option value="">Select Year</option>
                     <option value="1">1st Year</option>
                     <option value="2">2nd Year</option>
                     <option value="3">3rd Year</option>
                     <option value="4">4th Year</option>
                   </select>
                 </div>
-                <div className="space-y-2">
-                  <label
-                    htmlFor="batch"
-                    className="block text-gray-800 text-sm font-semibold"
-                  >
-                    Batch
-                  </label>
-                  <input
-                    id="batch"
-                    type="text"
-                    placeholder="2021-2025"
-                    onChange={handleChange}
-                    required
-                    className={inputFieldClass}
-                  />
+
+                <div>
+                  <label className="text-sm font-medium block mb-2">Batch</label>
+                  <input id="batch" value={form.batch} onChange={handleChange} className="input" placeholder="2021-2025" />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label
-                  htmlFor="course"
-                  className="block text-gray-800 text-sm font-semibold"
-                >
-                  Course
-                </label>
-                <select
-                  id="course"
-                  onChange={handleChange}
-                  required
-                  className={`${inputFieldClass} select-arrow cursor-pointer`}
-                >
+              {/* COURSE */}
+              <div>
+                <label className="text-sm font-medium block mb-2">Course</label>
+                <select id="course" value={form.course} onChange={handleChange} className="input select">
                   <option value="">Select your course</option>
-                  <option value="CSE">Computer Science Engineering</option>
-                  <option value="ECE">Electronics & Communication</option>
-                  <option value="ME">Mechanical Engineering</option>
-                  <option value="CE">Civil Engineering</option>
-                  <option value="EE">Electrical Engineering</option>
-                  <option value="IT">Information Technology</option>
-                  <option value="BBA">Business Administration</option>
-                  <option value="BCA">Computer Applications</option>
-                  <option value="MBA">MBA</option>
-                  <option value="MCA">MCA</option>
+                  {courses.map((c) => (
+                    <option key={c.value} value={c.value}>{c.label}</option>
+                  ))}
                 </select>
               </div>
 
-              <div className="space-y-2">
-                <label
-                  htmlFor="password"
-                  className="block text-gray-800 text-sm font-semibold"
-                >
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password (min 6 chars)"
-                    onChange={handleChange}
-                    required
-                    className={`${inputFieldClass} pr-10`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition"
-                  >
-                    {showPassword ? (
-                      <svg id="eyeClosed" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
-                      </svg>
-                    ) : (
-                      <svg id="eyeOpen" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                      </svg>
-                    )}
-                  </button>
+              {/* PASSWORD */}
+              <div>
+                <label className="text-sm font-medium block mb-2">Password</label>
+                <div className="flex items-center gap-3">
+                  <div className="icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <rect x="3" y="11" width="18" height="10" rx="2" stroke="rgba(0,0,0,0.5)" strokeWidth="1.25"/>
+                      <path d="M7 11V8a5 5 0 0110 0v3" stroke="rgba(0,0,0,0.5)" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+
+                  <div className="relative flex-1">
+                    <input
+                      id="password"
+                      value={form.password}
+                      onChange={handleChange}
+                      type={showPassword ? "text" : "password"}
+                      className="input pr-12"
+                      placeholder="Create a password (min 6 chars)"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((s) => !s)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900"
+                    >
+                      {showPassword ? (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029" stroke="currentColor" strokeWidth="1.25"/></svg>
+                      ) : (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke="currentColor" strokeWidth="1.25"/></svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
+
+                {passwordStrength && (
+                  <div className="mt-2 text-sm flex items-center gap-3">
+                    <span className="flex items-center">
+                      <span className="strength-dot" style={{ background: passwordStrength === "strong" ? "#059669" : passwordStrength === "medium" ? "#f59e0b" : "#ef4444" }}></span>
+                      <span className="text-xs font-medium text-gray-700">
+                        {passwordStrength === "strong" ? "Strong" : passwordStrength === "medium" ? "Medium" : "Weak"}
+                      </span>
+                    </span>
+                  </div>
+                )}
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className={btnPrimaryClass}
-              >
-                {loading && (
-                  <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="4" fill="none"></circle>
-                    <path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-                  </svg>
-                )}
-                <span>
+              <div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3 rounded-lg bg-gradient-to-r from-red-600 to-black text-white font-semibold text-lg shadow hover:opacity-95 transition"
+                >
                   {loading ? "Creating Account..." : "Create Account"}
-                </span>
-              </button>
+                </button>
+              </div>
             </form>
 
-            <div className="relative my-6 z-10">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">
-                  or continue with
-                </span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 relative z-10">
-              <button
-                type="button"
-                className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-200 rounded-xl hover:border-red-200 hover:bg-red-50 transition text-sm font-semibold text-gray-700"
-              >
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                </svg>
-                Google
-              </button>
-              <button
-                type="button"
-                className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-200 rounded-xl hover:border-red-200 hover:bg-red-50 transition text-sm font-semibold text-gray-700"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                </svg>
-                GitHub
-              </button>
-            </div>
-
-            <div className="text-center mt-6 relative z-10">
-              <p className="text-gray-600 text-sm">
-                Already have an account?{" "}
-                <Link
-                  to="/login"
-                  className="font-medium text-red-600 hover:text-red-700 transition ml-1"
-                >
-                  Login
-                </Link>
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600">
+                Already registered?{" "}
+                <Link to="/login" className="text-red-600 font-semibold hover:underline">Login</Link>
               </p>
             </div>
+
           </div>
         </div>
       </div>

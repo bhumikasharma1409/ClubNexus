@@ -11,48 +11,49 @@ export default function AdminLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate email
+    if (!collegeEmailRegex.test(email)) {
+      setError("Invalid college admin email format.");
+      return;
+    }
+
+    if (!club) {
+      setError("Please select your club.");
+      return;
+    }
+
+    // Validate password for selected club
+    const selectedClub = clubs.find((c) => c.name === club);
+    if (!selectedClub || selectedClub.password !== password) {
+      setError("Incorrect admin password.");
+      return;
+    }
+
     setError("");
 
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email,
-          password
-        })
-      });
-
-      const data = await res.json();
-      console.log("LOGIN RESPONSE:", data);
-
-      if (!res.ok) {
-        setError(data.message || "Invalid Credentials");
-        return;
-      }
-
-      // Save token + admin into localStorage
-      localStorage.setItem("adminToken", data.token);
-      localStorage.setItem("adminData", JSON.stringify(data.admin));
-
-      // Redirect to admin dashboard
-      navigate("/admin-dashboard");
-
-
-    } catch (err) {
-      setError("Server error. Try again later.");
-      console.error(err);
-    }
+    // SUCCESS → redirect
+    alert("Admin Login Successful!");
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 via-white to-red-100 p-6">
+      <style>{`
+        /* Left hero uses chitkara.webp with a black transparent overlay.
+           Place chitkara.webp in /public (url('/chitkara.webp')) or adjust path. */
+        .left-hero {
+          background:
+            linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+            url('/chitkara.webp');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+      `}</style>
+
       <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-2 overflow-hidden">
 
-        {/* LEFT */}
-        <div className="bg-gradient-to-b from-red-600 to-black text-white p-10 flex flex-col justify-center">
+        {/* LEFT SIDE (image + overlay) */}
+        <div className="left-hero text-white p-10 flex flex-col justify-center">
           <h1 className="text-4xl font-extrabold">Welcome Admin</h1>
           <h2 className="text-5xl font-extrabold mt-2">ClubNexus</h2>
           <p className="mt-4 text-sm bg-white/20 p-4 rounded-lg backdrop-blur-md">
