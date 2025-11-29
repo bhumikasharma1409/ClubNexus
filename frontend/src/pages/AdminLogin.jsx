@@ -10,36 +10,42 @@ export default function AdminLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate email
-    if (!collegeEmailRegex.test(email)) {
-      setError("Invalid college admin email format.");
-      return;
-    }
-
-    if (!club) {
-      setError("Please select your club.");
-      return;
-    }
-
-    // Validate password for selected club
-    const selectedClub = clubs.find((c) => c.name === club);
-    if (!selectedClub || selectedClub.password !== password) {
-      setError("Incorrect admin password.");
-      return;
-    }
-
     setError("");
 
-    // SUCCESS → redirect
-    alert("Admin Login Successful!");
+    try {
+      const res = await fetch("http://localhost:5001/api/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Login failed");
+        return;
+      }
+
+      // Save token
+      localStorage.setItem("adminToken", data.token);
+
+      // Redirect to admin dashboard
+      navigate("/admin/dashboard");
+
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong");
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 via-white to-red-100 p-6">
       <style>{`
-        /* Left hero uses chitkara.webp with a black transparent overlay.
-           Place chitkara.webp in /public (url('/chitkara.webp')) or adjust path. */
         .left-hero {
           background:
             linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
@@ -52,7 +58,7 @@ export default function AdminLogin() {
 
       <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-2 overflow-hidden">
 
-        {/* LEFT SIDE (image + overlay) */}
+        {/* LEFT SIDE */}
         <div className="left-hero text-white p-10 flex flex-col justify-center">
           <h1 className="text-4xl font-extrabold">Welcome Admin</h1>
           <h2 className="text-5xl font-extrabold mt-2">ClubNexus</h2>
@@ -61,7 +67,7 @@ export default function AdminLogin() {
           </p>
         </div>
 
-        {/* RIGHT */}
+        {/* RIGHT SIDE */}
         <div className="p-10">
           <h2 className="text-3xl font-bold mb-6">Admin Login</h2>
 
@@ -72,14 +78,13 @@ export default function AdminLogin() {
           )}
 
           <form className="space-y-5" onSubmit={handleSubmit}>
-
             {/* EMAIL */}
             <div>
               <label className="font-medium">Admin Email</label>
               <input
                 type="email"
                 className="w-full border rounded-lg p-3 mt-1"
-                placeholder="admin@codingclub.edu"
+                placeholder="admin@college.edu"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -99,7 +104,7 @@ export default function AdminLogin() {
               />
             </div>
 
-            {/* SUBMIT */}
+            {/* SUBMIT BUTTON */}
             <button
               type="submit"
               className="w-full py-3 rounded-lg bg-gradient-to-r from-red-600 to-black text-white font-semibold text-lg shadow-lg hover:opacity-90"
@@ -108,7 +113,7 @@ export default function AdminLogin() {
             </button>
           </form>
 
-          {/* USER LOGIN */}
+          {/* USER LOGIN LINK */}
           <div className="mt-6 text-center">
             <p className="text-gray-600">Not an admin?</p>
             <Link
