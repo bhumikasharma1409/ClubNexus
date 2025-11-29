@@ -18,7 +18,7 @@ const useInViewAnimation = (options = {}) => {
       if (observerRef.current && node) {
         try {
           observerRef.current.unobserve(node);
-        } catch (e) {}
+        } catch (e) { }
       }
       setNode(element);
     },
@@ -38,7 +38,7 @@ const useInViewAnimation = (options = {}) => {
           setIsVisible(true);
           try {
             if (node) observer.unobserve(node);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       options
@@ -50,7 +50,7 @@ const useInViewAnimation = (options = {}) => {
     return () => {
       try {
         if (observerRef.current && node) observerRef.current.unobserve(node);
-      } catch (e) {}
+      } catch (e) { }
       if (observerRef.current && typeof observerRef.current.disconnect === 'function') {
         observerRef.current.disconnect();
       }
@@ -153,11 +153,11 @@ export default function Home() {
   const [nonTechnicalClubs, setNonTechnicalClubs] = useState([]);
   const [faqOpen, setFaqOpen] = useState([false, false, false, false]);
 
-    // SLIDESHOW STATE
+  // SLIDESHOW STATE
   const slides = [
     '/second.jpg',
-    
-    
+
+
     '/fifth.jpg',
     '/third.jpg',
     '/fourth.jpg',
@@ -255,7 +255,7 @@ export default function Home() {
         return res.json();
       })
       .then((data) => Array.isArray(data) && setTechnicalClubs(data))
-      .catch(() => {});
+      .catch(() => { });
 
     fetch('/api/nontechnical-clubs')
       .then((res) => {
@@ -263,7 +263,7 @@ export default function Home() {
         return res.json();
       })
       .then((data) => Array.isArray(data) && setNonTechnicalClubs(data))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const toggleFaq = (index) => {
@@ -321,13 +321,13 @@ export default function Home() {
       `}</style>
 
       {/* HERO */}
-      <main id="home" className="flex flex-col md:flex-row items-center justify-between min-h-screen px-8 md:px-28 font-serif pt-20">
+      <main id="home" className="flex flex-col md:flex-row items-center justify-between min-h-screen px-4 md:px-28 font-serif pt-20">
         <AnimatedSection as="div" className="max-w-2xl text-left" delay="0.08s" threshold={0.05}>
           <span className="inline-block px-4 py-1 mb-6 text-sm font-serif font-medium text-blue-700 bg-blue-100 rounded-full shadow">
             College Clubs Made Simple
           </span>
 
-          <h1 className="text-4xl md:text-6xl font-serif font-extrabold leading-tight text-gray-900">
+          <h1 className="text-3xl md:text-6xl font-serif font-extrabold leading-tight text-gray-900">
             Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-800 to-black">ClubNexus</span>
           </h1>
 
@@ -338,7 +338,7 @@ export default function Home() {
           </p>
         </AnimatedSection>
 
-                <AnimatedSection className="mt-10 md:mt-0 md:ml-12 w-full md:w-4/5 lg:w-2/3 relative overflow-hidden rounded-2xl shadow-xl h-72 md:h-96" delay="0.24s" threshold={0.05}>
+        <AnimatedSection className="mt-10 md:mt-0 md:ml-12 w-full md:w-4/5 lg:w-2/3 relative overflow-hidden rounded-2xl shadow-xl h-64 md:h-96" delay="0.24s" threshold={0.05}>
           {/* Slider */}
           <div className="hero-slider">
             <div
@@ -379,7 +379,7 @@ export default function Home() {
           </p>
 
           {/* <-- increased spacing between boxes here --> */}
-          <div className="flex flex-wrap lg:items-stretch gap-8 md:gap-16 lg:gap-24 justify-center">
+          <div className="flex flex-wrap lg:items-stretch gap-6 md:gap-16 lg:gap-24 justify-center">
 
             {/* TECHNICAL BOX WITH OUTER GLOW */}
             <AnimatedSection className="relative flex-1 min-w-[260px] max-w-[480px]" delay="0.12s">
@@ -465,12 +465,12 @@ export default function Home() {
       <AnimatedSection
         as="section"
         id="about"
-        className="min-h-screen flex items-center justify-center relative bg-transparent py-24"
+        className="min-h-screen flex items-center justify-center relative bg-transparent py-12 md:py-24"
         threshold={0.3}
         delay="0.12s"
       >
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-extrabold text-gray-900 font-serif">About ClubNexus</h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 font-serif">About ClubNexus</h2>
 
           <p className="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">
             ClubNexus is your one-stop platform to explore, join, and participate in vibrant college clubs and events.
@@ -511,9 +511,9 @@ export default function Home() {
       </AnimatedSection>
 
       {/* FAQ */}
-      <AnimatedSection as="section" id="faq" className="py-24 mb-12 lg:mb-20 bg-gradient-to-r from-red-50 via-pink-50 to-red-100 relative z-10" threshold={0.1} delay="0.08s">
+      <AnimatedSection as="section" id="faq" className="py-12 md:py-24 mb-12 lg:mb-20 bg-gradient-to-r from-red-50 via-pink-50 to-red-100 relative z-10" threshold={0.1} delay="0.08s">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-5xl font-extrabold text-center text-gray-900 font-serif">Frequently Asked Questions</h2>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-center text-gray-900 font-serif">Frequently Asked Questions</h2>
           <p className="mt-4 text-lg text-gray-600 text-center">Get quick answers to the most common questions about ClubNexus</p>
 
           <div className="mt-14 space-y-5">
@@ -557,7 +557,7 @@ export default function Home() {
       </AnimatedSection>
 
       {/* Quote card (hidden by default) */}
-      <div id="quoteCard" className="fixed bottom-10 right-10 w-80 bg-white rounded-xl shadow-2xl p-5 opacity-0 pointer-events-none transition-opacity duration-500 z-50">
+      <div id="quoteCard" className="hidden lg:block fixed bottom-10 right-10 w-80 bg-white rounded-xl shadow-2xl p-5 opacity-0 pointer-events-none transition-opacity duration-500 z-50">
         <p id="cardText" className="text-gray-800 text-lg italic"></p>
         <p id="cardAuthor" className="text-gray-600 text-sm mt-2 text-right">— Unknown</p>
       </div>

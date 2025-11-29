@@ -1,7 +1,8 @@
+// src/pages/Login.jsx
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate, Link } from "react-router-dom";
-import ParticlesBg from "../components/ParticlesBg.jsx"; 
+import ParticlesBg from "../components/ParticlesBg.jsx";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -10,22 +11,18 @@ export default function Login() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); 
-  const {login} = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
+    setFormData((s) => ({ ...s, [e.target.id]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-
 
     try {
       const res = await fetch("/auth/login", {
@@ -41,132 +38,132 @@ export default function Login() {
       }
 
       login(data.user, data.token);
-      navigate("/"); 
+      navigate("/");
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Failed to log in");
     } finally {
       setLoading(false);
     }
-
   };
 
-  const inputFieldClass = "input-field w-full px-4 py-3.5 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none text-sm";
-  const btnPrimaryClass = "btn-primary w-full text-white font-bold py-4 px-6 rounded-xl mt-8 text-sm tracking-wide relative flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed";
+  const inputFieldClass =
+    "input-field w-full px-4 py-3.5 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none text-sm";
+  const btnPrimaryClass =
+    "btn-primary w-full text-white font-bold py-3.5 px-6 rounded-xl mt-4 text-sm tracking-wide relative flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed";
 
   return (
     <>
-      <ParticlesBg />
-      {/* Re-using the exact same styles from Register.jsx */}
-      <style>{`
-        body {
-            background: linear-gradient(135deg, #ffffff 0%, #fef2f2 50%, #ffffff 100%);
-        }
-        .card-shadow {
-            box-shadow: 
-                0 20px 60px -10px rgba(220, 38, 38, 0.15),
-                0 10px 30px -5px rgba(0, 0, 0, 0.05);
-        }
-        .input-field {
+      {/* 1) Particles: BACK-most layer */}
+      <div className="fixed inset-0 -z-20 pointer-events-none">
+        <ParticlesBg />
+      </div>
+
+      {/* 2) Gradient overlay: sits above particles but behind card */}
+      <div className="fixed inset-0 -z-10" aria-hidden="true">
+        <div className="w-full h-full bg-gradient-to-br from-red-50 via-white to-red-100 opacity-95" />
+      </div>
+
+      {/* 3) Main layout (card) sits above both */}
+      <div className="min-h-screen flex items-center justify-center p-6 relative z-10">
+        <style>{`
+          .card {
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 18px 50px -20px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.06);
+          }
+
+          .left-hero {
+            background:
+              linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+              url('/chitkara.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+          }
+
+          /* small form styles */
+          .input-field {
             background: #ffffff;
             border: 2px solid #fee2e2;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .input-field:focus {
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          .input-field:focus {
             border-color: #dc2626;
-            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
-        }
-        .input-field:hover {
-            border-color: #fca5a5;
-        }
-        .gradient-text {
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.08);
+          }
+          .input-field:hover { border-color: #fca5a5; }
+
+          .btn-primary {
             background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-            box-shadow: 
-                0 10px 25px -5px rgba(220, 38, 38, 0.4),
-                0 8px 10px -6px rgba(220, 38, 38, 0.3);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow:
+              0 10px 25px -5px rgba(220, 38, 38, 0.35),
+              0 8px 10px -6px rgba(220, 38, 38, 0.25);
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-        }
-        .btn-primary:hover {
+          }
+          .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 
-                0 20px 35px -5px rgba(220, 38, 38, 0.5),
-                0 10px 15px -6px rgba(220, 38, 38, 0.4);
-        }
-        .btn-primary:active { transform: translateY(0); }
-        .floating { animation: floating 3s ease-in-out infinite; }
-        @keyframes floating {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-        }
-        .decorative-circle {
+            box-shadow:
+              0 18px 35px -5px rgba(220, 38, 38, 0.42),
+              0 10px 15px -6px rgba(220, 38, 38, 0.34);
+          }
+          .btn-primary:active { transform: translateY(0); }
+
+          .decorative-circle {
             position: absolute;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(220, 38, 38, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.08) 0%, transparent 70%);
             pointer-events: none;
-        }
-        .circle-1 { width: 300px; height: 300px; top: -150px; right: -100px; }
-        .circle-2 { width: 200px; height: 200px; bottom: -100px; left: -50px; }
-      `}</style>
-      
-      <div className="min-h-screen flex items-center justify-center p-4 md:p-6 relative z-10">
-        <div className="absolute top-4 right-6">
-          <Link
-            to="/"
-            className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition"
-          >
-            Go to Homepage
-          </Link>
-        </div>
+          }
+          .circle-1 { width: 220px; height: 220px; top: -100px; right: -70px; }
+          .circle-2 { width: 160px; height: 160px; bottom: -70px; left: -40px; }
+        `}</style>
 
-        <div className="relative w-full max-w-md">
-          <div className="text-center mb-10 floating">
-            <div className="inline-block">
-              <h1 className="text-5xl md:text-6xl font-black gradient-text mb-2 tracking-tight">
-                ClubNexus
-              </h1>
-              <div className="h-1 w-24 mx-auto bg-gradient-to-r from-transparent via-red-600 to-transparent rounded-full"></div>
+        <div className="w-full max-w-3xl card bg-white grid grid-cols-1 md:grid-cols-2">
+          {/* LEFT HERO */}
+          <div className="left-hero text-white p-6 md:p-8 flex flex-col justify-center gap-4">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">Welcome to</h1>
+              <h2 className="text-4xl md:text-5xl font-extrabold mt-1">ClubNexus</h2>
             </div>
-            <p className="text-gray-600 text-sm mt-4 font-medium tracking-wide">
-              Your gateway to campus events
+
+            <p className="mt-2 bg-white/10 p-3 rounded-lg max-w-[95%] text-sm">
+              Your gateway to campus events — login to view and register for events, and connect with your clubs.
             </p>
           </div>
 
-          <div className="bg-white rounded-3xl p-8 md:p-10 card-shadow relative overflow-hidden">
+          {/* RIGHT FORM */}
+          <div className="p-6 md:p-8 bg-white relative">
             <div className="decorative-circle circle-1"></div>
             <div className="decorative-circle circle-2"></div>
-            
-            {error && <p className="text-red-600 text-center mb-4 text-sm font-medium">{error}</p>}
 
-            <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
-              <div className="space-y-2">
-                <label
-                  htmlFor="email"
-                  className="block text-gray-800 text-sm font-semibold"
-                >
+            <h3 className="text-xl md:text-2xl font-bold mb-3">Sign in to your account</h3>
+
+            {error && (
+              <div className="mb-3 rounded-md bg-red-50 border border-red-100 p-2 text-red-700 text-sm">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-3 relative z-10">
+              <div>
+                <label htmlFor="email" className="text-sm font-medium block mb-1 text-gray-800">
                   Email Address
                 </label>
                 <input
                   id="email"
                   type="email"
                   placeholder="your.email@college.edu"
+                  value={formData.email}
                   onChange={handleChange}
                   required
                   className={inputFieldClass}
                 />
               </div>
 
-              <div className="space-y-2">
-                <label
-                  htmlFor="password"
-                  className="block text-gray-800 text-sm font-semibold"
-                >
+              <div>
+                <label htmlFor="password" className="text-sm font-medium block mb-1 text-gray-800">
                   Password
                 </label>
                 <div className="relative">
@@ -174,61 +171,46 @@ export default function Login() {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
+                    value={formData.password}
                     onChange={handleChange}
                     required
                     className={`${inputFieldClass} pr-10`}
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition"
+                    onClick={() => setShowPassword((s) => !s)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition"
+                    aria-label="Toggle password visibility"
                   >
-                    {showPassword ? (
-                      <svg id="eyeClosed" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
-                      </svg>
-                    ) : (
-                      <svg id="eyeOpen" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                      </svg>
-                    )}
+                    {showPassword ? "Hide" : "Show"}
                   </button>
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className={btnPrimaryClass}
-              >
+              <button type="submit" disabled={loading} className={btnPrimaryClass}>
                 {loading && (
                   <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="4" fill="none"></circle>
                     <path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                   </svg>
                 )}
-                <span>
-                  {loading ? "Logging In..." : "Login"}
-                </span>
+                <span>{loading ? "Logging In..." : "Login"}</span>
               </button>
             </form>
 
-            <div className="relative my-6 z-10">
+            <div className="relative my-4 z-10">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">
-                  or continue with
-                </span>
+                <span className="px-3 bg-white text-gray-500">or continue with</span>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 relative z-10">
+            <div className="grid grid-cols-2 gap-3 relative z-10">
               <button
                 type="button"
-                className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-200 rounded-xl hover:border-red-200 hover:bg-red-50 transition text-sm font-semibold text-gray-700"
+                className="flex items-center justify-center gap-2 px-4 py-2 border-2 border-gray-200 rounded-xl hover:border-red-200 hover:bg-red-50 transition text-sm font-semibold text-gray-700"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -238,9 +220,10 @@ export default function Login() {
                 </svg>
                 Google
               </button>
+
               <button
                 type="button"
-                className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-200 rounded-xl hover:border-red-200 hover:bg-red-50 transition text-sm font-semibold text-gray-700"
+                className="flex items-center justify-center gap-2 px-4 py-2 border-2 border-gray-200 rounded-xl hover:border-red-200 hover:bg-red-50 transition text-sm font-semibold text-gray-700"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
@@ -249,13 +232,10 @@ export default function Login() {
               </button>
             </div>
 
-            <div className="text-center mt-6 relative z-10">
+            <div className="text-center mt-4 relative z-10">
               <p className="text-gray-600 text-sm">
                 Don't have an account?{" "}
-                <Link
-                  to="/register"
-                  className="font-medium text-red-600 hover:text-red-700 transition ml-1"
-                >
+                <Link to="/register" className="font-medium text-red-600 hover:text-red-700 transition ml-1">
                   Sign Up
                 </Link>
               </p>
