@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [tailwindcss(), react()],
   publicDir: 'public',
-  
+
   // This server proxy is critical for local development
   server: {
     proxy: {
