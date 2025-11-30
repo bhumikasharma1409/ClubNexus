@@ -24,14 +24,27 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.register = async (req, res) => {
-  const { name, email, password, club } = req.body;
+  const { name, email, password, club, year, batch, course } = req.body;
   if (!name || !email || !password) return res.status(400).json({ message: 'Name, email and password required' });
+
+  // Email domain validation
+  if (!email.endsWith('@chitkara.edu.in')) {
+    return res.status(400).json({ message: 'Email must be a valid Chitkara University email (@chitkara.edu.in)' });
+  }
 
   const existing = await User.findOne({ email });
   if (existing) return res.status(409).json({ message: 'Email already in use' });
 
   const hashed = await bcrypt.hash(password, saltRounds);
-  const user = new User({ name, email, password: hashed, club: club || null });
+  const user = new User({
+    name,
+    email,
+    password: hashed,
+    club: club || null,
+    year,
+    batch,
+    course
+  });
   await user.save();
 
   const token = signToken(user);
@@ -42,8 +55,11 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ message: 'Email and password required' });
 
-  const user = await User.findOne({ email });
-  if (!user) return res.status(401).json({ message: 'Invalid credentials' });
+  const user = await User.findOne({ email }).populate('club');
+  console.log('Login User found:', user ? user.email : 'None');
+  if (user) console.log('User Club:', user.club);
+
+  if (!user) return res.status(404).json({ message: 'User not registered. Please sign up first.' });
 
   const match = await bcrypt.compare(password, user.password);
   if (!match) return res.status(401).json({ message: 'Invalid credentials' });
@@ -77,14 +93,14 @@ exports.login = async (req, res) => {
 
   // Normal user login
   const token = signToken(user);
-  res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+  res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role, club: user.club } });
 };
 
 exports.verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
   if (!email || !otp) return res.status(400).json({ message: 'Email and OTP required' });
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).populate('club');
   if (!user) return res.status(404).json({ message: 'User not found' });
 
   if (user.otp !== otp || user.otpExpires < Date.now()) {
@@ -97,5 +113,65 @@ exports.verifyOtp = async (req, res) => {
   await user.save();
 
   const token = signToken(user);
-  res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+  res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role, club: user.club } });
+};
+
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+exports.googleLogin = async (req, res) => {
+  const { credential, googleAccessToken } = req.body;
+  if (!credential && !googleAccessToken) return res.status(400).json({ message: 'Google credential or access token required' });
+
+  try {
+    let email, name, picture;
+
+    if (credential) {
+      // ID Token verification
+      const ticket = await client.verifyIdToken({
+        idToken: credential,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      email = payload.email;
+      name = payload.name;
+      picture = payload.picture;
+    } else if (googleAccessToken) {
+      // Access Token verification
+      const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: `Bearer ${googleAccessToken}` }
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch user info from Google');
+
+      const payload = await response.json();
+      email = payload.email;
+      name = payload.name;
+      picture = payload.picture;
+    }
+
+    if (!email.endsWith('@chitkara.edu.in')) {
+      return res.status(400).json({ message: 'Only @chitkara.edu.in emails are allowed' });
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Create new user if not exists
+      user = new User({
+        name,
+        email,
+        password: await bcrypt.hash(Math.random().toString(36), 10), // Random password
+        role: 'user'
+      });
+      await user.save();
+    }
+
+    const token = signToken(user);
+    res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role, club: user.club } });
+
+  } catch (err) {
+    console.error("Google Auth Error:", err);
+    res.status(400).json({ message: 'Google authentication failed' });
+  }
 };

@@ -7,8 +7,12 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
   club: { type: mongoose.Schema.Types.ObjectId, ref: 'Club', default: null },
+  year: { type: String },
+  batch: { type: String },
+  course: { type: String },
   otp: { type: String },
   otpExpires: { type: Date },
+  registeredEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
   createdAt: { type: Date, default: Date.now }
 });
 

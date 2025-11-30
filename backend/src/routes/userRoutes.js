@@ -1,13 +1,12 @@
-// src/routes/userRoutes.js
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
-const { protect, authorize } = require('../middleware/authMiddleware');
+const authMiddleware = require('../middleware/authMiddleware');
 
-// profile for logged in user
-router.get('/me', protect, userController.getProfile);
+// Register for an event
+router.post('/events/:eventId/register', authMiddleware.protect, userController.registerForEvent);
 
-// admin-only route to list users
-router.get('/', protect, authorize('admin'), userController.getAllUsers);
+// Get user's registered events
+router.get('/events', authMiddleware.protect, userController.getUserEvents);
 
 module.exports = router;

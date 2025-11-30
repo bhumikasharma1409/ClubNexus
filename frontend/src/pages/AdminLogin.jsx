@@ -40,7 +40,14 @@ export default function AdminLogin() {
         } else {
           // Normal login (if not admin or no OTP required)
           localStorage.setItem("adminToken", data.token);
-          navigate("/admin/dashboard");
+          localStorage.setItem("adminUser", JSON.stringify(data.user));
+
+          if (data.user.club) {
+            const clubSlug = data.user.club.name.toLowerCase().replace(/ /g, '-');
+            navigate(`/admin/dashboard/${clubSlug}`);
+          } else {
+            navigate("/admin/dashboard");
+          }
         }
       } else {
         // Step 2: Verify OTP
@@ -59,7 +66,15 @@ export default function AdminLogin() {
 
         // Success
         localStorage.setItem("adminToken", data.token);
-        navigate("/admin/dashboard");
+        localStorage.setItem("adminUser", JSON.stringify(data.user)); // Save user info
+
+        // Redirect based on club
+        if (data.user.club) {
+          const clubSlug = data.user.club.name.toLowerCase().replace(/ /g, '-');
+          navigate(`/admin/dashboard/${clubSlug}`);
+        } else {
+          navigate("/admin/dashboard");
+        }
       }
 
     } catch (err) {

@@ -1,10 +1,12 @@
 // src/pages/NonTechnicalClubsNoAPI.jsx
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/footer";
 import ParticlesBg from "../components/ParticlesBg";
 
 export default function NonTechnicalClubsNoAPI() {
+  const navigate = useNavigate();
   const [redirecting, setRedirecting] = useState(false);
   const [popupText, setPopupText] = useState("");
 
@@ -15,7 +17,7 @@ export default function NonTechnicalClubsNoAPI() {
       name: "Literayllis",
       desc: "The official literary society that celebrates poetry, debate, and storytelling.",
       insta: "https://www.instagram.com/c2s2_literayllis?igsh=N3ZlcTNhOGF3d3Yz",
-      link: "/Litreyllis.html",
+      link: "/club/literayllis",
     },
     {
       id: 2,
@@ -23,7 +25,7 @@ export default function NonTechnicalClubsNoAPI() {
       name: "Dhwani",
       desc: "The music club that unites singers and instrumentalists to create soulful melodies.",
       insta: "https://www.instagram.com/c2s2__dhwani?igsh=MXFhNmoxaXV6N2k1YQ==",
-      link: "/Dhwani.html",
+      link: "/club/dhwani",
     },
     {
       id: 3,
@@ -31,7 +33,7 @@ export default function NonTechnicalClubsNoAPI() {
       name: "Nati",
       desc: "The dramatics club, showcasing stage plays, skits, and street theatre performances.",
       insta: "https://www.instagram.com/c2s2_nati_?igsh=MXNneGVsOGtyY2VyeQ==",
-      link: "/Nati.html",
+      link: "/club/nati",
     },
     {
       id: 4,
@@ -39,7 +41,7 @@ export default function NonTechnicalClubsNoAPI() {
       name: "Custody",
       desc: "The dance club, where passion meets rhythm and creativity takes the stage.",
       insta: "https://www.instagram.com/c2s2_custody?igsh=aWNsMnJ5aDN4cXhh",
-      link: "/Custody.html",
+      link: "/club/custody",
     },
     {
       id: 5,
@@ -47,7 +49,7 @@ export default function NonTechnicalClubsNoAPI() {
       name: "The Bhangra Regiment",
       desc: "A high-energy bhangra crew spreading Punjabi culture through dance and enthusiasm.",
       insta: "https://www.instagram.com/c2s2_thebhangraregiment?igsh=bXZudDZxNTk0ZWti",
-      link: "/Bhangra.html",
+      link: "/club/bhangra-regiment",
     },
     {
       id: 6,
@@ -55,7 +57,7 @@ export default function NonTechnicalClubsNoAPI() {
       name: "Reflection",
       desc: "The photography and cinematography club capturing creativity through the lens.",
       insta: "https://www.instagram.com/c2s2_reflection?igsh=MXQxdnlmamU1cDQxcQ==",
-      link: "/Reflection.html",
+      link: "/club/reflection",
     },
     {
       id: 7,
@@ -63,7 +65,7 @@ export default function NonTechnicalClubsNoAPI() {
       name: "Lethal Giddha Squad",
       desc: "A dynamic all-girls team reviving traditional Punjabi giddha with a modern touch.",
       insta: "https://www.instagram.com/c2s2_lethal_giddha_squad?igsh=ODZkMGx3bzNhbXdo",
-      link: "/Giddha.html",
+      link: "/club/giddha-squad",
     },
     {
       id: 8,
@@ -71,7 +73,7 @@ export default function NonTechnicalClubsNoAPI() {
       name: "Natraj",
       desc: "The classical dance club dedicated to Bharatanatyam, Kathak, and Odissi traditions.",
       insta: "https://www.instagram.com/c2s2_natraj?igsh=MWl6em1mczYwdnM4aQ==",
-      link: "/Natraj.html",
+      link: "/club/natraj",
     },
   ];
 
@@ -92,7 +94,7 @@ export default function NonTechnicalClubsNoAPI() {
     setRedirecting(true);
 
     setTimeout(() => {
-      window.location.href = href;
+      navigate(href);
     }, 1800);
   };
 

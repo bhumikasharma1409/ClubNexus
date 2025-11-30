@@ -19,6 +19,11 @@ export default defineConfig({
       '/auth': {
         target: 'http://localhost:5001',
         changeOrigin: true,
+      },
+      // Proxy for uploaded images
+      '/uploads': {
+        target: 'http://localhost:5001',
+        changeOrigin: true,
       }
     }
   }

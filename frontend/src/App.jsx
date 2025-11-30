@@ -13,6 +13,8 @@ import Nati from "./pages/Nati";
 import BhangraRegiment from "./pages/BhangraRegiment";
 import GiddhaSquad from "./pages/GiddhaSquad";
 import Natraj from "./pages/NatrajClub";
+import Custody from "./pages/CustodyClub";
+import Reflection from "./pages/ReflectionClub";
 
 import CodingNinjas from "./pages/CodingNinjas";
 import IEEE from "./pages/IEEE";
@@ -24,10 +26,13 @@ import GDSC from "./pages/GDSC";
 import CodingBlocks from "./pages/CodingBlocks";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import OpenSourceDashboard from "./pages/OpenSourceDashboard";
 
 import AddEventModal from "./components/AddEventModal";
 
 
+
+import UserDashboard from "./pages/UserDashboard";
 
 export default function App() {
   return (
@@ -36,6 +41,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<UserDashboard />} />
         <Route path="/technical-clubs" element={<TechnicalClubs />} />
         <Route path="/nontechnical-clubs" element={<NonTechnicalClubs />} />
 
@@ -46,6 +52,8 @@ export default function App() {
         <Route path="/club/bhangra-regiment" element={<BhangraRegiment />} />
         <Route path="/club/giddha-squad" element={<GiddhaSquad />} />
         <Route path="/club/natraj" element={<Natraj />} />
+        <Route path="/club/custody" element={<Custody />} />
+        <Route path="/club/reflection" element={<Reflection />} />
 
         {/* Technical Club Routes */}
         <Route path="/club/coding-ninjas" element={<CodingNinjas />} />
@@ -60,7 +68,8 @@ export default function App() {
         {/* Admin */}
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin-events" element={<AdminEvents />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/dashboard/open-source" element={<OpenSourceDashboard />} />
 
 
 

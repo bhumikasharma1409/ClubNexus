@@ -1,225 +1,146 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react';
+import Navbar from '../components/Navbar';
+import Footer from '../components/footer';
+import EventCard from '../components/EventCard';
+import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
-/**
- * UserDashboard.jsx
- *
- * Props:
- *  - user (optional): { name, email, role, bio, avatarInitials }
- *
- * If no `user` prop is provided, the component will try to fetch `/api/me`.
- * Replace fetch endpoints with your backend routes as needed.
- */
+export default function UserDashboard() {
+  const { user, token } = useAuth();
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('upcoming'); // 'upcoming' or 'past'
 
-export default function UserDashboard({ user: userProp }) {
-  const [user, setUser] = useState(userProp || null)
-  const [loadingUser, setLoadingUser] = useState(!userProp)
-  const [errorUser, setErrorUser] = useState(null)
-
-  // Events arrays - replace with real API data or pass as props
-  const [upcomingEvents, setUpcomingEvents] = useState([])
-  const [registeredEvents, setRegisteredEvents] = useState([])
-  const [pastEvents, setPastEvents] = useState([])
-
-  // Helper to create initials from name
-  const makeInitials = (name) => {
-    if (!name) return ''
-    const parts = name.trim().split(/\s+/)
-    const first = parts[0]?.[0] ?? ''
-    const last = parts.length > 1 ? parts[parts.length - 1][0] : ''
-    return (first + last).toUpperCase()
-  }
-
-  // If no user prop, fetch current user
   useEffect(() => {
-    let mounted = true
-    const fetchUser = async () => {
-      if (userProp) return
-      setLoadingUser(true)
-      try {
-        const res = await fetch('/api/me') // change to your endpoint
-        if (!res.ok) throw new Error(`Failed to load user (${res.status})`)
-        const data = await res.json()
-        if (!mounted) return
-        // normalize fields
-        const normalized = {
-          name: data.name || data.fullName || '',
-          email: data.email || '',
-          role: data.role || '',
-          bio: data.bio || '',
-          avatarInitials: data.avatarInitials || makeInitials(data.name || data.fullName || ''),
-        }
-        setUser(normalized)
-        setErrorUser(null)
-      } catch (err) {
-        if (!mounted) return
-        setErrorUser(err.message)
-      } finally {
-        if (!mounted) return
-        setLoadingUser(false)
-      }
+    if (token) {
+      fetchEvents();
     }
-    fetchUser()
-    return () => { mounted = false }
-  }, [userProp])
+  }, [token]);
 
-  // Example: placeholder to fetch events (uncomment & adapt)
-  // useEffect(() => {
-  //   async function loadEvents() {
-  //     const res = await fetch('/api/my-events') // adapt endpoint
-  //     const payload = await res.json()
-  //     setUpcomingEvents(payload.upcoming || [])
-  //     setRegisteredEvents(payload.registered || [])
-  //     setPastEvents(payload.past || [])
-  //   }
-  //   loadEvents()
-  // }, [])
+  const fetchEvents = async () => {
+    try {
+      const res = await fetch('/api/user/events', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setEvents(data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch events', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // derived userData to avoid crashes
-  const userData = user || { name: '', email: '', role: '', bio: '', avatarInitials: '' }
-  const avatarInitials = userData.avatarInitials || makeInitials(userData.name)
-
-  return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-6xl mx-auto">
-        <header className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-semibold text-gray-800">
-            Welcome,&nbsp;
-            <span className="text-indigo-600">{userData.name || 'Guest'}</span>
-          </h1>
-          <div className="text-sm text-gray-600">Manage your profile, registrations, and past participation</div>
-        </header>
-
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Left column - profile */}
-          <aside className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-              {loadingUser ? (
-                <div className="animate-pulse">
-                  <div className="h-16 w-16 rounded-full bg-gray-200" />
-                  <div className="mt-3 h-4 w-32 bg-gray-200 rounded" />
-                  <div className="mt-2 h-3 w-40 bg-gray-200 rounded" />
-                </div>
-              ) : errorUser ? (
-                <div className="text-sm text-red-600">Error loading user: {errorUser}</div>
-              ) : (
-                <>
-                  <div className="flex items-center gap-4">
-                    <div className="h-16 w-16 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-xl">
-                      {avatarInitials}
-                    </div>
-                    <div>
-                      <div className="text-lg font-medium text-gray-800">{userData.name}</div>
-                      <div className="text-sm text-gray-500">{userData.email}</div>
-                    </div>
-                  </div>
-
-                  <p className="mt-4 text-sm text-gray-600">{userData.bio}</p>
-
-                  <div className="mt-6 space-y-2">
-                    <button className="w-full py-2 rounded-lg border border-indigo-100 text-indigo-600 font-medium">
-                      Edit profile
-                    </button>
-                    <button className="w-full py-2 rounded-lg bg-indigo-600 text-white font-medium">
-                      View full profile
-                    </button>
-                  </div>
-
-                  <div className="mt-6 text-xs text-gray-500">
-                    Role: <span className="text-gray-700">{userData.role}</span>
-                  </div>
-                </>
-              )}
-            </div>
-          </aside>
-
-          {/* Right column - main content */}
-          <main className="lg:col-span-3 space-y-6">
-            {/* Upcoming events */}
-            <section className="bg-white rounded-2xl shadow-sm p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-800">Upcoming Events</h2>
-                <div className="text-sm text-gray-500">See what's next</div>
-              </div>
-
-              {upcomingEvents.length === 0 ? (
-                <div className="text-sm text-gray-500">No upcoming events. Browse clubs to find events to join.</div>
-              ) : (
-                <div className="space-y-3">
-                  {upcomingEvents.map(ev => (
-                    <div key={ev.id} className="flex items-center justify-between border rounded-lg p-3">
-                      <div>
-                        <div className="font-medium text-gray-800">{ev.title}</div>
-                        <div className="text-sm text-gray-500">{ev.date} • seats {ev.seats}</div>
-                      </div>
-
-                      <div className="flex items-center gap-3">
-                        <div className={`text-sm px-3 py-1 rounded-full text-white ${ev.status === 'Registered' ? 'bg-emerald-500' : 'bg-gray-400'}`}>
-                          {ev.status}
-                        </div>
-                        <button className="text-sm text-indigo-600 font-medium">Details</button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </section>
-
-            {/* Registered Events */}
-            <section className="bg-white rounded-2xl shadow-sm p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-800">Registered Events</h2>
-                <div className="text-sm text-gray-500">Manage registrations</div>
-              </div>
-
-              {registeredEvents.length === 0 ? (
-                <div className="text-sm text-gray-500">You haven't registered for any events yet.</div>
-              ) : (
-                <div className="divide-y">
-                  {registeredEvents.map(ev => (
-                    <div key={ev.id} className="py-3 flex items-center justify-between">
-                      <div>
-                        <div className="font-medium text-gray-800">{ev.title}</div>
-                        <div className="text-sm text-gray-500">{ev.date}</div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <button className="text-sm px-3 py-1 rounded-md border">Cancel</button>
-                        <button className="text-sm px-3 py-1 rounded-md bg-indigo-600 text-white">View</button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </section>
-
-            {/* Past Events */}
-            <section className="bg-white rounded-2xl shadow-sm p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-800">Past Events</h2>
-                <div className="text-sm text-gray-500">Your participation history</div>
-              </div>
-
-              {pastEvents.length === 0 ? (
-                <div className="text-sm text-gray-500">No past events</div>
-              ) : (
-                <div className="space-y-3">
-                  {pastEvents.map(ev => (
-                    <div key={ev.id} className="flex items-center justify-between border rounded-lg p-3">
-                      <div>
-                        <div className="font-medium text-gray-800">{ev.title}</div>
-                        <div className="text-sm text-gray-500">{ev.date} • {ev.role}</div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <button className="text-sm px-3 py-1 rounded-md border">Certificate</button>
-                        <button className="text-sm text-indigo-600 font-medium">Feedback</button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </section>
-          </main>
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Please log in to view your dashboard</h2>
+          <Link to="/login" className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+            Login
+          </Link>
         </div>
       </div>
+    );
+  }
+
+  const now = new Date();
+  const upcomingEvents = events.filter(e => new Date(e.date) >= now);
+  const pastEvents = events.filter(e => new Date(e.date) < now);
+
+  const displayedEvents = activeTab === 'upcoming' ? upcomingEvents : pastEvents;
+
+  return (
+    <div className="min-h-screen bg-gray-50 font-serif">
+      <Navbar />
+
+      <div className="pt-24 pb-12 container mx-auto px-4 md:px-8">
+        {/* Header */}
+        <div className="bg-white rounded-2xl shadow-sm p-8 mb-8 border border-gray-100">
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#ffe5e5] to-[#ffcaca] border-4 border-white shadow-lg flex items-center justify-center text-4xl font-bold text-red-900 uppercase">
+              {user.name ? user.name.charAt(0) : user.email.charAt(0)}
+            </div>
+            <div className="text-center md:text-left">
+              <h1 className="text-3xl font-bold text-gray-900 mb-1">{user.name}</h1>
+              <p className="text-gray-500">{user.email}</p>
+              <div className="mt-4 flex flex-wrap gap-3 justify-center md:justify-start">
+                <div className="px-4 py-1 bg-red-50 text-red-700 rounded-full text-sm font-medium border border-red-100">
+                  {user.course || 'Student'}
+                </div>
+                {user.year && (
+                  <div className="px-4 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium border border-blue-100">
+                    Year {user.year}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-6 mb-8 border-b border-gray-200">
+          <button
+            onClick={() => setActiveTab('upcoming')}
+            className={`pb-3 text-lg font-medium transition-colors relative ${activeTab === 'upcoming'
+                ? 'text-red-600'
+                : 'text-gray-500 hover:text-gray-700'
+              }`}
+          >
+            Upcoming Events
+            {activeTab === 'upcoming' && (
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 rounded-t-full" />
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab('past')}
+            className={`pb-3 text-lg font-medium transition-colors relative ${activeTab === 'past'
+                ? 'text-red-600'
+                : 'text-gray-500 hover:text-gray-700'
+              }`}
+          >
+            Past Events
+            {activeTab === 'past' && (
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 rounded-t-full" />
+            )}
+          </button>
+        </div>
+
+        {/* Events Grid */}
+        {loading ? (
+          <div className="text-center py-12 text-gray-500">Loading events...</div>
+        ) : displayedEvents.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {displayedEvents.map(event => (
+              <EventCard
+                key={event._id}
+                title={event.title}
+                date={new Date(event.date).toLocaleDateString()}
+                time={event.time}
+                description={event.description}
+                poster={event.poster}
+                clubName={event.club?.name}
+                isRegistered={true} // Since these are fetched from user's registered events
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16 bg-white rounded-xl border border-dashed border-gray-300">
+            <div className="text-gray-400 mb-4 text-6xl">📅</div>
+            <h3 className="text-xl font-medium text-gray-900 mb-2">No events found</h3>
+            <p className="text-gray-500 mb-6">You haven't registered for any {activeTab} events yet.</p>
+            <Link to="/#clubs" className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-black transition">
+              Explore Clubs
+            </Link>
+          </div>
+        )}
+      </div>
+
+      <Footer />
     </div>
-  )
+  );
 }

@@ -10,21 +10,32 @@ const run = async () => {
   try {
     await connectDB();
     const adminEmail = 'bhanvisahni@gmail.com';
-    const existing = await User.findOne({ email: adminEmail });
-    if (existing) {
-      console.log('Admin already exists:', existing.email);
-      process.exit(0);
-    }
+    // Check removed to allow update
     const salt = parseInt(process.env.BCRYPT_SALT || '10');
     const hashed = await bcrypt.hash('bhanvi', salt);
-    let club = await Club.findOne({ name: 'Default Club' });
+    let club = await Club.findOne({ name: 'Open Source' });
     if (!club) {
-      club = new Club({ name: 'Default Club', description: 'Seed club' });
+      club = new Club({
+        name: 'Open Source',
+        description: 'Contribute to real-world projects and collaborate globally.',
+        category: 'Technical'
+      });
       await club.save();
     }
-    const admin = new User({ name: 'Bhanvi', email: adminEmail, password: hashed, role: 'admin', club: club._id });
-    await admin.save();
-    console.log('Admin created:', adminEmail, 'password: bhanvi');
+
+    // Update or create admin
+    const admin = await User.findOneAndUpdate(
+      { email: adminEmail },
+      {
+        name: 'Bhanvi',
+        password: hashed,
+        role: 'admin',
+        club: club._id
+      },
+      { upsert: true, new: true }
+    );
+
+    console.log('Admin created/updated:', adminEmail, 'for club:', club.name);
     process.exit(0);
   } catch (err) {
     console.error(err);

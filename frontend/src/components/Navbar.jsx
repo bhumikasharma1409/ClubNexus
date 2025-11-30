@@ -107,15 +107,17 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <>
-                <div className="relative w-12 h-12">
-                  <div className="absolute h-11 w-11 bg-white rounded-full border-2 border-white shadow flex items-center justify-center overflow-hidden">
-                    <img
-                      src="/pfp.jpg"
-                      alt="Profile"
-                      className="w-11 h-11 object-cover rounded-full"
-                    />
+                <Link to="/dashboard" className="relative w-10 h-10 md:w-11 md:h-11 group cursor-pointer block">
+                  <div className="w-full h-full rounded-full bg-gradient-to-br from-[#ffe5e5] to-[#ffcaca] border-2 border-white/20 shadow-md flex items-center justify-center overflow-hidden transform group-hover:scale-105 transition-transform duration-200">
+                    <span className="text-red-900 font-bold text-lg md:text-xl uppercase select-none">
+                      {user.name ? user.name.charAt(0) : user.email.charAt(0)}
+                    </span>
                   </div>
-                </div>
+                  {/* Tooltip on hover */}
+                  <div className="absolute top-full right-0 mt-2 w-max px-3 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                    {user.name || user.email}
+                  </div>
+                </Link>
                 <button
                   onClick={logout}
                   className="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg shadow hover:bg-gray-300 transition"
@@ -167,9 +169,8 @@ export default function Navbar() {
       {/* Mobile panel (slide down) */}
       <div
         id="mobile-menu"
-        className={`md:hidden fixed top-[64px] left-0 right-0 bg-black/60 backdrop-blur-sm z-40 transform transition-all duration-200 ${
-          mobileOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
-        }`}
+        className={`md:hidden fixed top-[64px] left-0 right-0 bg-black/60 backdrop-blur-sm z-40 transform transition-all duration-200 ${mobileOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
+          }`}
       >
         <div className="max-w-md mx-auto bg-white rounded-b-xl shadow-xl mt-0 overflow-hidden">
           <div className="p-4">
@@ -210,9 +211,11 @@ export default function Navbar() {
               {user ? (
                 <>
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-gray-200">
-                      <img src="/pfp.jpg" alt="Profile" className="w-full h-full object-cover" />
-                    </div>
+                    <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="w-12 h-12 rounded-full overflow-hidden border-2 border-gray-200 bg-gradient-to-br from-[#ffe5e5] to-[#ffcaca] flex items-center justify-center">
+                      <span className="text-red-900 font-bold text-xl uppercase select-none">
+                        {user.name ? user.name.charAt(0) : user.email.charAt(0)}
+                      </span>
+                    </Link>
                     <div>
                       <div className="text-sm font-medium text-gray-900">{user.name || user.email}</div>
                       <div className="text-xs text-gray-500">Member</div>
@@ -250,6 +253,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-    </header>
+    </header >
   );
 }
