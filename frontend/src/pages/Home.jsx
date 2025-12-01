@@ -304,35 +304,24 @@ export default function Home() {
       <ParticlesBg />
       <Navbar />
 
-      {/* animation + helper styles */}
+      {/* animation + helper styles (replace slider-related styles with these) */}
       <style>{`
-        .fade-slide-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
-        .fade-slide-up.is-visible { opacity: 1; transform: translateY(0); }
+  .fade-slide-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+  .fade-slide-up.is-visible { opacity: 1; transform: translateY(0); }
 
-        /* slider styles */
-        .hero-slider { width: 100%; height: 100%; overflow: hidden; }
-        .hero-slider-track { display: flex; width: 100%; height: 100%; transition: transform 600ms ease; }
-        .hero-slide { width: 100%; flex-shrink: 0; height: 100%; }
-        .hero-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* slider styles - updated */
+  .hero-slider { width: 100%; height: 100%; overflow: hidden; position: relative; }
+  .hero-slider-track { display: flex; transition: transform 600ms ease; /* no fixed width */ }
+  .hero-slide { flex: 0 0 100%; width: 100%; height: 100%; }
+  .hero-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        .gradient-text-red {
-          background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-
-        @keyframes border-glow {
-          0%, 100% { box-shadow: 0 0 4px rgba(220, 38, 38, 0.3); border-color: #fee2e2; }
-          50% { box-shadow: 0 0 20px rgba(220, 38, 38, 0.8); border-color: #ef4444; }
-        }
-        
-        .club-logo-glow {
-          animation: border-glow 3s infinite ease-in-out;
-        }
-      `}</style>
-
-
+  .gradient-text-red {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+`}</style>
 
       {/* HERO */}
       <main id="home" className="flex flex-col md:flex-row items-center justify-between min-h-[75vh] px-4 md:px-28 font-serif pt-28">
@@ -349,6 +338,7 @@ export default function Home() {
 
           <p className="mt-6 text-lg text-gray-600 max-w-xl">
             All your college events, in one place. Stay updated and never miss an opportunity again.
+
           </p>
 
           {!user && (
@@ -387,8 +377,8 @@ export default function Home() {
             </div>
           </div>
         </AnimatedSection>
-
       </main>
+
 
       {/* TECH CLUBS LOGO ROW */}
       <div className="py-12 px-4 overflow-hidden">
