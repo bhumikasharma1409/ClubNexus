@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import Slideshow from '../components/Slideshow';
 import EventCard from '../components/EventCard';
 
 const slideshowImages = [
-  '/first.jpg',
-  '/second.jpg',
-  '/eight.jpg',
-  '/third.jpg',
+  '/firstieee.webp',
+  '/secondieee.webp',
+  '/thirdieee.webp',
+  '/fourthieee.webp',
 ];
 
 export default function IEEE() {
@@ -21,23 +22,40 @@ export default function IEEE() {
         // 1. Get Club ID
         const clubRes = await fetch('/api/clubs');
         const clubs = await clubRes.json();
-        const ieeeClub = clubs.find(c => c.name === 'IEEE');
+        if (!Array.isArray(clubs)) {
+          console.warn('/api/clubs did not return an array', clubs);
+          return;
+        }
+        const ieeeClub = clubs.find((c) => c.name === 'IEEE');
 
         if (ieeeClub) {
           // 2. Get Events
           const eventRes = await fetch(`/api/events/${ieeeClub._id}`);
-          const eventData = await eventRes.json();
-          setEvents(eventData);
+          if (eventRes.ok) {
+            const eventData = await eventRes.json();
+            setEvents(Array.isArray(eventData) ? eventData : []);
+          } else {
+            console.warn('Failed to fetch events:', eventRes.status);
+            setEvents([]);
+          }
 
           // 3. Get Openings
           const openingRes = await fetch(`/api/openings/${ieeeClub._id}`);
           if (openingRes.ok) {
             const openingData = await openingRes.json();
-            setOpening(openingData);
+            setOpening(openingData || null);
+          } else {
+            setOpening(null);
           }
+        } else {
+          // no IEEE club found
+          setEvents([]);
+          setOpening(null);
         }
       } catch (err) {
         console.error('Failed to fetch data:', err);
+        setEvents([]);
+        setOpening(null);
       }
     };
 
@@ -45,7 +63,7 @@ export default function IEEE() {
   }, []);
 
   const pageStyle = {
-    backgroundImage: "url('/eight.jpg')",
+    backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/firstieee.webp')",
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',
@@ -54,42 +72,40 @@ export default function IEEE() {
   return (
     <div style={pageStyle} className="min-h-screen text-white">
       <Navbar />
-      <div className="h-28"></div>
+      <div className="h-28" />
 
       <main className="container mx-auto px-4 py-10">
         {/* --- GLASS EFFECT CONTAINER --- */}
-        <div className="bg-black bg-opacity-40 p-8 rounded-2xl shadow-xl backdrop-blur-lg border border-white border-opacity-20 max-w-4xl mx-auto">
+        <div className="bg-black bg-opacity-60 p-8 rounded-2xl shadow-xl backdrop-blur-lg border border-white border-opacity-20 max-w-4xl mx-auto">
 
           {/* --- 1. HEADER (Name & Tagline) --- */}
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
             <img
               src="/ieee.webp"
-              alt="IEEE Club"
+              alt="IEEE Club Logo"
               className="w-48 h-48 rounded-full object-cover border-4 border-blue-600 shadow-lg"
             />
             <div className="text-center md:text-left mt-4">
-              <h1 className="text-6xl font-extrabold text-blue-600 mb-3">
-                IEEE
-              </h1>
-              <p className="text-2xl text-gray-200 mb-4">
-                Advancing Technology for Humanity
-              </p>
+              <h1 className="text-6xl font-extrabold text-blue-600 mb-3">IEEE</h1>
+              <p className="text-2xl text-gray-200 mb-4">Advancing Technology for Humanity</p>
               <div className="flex justify-center md:justify-start space-x-4">
                 <a
                   href="https://www.instagram.com/ieeeciet?igsh=MWxqMmJtcDU4em9zcw=="
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-3xl text-gray-300 hover:text-pink-500 transition-colors"
+                  aria-label="IEEE Instagram"
                 >
-                  <i className="fab fa-instagram"></i>
+                  <i className="fab fa-instagram" />
                 </a>
                 <a
                   href="https://www.linkedin.com/company/ieee-ciet-student-branch/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-3xl text-gray-300 hover:text-blue-500 transition-colors"
+                  aria-label="IEEE LinkedIn"
                 >
-                  <i className="fab fa-linkedin"></i>
+                  <i className="fab fa-linkedin" />
                 </a>
               </div>
             </div>
@@ -98,7 +114,7 @@ export default function IEEE() {
           {/* --- RECRUITMENT BANNER --- */}
           {opening && (opening.technicalRoles?.length > 0 || opening.nonTechnicalRoles?.length > 0) && (
             <div className="mt-12 relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-pulse" />
               <div className="relative bg-black bg-opacity-80 p-8 rounded-xl border border-blue-500/50 shadow-[0_0_30px_rgba(37,99,235,0.3)]">
                 <div className="flex flex-col md:flex-row items-start justify-between gap-8">
                   <div className="flex-1 text-center md:text-left">
@@ -114,7 +130,7 @@ export default function IEEE() {
                         <div>
                           <h3 className="text-blue-400 font-bold mb-2 uppercase tracking-wider text-sm">Technical</h3>
                           <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                            {opening.technicalRoles.map(role => (
+                            {opening.technicalRoles.map((role) => (
                               <span key={role} className="px-3 py-1 bg-blue-900/30 border border-blue-500/30 rounded-full text-blue-200 text-sm">
                                 {role}
                               </span>
@@ -127,7 +143,7 @@ export default function IEEE() {
                         <div>
                           <h3 className="text-cyan-400 font-bold mb-2 uppercase tracking-wider text-sm">Non-Technical</h3>
                           <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                            {opening.nonTechnicalRoles.map(role => (
+                            {opening.nonTechnicalRoles.map((role) => (
                               <span key={role} className="px-3 py-1 bg-cyan-900/30 border border-cyan-500/30 rounded-full text-cyan-200 text-sm">
                                 {role}
                               </span>
@@ -158,12 +174,6 @@ export default function IEEE() {
             </div>
           )}
 
-          {/* --- 2. SLIDESHOW --- */}
-          <div className="mt-12">
-            <h2 className="text-3xl font-bold mb-4 text-white">Recent Moments</h2>
-            <Slideshow images={slideshowImages} />
-          </div>
-
           {/* --- 3. UPCOMING EVENTS --- */}
           <div className="mt-12">
             <h2 className="text-3xl font-bold mb-4 text-white">Upcoming Events</h2>
@@ -176,7 +186,7 @@ export default function IEEE() {
                     key={event._id}
                     id={event._id}
                     title={event.title}
-                    date={new Date(event.date).toLocaleDateString()}
+                    date={event.date ? new Date(event.date).toLocaleDateString() : ''}
                     time={event.time}
                     description={event.description}
                     poster={event.poster}
@@ -186,54 +196,31 @@ export default function IEEE() {
             )}
           </div>
 
+          {/* --- 2. SLIDESHOW --- */}
+          <div className="mt-12">
+            <h2 className="text-3xl font-bold mb-4 text-white">Recent Moments</h2>
+            <Slideshow images={slideshowImages} />
+          </div>
+
           {/* --- 4. ABOUT US --- */}
           <div className="mt-12 border-t border-gray-600 pt-8">
             <h2 className="text-3xl font-bold mb-4 text-blue-500">About Us</h2>
             <p className="text-lg text-gray-300 leading-relaxed">
-              Innovate with technology, research, and professional networking. As the world's largest technical professional organization, we provide a platform for research and development.
+              IEEE CIET is the student branch of the Institute of Electrical and Electronics Engineers (IEEE) at Coimbatore Institute of Engineering and Technology. It's a platform for students to explore cutting-edge technologies, network with industry professionals, and enhance their technical skills.
+            </p>
+          </div>
+
+          <div className="mt-12 border-t border-gray-600 pt-8">
+            <h2 className="text-3xl font-bold mb-4 text-blue-500">What are the benefits of joining IEEE CIET?</h2>
+            <p className="text-lg text-gray-300 leading-relaxed">
+              Benefits include access to IEEE's vast digital library, networking opportunities with industry professionals, participation in workshops and conferences, eligibility for IEEE scholarships, and the chance to work on cutting-edge projects and research.
             </p>
           </div>
         </div>
       </main>
 
-      {/* --- 5. FOOTER (from Home.jsx) --- */}
-      <footer className="relative z-10 bg-gradient-to-r from-red-600 via-red-800 to-black text-white pt-16 pb-12 mt-16">
-        <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <img src="/logo.png" alt="ClubNexus Logo" className="h-16 w-auto mb-4" />
-            <p className="text-gray-300">
-              Your one-stop platform for discovering and connecting with all the clubs at Chitkara University.
-            </p>
-          </div>
-          <div>
-            <h5 className="text-xl font-bold mb-4">Quick Links</h5>
-            <ul className="space-y-2">
-              <li><Link to="/" className="hover:text-yellow-300">Home</Link></li>
-              <li><a href="/#about" className="hover:text-yellow-300">About Us</a></li>
-              <li><a href="/#faq" className="hover:text-yellow-300">FAQs</a></li>
-              <li><Link to="/login" className="hover:text-yellow-300">Login</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h5 className="text-xl font-bold mb-4">Discover</h5>
-            <ul className="space-y-2">
-              <li><Link to="/technical-clubs" className="hover:text-yellow-300">Technical Clubs</Link></li>
-              <li><Link to="/nontechnical-clubs" className="hover:text-yellow-300">Non-Technical Clubs</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h5 className="text-xl font-bold mb-4">Follow Us</h5>
-            <div className="flex space-x-4">
-              <a href="#" className="text-2xl hover:text-yellow-300"><i className="fab fa-instagram"></i></a>
-              <a href="#" className="text-2xl hover:text-yellow-300"><i className="fab fa-linkedin"></i></a>
-              <a href="#" className="text-2xl hover:text-yellow-300"><i className="fab fa-github"></i></a>
-            </div>
-          </div>
-        </div>
-        <div className="text-center text-gray-400 mt-12 pt-8 border-t border-red-700">
-          © 2024 ClubNexus. Developed by Students.
-        </div>
-      </footer>
+      {/* --- FOOTER --- */}
+      <Footer />
     </div>
   );
 }

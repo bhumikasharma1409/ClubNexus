@@ -99,6 +99,15 @@ export default function Navbar() {
               FAQs
             </a>
           </li>
+          <li>
+            <a
+              href="#contact"
+              onClick={handleNavClick('contact')}
+              className="text-white font-serif hover:text-yellow-300 text-lg font-medium"
+            >
+              Contact Us
+            </a>
+          </li>
         </ul>
 
         {/* Right area: auth buttons + mobile toggle */}
@@ -195,6 +204,13 @@ export default function Navbar() {
                 className="block text-gray-800 font-medium py-2 px-2 rounded hover:bg-gray-50"
               >
                 FAQs
+              </a>
+              <a
+                href="#contact"
+                onClick={handleNavClick('contact')}
+                className="block text-gray-800 font-medium py-2 px-2 rounded hover:bg-gray-50"
+              >
+                Contact Us
               </a>
             </nav>
 
