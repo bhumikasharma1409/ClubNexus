@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import AdminEvents from "./pages/AdminEvents";
 import Home from "./pages/Home";
@@ -44,6 +44,7 @@ export default function App() {
     <div className="relative z-10 min-h-screen">
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Navigate to="/" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<UserDashboard />} />

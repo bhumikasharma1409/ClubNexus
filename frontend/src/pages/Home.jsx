@@ -340,12 +340,6 @@ export default function Home() {
             All your college events, in one place. Stay updated and never miss an opportunity again.
 
           </p>
-
-          {!user && (
-            <Link to="/register" className="mt-8 inline-block px-8 py-3 bg-red-600 text-white font-bold rounded-xl shadow-lg hover:bg-red-700 transition transform hover:-translate-y-1">
-              Get Started
-            </Link>
-          )}
         </AnimatedSection>
 
         <AnimatedSection className="mt-10 md:mt-0 md:ml-12 w-full md:w-4/5 lg:w-2/3 relative overflow-hidden rounded-2xl shadow-xl h-64 md:h-96" delay="0.24s" threshold={0.05}>
@@ -354,7 +348,8 @@ export default function Home() {
             <div
               ref={trackRef}
               className="hero-slider-track"
-              style={{ transform: `translateX(-${currentSlide * 100} %)` }}
+              // FIXED: removed space before % and let CSS handle the track sizing
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               aria-hidden={false}
             >
               {slidesExtended.map((src, i) => (
@@ -369,9 +364,14 @@ export default function Home() {
               {slides.map((_, idx) => (
                 <button
                   key={idx}
-                  onClick={() => goToSlide(idx)}
-                  className={`w - 2 h - 2 rounded - full ${currentSlide % slides.length === idx ? 'bg-white' : 'bg-white/40'} `}
-                  aria-label={`Go to slide ${idx + 1} `}
+                  onClick={() => {
+                    // ensure transition is enabled for manual jumps
+                    if (trackRef.current) trackRef.current.style.transition = 'transform 600ms ease';
+                    setCurrentSlide(idx);
+                  }}
+                  className={`w-2 h-2 rounded-full ${currentSlide % slides.length === idx ? 'bg-white' : 'bg-white/40'} focus:outline-none`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  type="button"
                 />
               ))}
             </div>
