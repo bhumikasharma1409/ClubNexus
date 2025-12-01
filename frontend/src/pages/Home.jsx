@@ -302,85 +302,80 @@ export default function Home() {
       <ParticlesBg />
       <Navbar />
 
-      {/* animation + helper styles */}
-      <style>{`
-        .fade-slide-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
-        .fade-slide-up.is-visible { opacity: 1; transform: translateY(0); }
+      {/* animation + helper styles (replace slider-related styles with these) */}
+<style>{`
+  .fade-slide-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+  .fade-slide-up.is-visible { opacity: 1; transform: translateY(0); }
 
-        /* slider styles */
-        .hero-slider { width: 100%; height: 100%; overflow: hidden; }
-        .hero-slider-track { display: flex; width: 100%; height: 100%; transition: transform 600ms ease; }
-        .hero-slide { width: 100%; flex-shrink: 0; height: 100%; }
-        .hero-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* slider styles - updated */
+  .hero-slider { width: 100%; height: 100%; overflow: hidden; position: relative; }
+  .hero-slider-track { display: flex; transition: transform 600ms ease; /* no fixed width */ }
+  .hero-slide { flex: 0 0 100%; width: 100%; height: 100%; }
+  .hero-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        .gradient-text-red {
-          background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
+  .gradient-text-red {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+`}</style>
 
-        @keyframes border-glow {
-          0%, 100% { box-shadow: 0 0 4px rgba(220, 38, 38, 0.3); border-color: #fee2e2; }
-          50% { box-shadow: 0 0 20px rgba(220, 38, 38, 0.8); border-color: #ef4444; }
-        }
-        
-        .club-logo-glow {
-          animation: border-glow 3s infinite ease-in-out;
-        }
-      `}</style>
+{/* HERO */}
+<main id="home" className="flex flex-col md:flex-row items-center justify-between min-h-[75vh] px-4 md:px-28 font-serif pt-28">
+  <AnimatedSection as="div" className="max-w-2xl text-left" delay="0.08s" threshold={0.05}>
+    <span className="inline-block px-4 py-1 mb-6 text-sm font-serif font-medium text-blue-700 bg-blue-100 rounded-full shadow">
+      College Clubs Made Simple
+    </span>
 
+    <h1 className="text-3xl md:text-6xl font-serif font-extrabold leading-tight text-gray-900">
+      Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-800 to-black">ClubNexus</span>
+    </h1>
 
+    <h2 className="mt-3 text-xl md:text-3xl font-serif font-bold text-gray-700">Discover • Register • Connect</h2>
 
-      {/* HERO */}
-      <main id="home" className="flex flex-col md:flex-row items-center justify-between min-h-[75vh] px-4 md:px-28 font-serif pt-28">
-        <AnimatedSection as="div" className="max-w-2xl text-left" delay="0.08s" threshold={0.05}>
-          <span className="inline-block px-4 py-1 mb-6 text-sm font-serif font-medium text-blue-700 bg-blue-100 rounded-full shadow">
-            College Clubs Made Simple
-          </span>
+    <p className="mt-6 text-lg text-gray-600 max-w-xl">
+      All your college events, in one place. Stay updated and never miss an opportunity again.
+    </p>
+  </AnimatedSection>
 
-          <h1 className="text-3xl md:text-6xl font-serif font-extrabold leading-tight text-gray-900">
-            Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-800 to-black">ClubNexus</span>
-          </h1>
-
-          <h2 className="mt-3 text-xl md:text-3xl font-serif font-bold text-gray-700">Discover • Register • Connect</h2>
-
-          <p className="mt-6 text-lg text-gray-600 max-w-xl">
-            All your college events, in one place. Stay updated and never miss an opportunity again.
-          </p>
-        </AnimatedSection>
-
-        <AnimatedSection className="mt-10 md:mt-0 md:ml-12 w-full md:w-4/5 lg:w-2/3 relative overflow-hidden rounded-2xl shadow-xl h-64 md:h-96" delay="0.24s" threshold={0.05}>
-          {/* Slider */}
-          <div className="hero-slider">
-            <div
-              ref={trackRef}
-              className="hero-slider-track"
-              style={{ transform: `translateX(-${currentSlide * 100} %)` }}
-              aria-hidden={false}
-            >
-              {slidesExtended.map((src, i) => (
-                <div className="hero-slide" key={i}>
-                  <img src={src} alt={`slide - ${i} `} />
-                </div>
-              ))}
-            </div>
-
-            {/* small dots */}
-            <div className="absolute left-1/2 -translate-x-1/2 bottom-3 flex space-x-2">
-              {slides.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => goToSlide(idx)}
-                  className={`w - 2 h - 2 rounded - full ${currentSlide % slides.length === idx ? 'bg-white' : 'bg-white/40'} `}
-                  aria-label={`Go to slide ${idx + 1} `}
-                />
-              ))}
-            </div>
+  <AnimatedSection className="mt-10 md:mt-0 md:ml-12 w-full md:w-4/5 lg:w-2/3 relative overflow-hidden rounded-2xl shadow-xl h-64 md:h-96" delay="0.24s" threshold={0.05}>
+    {/* Slider */}
+    <div className="hero-slider">
+      <div
+        ref={trackRef}
+        className="hero-slider-track"
+        // FIXED: removed space before % and let CSS handle the track sizing
+        style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        aria-hidden={false}
+      >
+        {slidesExtended.map((src, i) => (
+          <div className="hero-slide" key={i}>
+            <img src={src} alt={`slide - ${i}`} />
           </div>
-        </AnimatedSection>
+        ))}
+      </div>
 
-      </main>
+      {/* small dots */}
+      <div className="absolute left-1/2 -translate-x-1/2 bottom-3 flex space-x-2">
+        {slides.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => {
+              // ensure transition is enabled for manual jumps
+              if (trackRef.current) trackRef.current.style.transition = 'transform 600ms ease';
+              setCurrentSlide(idx);
+            }}
+            className={`w-2 h-2 rounded-full ${currentSlide % slides.length === idx ? 'bg-white' : 'bg-white/40'} focus:outline-none`}
+            aria-label={`Go to slide ${idx + 1}`}
+            type="button"
+          />
+        ))}
+      </div>
+    </div>
+  </AnimatedSection>
+</main>
+
 
       {/* TECH CLUBS LOGO ROW */}
       <div className="py-12 px-4 overflow-hidden">
