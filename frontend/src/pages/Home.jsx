@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Chatbot from '../components/Chatbot';
 import ParticlesBg from '../components/ParticlesBg';
+import { useAuth } from '../context/AuthContext';
 
 /* -------------------------
    useInViewAnimation hook (stable, callback ref)
@@ -150,6 +151,7 @@ const slugify = (name = '') =>
    Home component
    ------------------------- */
 export default function Home() {
+  const { user } = useAuth();
   const [technicalClubs, setTechnicalClubs] = useState([]);
   const [nonTechnicalClubs, setNonTechnicalClubs] = useState([]);
   const [faqOpen, setFaqOpen] = useState([false, false, false, false]);
@@ -348,6 +350,12 @@ export default function Home() {
           <p className="mt-6 text-lg text-gray-600 max-w-xl">
             All your college events, in one place. Stay updated and never miss an opportunity again.
           </p>
+
+          {!user && (
+            <Link to="/register" className="mt-8 inline-block px-8 py-3 bg-red-600 text-white font-bold rounded-xl shadow-lg hover:bg-red-700 transition transform hover:-translate-y-1">
+              Get Started
+            </Link>
+          )}
         </AnimatedSection>
 
         <AnimatedSection className="mt-10 md:mt-0 md:ml-12 w-full md:w-4/5 lg:w-2/3 relative overflow-hidden rounded-2xl shadow-xl h-64 md:h-96" delay="0.24s" threshold={0.05}>

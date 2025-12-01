@@ -38,6 +38,7 @@ app.use('/api/activities', activityRoutes);
 app.use('/api/openings', openingRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/duty-leaves', require('./routes/dutyLeaveRoutes'));
 
 // Error handler (should be last)
 app.use(errorMiddleware);

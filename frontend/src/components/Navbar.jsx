@@ -118,22 +118,7 @@ export default function Navbar() {
                   {user.name || user.email}
                 </div>
               </Link>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg shadow hover:bg-gray-300 transition"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-800 text-white text-sm font-semibold rounded-lg shadow hover:opacity-90 transition"
-                >
-                  Sign Up
-                </Link>
-              </>
-            )}
+            ) : null}
           </div>
 
           {/* Mobile hamburger */}
@@ -224,24 +209,7 @@ export default function Navbar() {
                     Sign Out
                   </button>
                 </>
-              ) : (
-                <>
-                  <Link
-                    to="/login"
-                    onClick={() => setMobileOpen(false)}
-                    className="w-full text-center px-4 py-2 rounded-lg bg-gray-200 text-gray-800 font-semibold"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/register"
-                    onClick={() => setMobileOpen(false)}
-                    className="w-full text-center px-4 py-2 rounded-lg bg-gradient-to-r from-red-500 to-red-800 text-white font-semibold"
-                  >
-                    Sign Up
-                  </Link>
-                </>
-              )}
+              ) : null}
             </div>
           </div>
         </div>

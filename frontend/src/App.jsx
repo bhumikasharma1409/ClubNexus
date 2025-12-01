@@ -37,6 +37,7 @@ import AddEventModal from "./components/AddEventModal";
 import UserDashboard from "./pages/UserDashboard";
 
 import EventRegistrations from "./pages/EventRegistrations";
+import EventDetails from "./pages/EventDetails";
 
 export default function App() {
   return (
@@ -46,6 +47,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<UserDashboard />} />
+        <Route path="/events/:id" element={<EventDetails />} />
         <Route path="/technical-clubs" element={<TechnicalClubs />} />
         <Route path="/nontechnical-clubs" element={<NonTechnicalClubs />} />
 

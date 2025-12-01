@@ -15,6 +15,7 @@ const OpenSourceDashboard = () => {
     const [totalMembers, setTotalMembers] = useState(0);
     const [showModal, setShowModal] = useState(false);
     const [eventToEdit, setEventToEdit] = useState(null);
+    const [dutyLeaves, setDutyLeaves] = useState([]);
 
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const profileMenuRef = useRef(null);
@@ -40,6 +41,7 @@ const OpenSourceDashboard = () => {
                     await fetchEvents(openSourceClub._id);
                     await fetchRecentActivity(openSourceClub._id);
                     await fetchMemberCount(openSourceClub._id);
+                    await fetchDutyLeaves(openSourceClub._id);
                 } else {
                     console.error("Open Source club not found in database. Available clubs:", clubs.map(c => c.name));
                 }
@@ -101,6 +103,36 @@ const OpenSourceDashboard = () => {
         }
     };
 
+    const fetchDutyLeaves = async (clubId) => {
+        try {
+            const res = await fetch(`/api/duty-leaves/${clubId}`);
+            const data = await res.json();
+            if (res.ok) {
+                setDutyLeaves(data);
+            }
+        } catch (err) {
+            console.error("Failed to fetch duty leaves", err);
+        }
+    };
+
+    const handleUpdateDLStatus = async (id, status) => {
+        try {
+            const res = await fetch(`/api/duty-leaves/${id}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status })
+            });
+            if (res.ok) {
+                // Update local state
+                setDutyLeaves(dutyLeaves.map(dl => dl._id === id ? { ...dl, status } : dl));
+            } else {
+                alert('Failed to update status');
+            }
+        } catch (err) {
+            console.error("Failed to update DL status", err);
+        }
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
@@ -152,6 +184,100 @@ const OpenSourceDashboard = () => {
         }
         if (activeTab === 'settings') {
             return <SettingsTab clubId={clubId} />;
+        }
+        if (activeTab === 'duty-leave') {
+            const appliedDLs = dutyLeaves.filter(dl => dl.status === 'Pending');
+            const processedDLs = dutyLeaves.filter(dl => dl.status === 'Approved' || dl.status === 'Rejected');
+
+            return (
+                <div className="space-y-8">
+                    {/* DL Applied Table */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h3 className="text-xl font-bold text-gray-800 mb-4">DL Applied</h3>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse">
+                                <thead>
+                                    <tr className="border-b border-gray-100 text-gray-500 text-sm">
+                                        <th className="py-3 px-4">Student Name</th>
+                                        <th className="py-3 px-4">Roll No</th>
+                                        <th className="py-3 px-4">Event</th>
+                                        <th className="py-3 px-4">Date</th>
+                                        <th className="py-3 px-4">Status</th>
+                                        <th className="py-3 px-4">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-gray-700 text-sm">
+                                    {appliedDLs.length === 0 ? (
+                                        <tr><td colSpan="6" className="py-4 text-center text-gray-500">No pending requests</td></tr>
+                                    ) : (
+                                        appliedDLs.map(dl => (
+                                            <tr key={dl._id} className="border-b border-gray-50 hover:bg-gray-50">
+                                                <td className="py-3 px-4">{dl.studentName}</td>
+                                                <td className="py-3 px-4">{dl.rollNo}</td>
+                                                <td className="py-3 px-4">{dl.eventName}</td>
+                                                <td className="py-3 px-4">{new Date(dl.date).toLocaleDateString()}</td>
+                                                <td className="py-3 px-4"><span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs">{dl.status}</span></td>
+                                                <td className="py-3 px-4">
+                                                    <button
+                                                        onClick={() => handleUpdateDLStatus(dl._id, 'Approved')}
+                                                        className="text-green-600 hover:text-green-800 mr-2 font-medium"
+                                                    >
+                                                        Approve
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleUpdateDLStatus(dl._id, 'Rejected')}
+                                                        className="text-red-600 hover:text-red-800 font-medium"
+                                                    >
+                                                        Reject
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {/* Processed Requests Table */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h3 className="text-xl font-bold text-gray-800 mb-4">Processed Requests</h3>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse">
+                                <thead>
+                                    <tr className="border-b border-gray-100 text-gray-500 text-sm">
+                                        <th className="py-3 px-4">Student Name</th>
+                                        <th className="py-3 px-4">Roll No</th>
+                                        <th className="py-3 px-4">Event</th>
+                                        <th className="py-3 px-4">Date</th>
+                                        <th className="py-3 px-4">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-gray-700 text-sm">
+                                    {processedDLs.length === 0 ? (
+                                        <tr><td colSpan="5" className="py-4 text-center text-gray-500">No processed requests</td></tr>
+                                    ) : (
+                                        processedDLs.map(dl => (
+                                            <tr key={dl._id} className="border-b border-gray-50 hover:bg-gray-50">
+                                                <td className="py-3 px-4">{dl.studentName}</td>
+                                                <td className="py-3 px-4">{dl.rollNo}</td>
+                                                <td className="py-3 px-4">{dl.eventName}</td>
+                                                <td className="py-3 px-4">{new Date(dl.date).toLocaleDateString()}</td>
+                                                <td className="py-3 px-4">
+                                                    <span className={`px-2 py-1 rounded-full text-xs ${dl.status === 'Approved' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                                        }`}>
+                                                        {dl.status}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            );
         }
 
         // Content for 'dashboard' and 'events' tabs
@@ -311,22 +437,16 @@ const OpenSourceDashboard = () => {
                         Openings
                     </button>
                     <button
+                        onClick={() => setActiveTab('duty-leave')}
+                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'duty-leave' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
+                    >
+                        Duty Leave
+                    </button>
+                    <button
                         onClick={() => setActiveTab('team')}
                         className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'team' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
                     >
                         Members
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('events')}
-                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'events' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
-                    >
-                        Events
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('settings')}
-                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'settings' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
-                    >
-                        Settings
                     </button>
                 </nav>
             </aside>

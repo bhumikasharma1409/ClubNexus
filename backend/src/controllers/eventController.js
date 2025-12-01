@@ -15,6 +15,23 @@ exports.getEventRegistrations = async (req, res) => {
     }
 };
 
+exports.getEventById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        console.log('Fetching event details for ID:', id);
+        const event = await Event.findById(id).populate('club');
+        if (!event) {
+            console.log('Event not found in DB');
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        console.log('Event found:', event.title);
+        res.json(event);
+    } catch (err) {
+        console.error('Error fetching event details:', err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 exports.createEvent = async (req, res) => {
     try {
         const { title, description, date, time, place, club } = req.body;

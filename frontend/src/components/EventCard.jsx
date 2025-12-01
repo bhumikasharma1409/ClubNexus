@@ -64,11 +64,11 @@ export default function EventCard({ id, title, date, time, description, poster, 
           </div>
         )}
         {poster && (
-          <div className="h-48 overflow-hidden">
+          <div className="h-48 overflow-hidden bg-gray-50 flex items-center justify-center">
             <img
               src={poster}
               alt={title}
-              className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+              className="w-full h-full object-contain transform hover:scale-105 transition-transform duration-500"
               onError={(e) => { e.target.style.display = 'none'; }}
             />
           </div>

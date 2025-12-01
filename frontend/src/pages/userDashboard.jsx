@@ -3,9 +3,10 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/footer';
 import EventCard from '../components/EventCard';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function UserDashboard() {
+  const navigate = useNavigate();
   const { user, token, logout } = useAuth();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -83,7 +84,10 @@ export default function UserDashboard() {
             </div>
 
             <button
-              onClick={logout}
+              onClick={() => {
+                logout();
+                navigate('/');
+              }}
               className="px-6 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 transition-colors"
             >
               Sign Out
@@ -125,16 +129,18 @@ export default function UserDashboard() {
         ) : displayedEvents.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayedEvents.map(event => (
-              <EventCard
-                key={event._id}
-                title={event.title}
-                date={new Date(event.date).toLocaleDateString()}
-                time={event.time}
-                description={event.description}
-                poster={event.poster}
-                clubName={event.club?.name}
-                isRegistered={true} // Since these are fetched from user's registered events
-              />
+              <Link key={event._id} to={`/events/${event._id}`} className="block transform transition-transform hover:scale-[1.02]">
+                <EventCard
+                  id={event._id}
+                  title={event.title}
+                  date={new Date(event.date).toLocaleDateString()}
+                  time={event.time}
+                  description={event.description}
+                  poster={event.poster}
+                  clubName={event.club?.name}
+                  isRegistered={true}
+                />
+              </Link>
             ))}
           </div>
         ) : (
