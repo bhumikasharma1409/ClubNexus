@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const run = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/clubnexus');
+        await mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://Bhanvi:Atlas%230302@cluster0.elci9ii.mongodb.net/?appName=Cluster0');
         console.log('Connected to DB');
 
         const admin = await User.findOne({ email: 'bhanvisahni@gmail.com' });
