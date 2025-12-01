@@ -319,10 +319,21 @@ export default function Home() {
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
-`}</style>
+
+        @keyframes border-glow {
+          0%, 100% { box-shadow: 0 0 4px rgba(220, 38, 38, 0.3); border-color: #fee2e2; }
+          50% { box-shadow: 0 0 20px rgba(220, 38, 38, 0.8); border-color: #ef4444; }
+        }
+        
+        .club-logo-glow {
+          animation: border-glow 3s infinite ease-in-out;
+        }
+      `}</style>
+
+
 
       {/* HERO */}
-      <main id="home" className="flex flex-col md:flex-row items-center justify-between min-h-screen px-4 md:px-28 font-serif pt-20">
+      <main id="home" className="flex flex-col md:flex-row items-center justify-between min-h-[75vh] px-4 md:px-28 font-serif pt-28">
         <AnimatedSection as="div" className="max-w-2xl text-left" delay="0.08s" threshold={0.05}>
           <span className="inline-block px-4 py-1 mb-6 text-sm font-serif font-medium text-blue-700 bg-blue-100 rounded-full shadow">
             College Clubs Made Simple
@@ -371,6 +382,25 @@ export default function Home() {
 
       </main>
 
+      {/* TECH CLUBS LOGO ROW */}
+      <div className="py-12 px-4 overflow-hidden">
+        <div className="flex justify-center items-center gap-8 md:gap-16 flex-wrap opacity-90">
+          {defaultTech.map((club, index) => (
+            <div
+              key={club.id}
+              className="p-2"
+            >
+              <img
+                src={club.icon}
+                alt={club.name}
+                className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-red-100 shadow-sm club-logo-glow"
+                title={club.name}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* CLUBS */}
       <AnimatedSection as="section" id="clubs" className="py-12 " threshold={0.12} delay="0.08s">
         <div className="container mx-auto px-6">
@@ -383,71 +413,71 @@ export default function Home() {
           <div className="flex flex-wrap lg:items-stretch gap-6 md:gap-16 lg:gap-24 justify-center">
 
             <AnimatedSection className="relative flex-1 min-w-[260px] max-w-[480px]" delay="0.12s">
-  <Link to="/technical-clubs" className="block">
-    <div className="relative rounded-2xl p-6 shadow-md overflow-hidden bg-gradient-to-r from-[#ffe5e5] via-[#fff1f1] to-white border border-transparent hover:shadow-xl hover:scale-105 transform transition-all duration-200 cursor-pointer">
-      <h3 className="text-2xl font-serif font-bold text-black mb-1">Technical Clubs</h3>
-      <p className="text-sm text-yellow-800 mb-6">Innovate, build, and code with the brightest minds on campus.</p>
+              <Link to="/technical-clubs" className="block">
+                <div className="relative rounded-2xl p-6 shadow-md overflow-hidden bg-gradient-to-r from-[#ffe5e5] via-[#fff1f1] to-white border border-transparent hover:shadow-xl hover:scale-105 transform transition-all duration-200 cursor-pointer">
+                  <h3 className="text-2xl font-serif font-bold text-black mb-1">Technical Clubs</h3>
+                  <p className="text-sm text-yellow-800 mb-6">Innovate, build, and code with the brightest minds on campus.</p>
 
-      <div className="grid grid-cols-2 gap-2 mb-6">
-        {(technicalClubs && technicalClubs.length ? technicalClubs : defaultTech).slice(0, 8).map((club, i) => (
-          <div
-            key={club.id ?? i}
-            className="flex items-center gap-3 p-3 rounded-lg bg-white/6 border border-white/6 transition-all duration-150"
-          >
-            <div className="w-9 h-9 rounded-full overflow-hidden bg-white/8 flex items-center justify-center flex-shrink-0 ring-1 ring-white/10">
-              <img
-                src={club.icon || `/${slugify(club.name)}.jpg`}
-                alt={`${club.name} icon`}
-                className="w-full h-full object-cover"
-                onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/default.png'; }}
-              />
-            </div>
+                  <div className="grid grid-cols-2 gap-2 mb-6">
+                    {(technicalClubs && technicalClubs.length ? technicalClubs : defaultTech).slice(0, 8).map((club, i) => (
+                      <div
+                        key={club.id ?? i}
+                        className="flex items-center gap-3 p-3 rounded-lg bg-white/6 border border-white/6 transition-all duration-150"
+                      >
+                        <div className="w-9 h-9 rounded-full overflow-hidden bg-white/8 flex items-center justify-center flex-shrink-0 ring-1 ring-white/10">
+                          <img
+                            src={club.icon || `/${slugify(club.name)}.jpg`}
+                            alt={`${club.name} icon`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/default.png'; }}
+                          />
+                        </div>
 
-            <span className="text-sm font-serif font-semibold text-black truncate">{club.name}</span>
-          </div>
-        ))}
-      </div>
+                        <span className="text-sm font-serif font-semibold text-black truncate">{club.name}</span>
+                      </div>
+                    ))}
+                  </div>
 
-      <div className="text-center">
-       
-      </div>
-    </div>
-  </Link>
-</AnimatedSection>
+                  <div className="text-center">
+
+                  </div>
+                </div>
+              </Link>
+            </AnimatedSection>
 
 
             <AnimatedSection className="relative flex-1 min-w-[260px] max-w-[480px]" delay="0.24s">
-  <Link to="/nontechnical-clubs" className="block">
-    <div className="relative rounded-2xl p-6 shadow-md overflow-hidden bg-gradient-to-r from-[#ffe5e5] via-[#fff1f1] to-white border border-transparent hover:shadow-xl hover:scale-105 transform transition-all duration-200 cursor-pointer">
-      <h3 className="text-2xl font-serif font-bold text-black mb-1">Non-Technical Clubs</h3>
-      <p className="text-sm text-yellow-800 mb-6">Explore your passion in arts, culture, dance, and more.</p>
+              <Link to="/nontechnical-clubs" className="block">
+                <div className="relative rounded-2xl p-6 shadow-md overflow-hidden bg-gradient-to-r from-[#ffe5e5] via-[#fff1f1] to-white border border-transparent hover:shadow-xl hover:scale-105 transform transition-all duration-200 cursor-pointer">
+                  <h3 className="text-2xl font-serif font-bold text-black mb-1">Non-Technical Clubs</h3>
+                  <p className="text-sm text-yellow-800 mb-6">Explore your passion in arts, culture, dance, and more.</p>
 
-      <div className="grid grid-cols-2 gap-2 mb-6">
-        {(nonTechnicalClubs && nonTechnicalClubs.length ? nonTechnicalClubs : defaultNonTech).slice(0, 8).map((club, i) => (
-          <div
-            key={club.id ?? i}
-            className="flex items-center gap-3 p-3 rounded-lg bg-white/6 border border-white/6 transition-all duration-150"
-          >
-            <div className="w-9 h-9 rounded-full overflow-hidden bg-white/8 flex items-center justify-center flex-shrink-0 ring-1 ring-white/10">
-              <img
-                src={club.icon || `/${slugify(club.name)}.jpg`}
-                alt={`${club.name} icon`}
-                className="w-full h-full object-cover"
-                onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/default.png'; }}
-              />
-            </div>
+                  <div className="grid grid-cols-2 gap-2 mb-6">
+                    {(nonTechnicalClubs && nonTechnicalClubs.length ? nonTechnicalClubs : defaultNonTech).slice(0, 8).map((club, i) => (
+                      <div
+                        key={club.id ?? i}
+                        className="flex items-center gap-3 p-3 rounded-lg bg-white/6 border border-white/6 transition-all duration-150"
+                      >
+                        <div className="w-9 h-9 rounded-full overflow-hidden bg-white/8 flex items-center justify-center flex-shrink-0 ring-1 ring-white/10">
+                          <img
+                            src={club.icon || `/${slugify(club.name)}.jpg`}
+                            alt={`${club.name} icon`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/default.png'; }}
+                          />
+                        </div>
 
-            <span className="text-sm font-serif font-semibold text-black truncate">{club.name}</span>
-          </div>
-        ))}
-      </div>
+                        <span className="text-sm font-serif font-semibold text-black truncate">{club.name}</span>
+                      </div>
+                    ))}
+                  </div>
 
-      <div className="text-center">
-        
-      </div>
-    </div>
-  </Link>
-</AnimatedSection>
+                  <div className="text-center">
+
+                  </div>
+                </div>
+              </Link>
+            </AnimatedSection>
 
 
           </div>
