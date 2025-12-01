@@ -8,7 +8,7 @@ export default function Slideshow({ images }) {
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 4000); 
+    }, 2000); 
 
     return () => clearInterval(interval); 
   }, [images]);
