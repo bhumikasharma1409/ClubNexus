@@ -9,6 +9,7 @@ const eventSchema = new mongoose.Schema({
     poster: { type: String }, // Path to uploaded image
     club: { type: mongoose.Schema.Types.ObjectId, ref: 'Club', required: true },
     attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    isDutyLeaveEnabled: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now }
 });
 

@@ -156,3 +156,25 @@ exports.updateEvent = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+exports.toggleDutyLeave = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const event = await Event.findById(id);
+
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+
+        event.isDutyLeaveEnabled = !event.isDutyLeaveEnabled;
+        await event.save();
+
+        res.json({
+            message: `Duty Leave ${event.isDutyLeaveEnabled ? 'enabled' : 'disabled'}`,
+            isDutyLeaveEnabled: event.isDutyLeaveEnabled
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};

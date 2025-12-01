@@ -34,5 +34,6 @@ router.get('/:clubId', eventController.getEvents);
 router.put('/:id', upload.single('poster'), eventController.updateEvent);
 router.delete('/:id', eventController.deleteEvent);
 router.get('/:id/registrations', eventController.getEventRegistrations);
+router.patch('/:id/toggle-dl', eventController.toggleDutyLeave);
 
 module.exports = router;

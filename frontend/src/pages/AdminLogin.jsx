@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -180,15 +180,7 @@ export default function AdminLogin() {
           </form>
 
           {/* USER LOGIN LINK */}
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">Not an admin?</p>
-            <Link
-              to="/login"
-              className="text-red-600 font-semibold hover:underline"
-            >
-              Login as User →
-            </Link>
-          </div>
+
         </div>
       </div>
     </div>

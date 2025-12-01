@@ -133,6 +133,23 @@ const OpenSourceDashboard = () => {
         }
     };
 
+    const handleToggleDL = async (event) => {
+        try {
+            const res = await fetch(`/api/events/${event._id}/toggle-dl`, {
+                method: 'PATCH'
+            });
+            const data = await res.json();
+            if (res.ok) {
+                // Update local state
+                setEvents(events.map(e => e._id === event._id ? { ...e, isDutyLeaveEnabled: data.isDutyLeaveEnabled } : e));
+            } else {
+                alert('Failed to toggle Duty Leave status');
+            }
+        } catch (err) {
+            console.error("Failed to toggle DL", err);
+        }
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
@@ -296,7 +313,7 @@ const OpenSourceDashboard = () => {
                         </div>
                         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                             <h3 className="text-gray-500 font-medium">Pending Approvals</h3>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">3</p>
+                            <p className="text-3xl font-bold text-gray-800 mt-2">{dutyLeaves.filter(dl => dl.status === 'Pending').length}</p>
                         </div>
                     </div>
                 )}
@@ -325,11 +342,11 @@ const OpenSourceDashboard = () => {
                                     {events.map((event) => (
                                         <div key={event._id} className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow flex flex-col">
                                             {event.poster && (
-                                                <div className="h-48 overflow-hidden">
+                                                <div className="h-48 overflow-hidden bg-gray-50 flex items-center justify-center">
                                                     <img
                                                         src={event.poster}
                                                         alt={event.title}
-                                                        className="w-full h-full object-cover"
+                                                        className="w-full h-full object-contain"
                                                     />
                                                 </div>
                                             )}
@@ -351,6 +368,15 @@ const OpenSourceDashboard = () => {
                                                 </div>
 
                                                 <div className="flex gap-2 mt-auto">
+                                                    <button
+                                                        onClick={() => handleToggleDL(event)}
+                                                        className={`flex-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${event.isDutyLeaveEnabled
+                                                            ? 'bg-purple-100 text-purple-700 hover:bg-purple-200'
+                                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                            }`}
+                                                    >
+                                                        {event.isDutyLeaveEnabled ? 'Stop DL' : 'Start DL'}
+                                                    </button>
                                                     <button
                                                         onClick={() => navigate(`/admin/events/${event._id}/registrations`)}
                                                         className="flex-1 px-3 py-1.5 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 transition-colors"
@@ -459,15 +485,7 @@ const OpenSourceDashboard = () => {
                         <p className="text-gray-600">Welcome back, {user.name || 'Admin'}!</p>
                     </div>
                     <div className="flex items-center gap-4">
-                        {/* Only show Add Event button in dashboard view */}
-                        {activeTab === 'dashboard' && (
-                            <button
-                                onClick={() => setShowModal(true)}
-                                className="px-6 py-2.5 bg-red-600 text-white font-semibold rounded-xl shadow-lg hover:bg-red-700 transition-colors flex items-center gap-2"
-                            >
-                                <span>+</span> Add Event
-                            </button>
-                        )}
+
 
                         <div className="relative" ref={profileMenuRef}>
                             <button

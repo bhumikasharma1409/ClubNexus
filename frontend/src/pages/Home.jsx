@@ -324,7 +324,7 @@ export default function Home() {
 `}</style>
 
       {/* HERO */}
-      <main id="home" className="flex flex-col md:flex-row items-center justify-between min-h-[75vh] px-4 md:px-28 font-serif pt-28">
+      <main id="home" className="flex flex-col md:flex-row items-center justify-between min-h-screen px-4 md:px-28 font-serif pt-28">
         <AnimatedSection as="div" className="max-w-2xl text-left" delay="0.08s" threshold={0.05}>
           <span className="inline-block px-4 py-1 mb-6 text-sm font-serif font-medium text-blue-700 bg-blue-100 rounded-full shadow">
             College Clubs Made Simple
@@ -340,6 +340,12 @@ export default function Home() {
             All your college events, in one place. Stay updated and never miss an opportunity again.
 
           </p>
+
+          {!user && (
+            <Link to="/register" className="mt-8 inline-block px-8 py-3 bg-red-600 text-white font-bold rounded-xl shadow-lg hover:bg-red-700 transition transform hover:-translate-y-1">
+              Get Started
+            </Link>
+          )}
         </AnimatedSection>
 
         <AnimatedSection className="mt-10 md:mt-0 md:ml-12 w-full md:w-4/5 lg:w-2/3 relative overflow-hidden rounded-2xl shadow-xl h-64 md:h-96" delay="0.24s" threshold={0.05}>
@@ -380,32 +386,34 @@ export default function Home() {
       </main>
 
 
-      {/* TECH CLUBS LOGO ROW */}
-      <div className="py-12 px-4 overflow-hidden">
-        <div className="flex justify-center items-center gap-8 md:gap-16 flex-wrap opacity-90">
-          {defaultTech.map((club, index) => (
-            <div
-              key={club.id}
-              className="p-2"
-            >
-              <img
-                src={club.icon}
-                alt={club.name}
-                className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-red-100 shadow-sm club-logo-glow"
-                title={club.name}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+
 
       {/* CLUBS */}
       <AnimatedSection as="section" id="clubs" className="py-12 " threshold={0.12} delay="0.08s">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-center mb-2 text-gray-900">Explore Our Clubs</h2>
-          <p className="text-md text-gray-600 text-center mb-8 max-w-2xl mx-auto">
+          <p className="text-md text-gray-600 text-center mb-2 max-w-2xl mx-auto">
             Forge your path, connect, and thrive within our diverse college community.
           </p>
+
+          {/* TECH CLUBS LOGO ROW */}
+          <div className="py-4 px-4 overflow-hidden">
+            <div className="flex justify-center items-center gap-8 md:gap-16 flex-wrap opacity-90">
+              {defaultTech.map((club, index) => (
+                <div
+                  key={club.id}
+                  className="p-2"
+                >
+                  <img
+                    src={club.icon}
+                    alt={club.name}
+                    className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-red-100 shadow-sm club-logo-glow"
+                    title={club.name}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
 
           {/* <-- increased spacing between boxes here --> */}
           <div className="flex flex-wrap lg:items-stretch gap-6 md:gap-16 lg:gap-24 justify-center">

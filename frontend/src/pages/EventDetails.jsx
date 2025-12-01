@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import Footer from '../components/footer';
+import Footer from '../components/Footer';
 import { useAuth } from '../context/AuthContext';
 
 const EventDetails = () => {
@@ -152,12 +152,14 @@ const EventDetails = () => {
                                             '⏳ DL Applied'}
                                 </div>
                             ) : (
-                                <button
-                                    onClick={() => setShowModal(true)}
-                                    className="px-8 py-3 bg-red-600 text-white font-bold rounded-xl shadow-lg hover:bg-red-700 transition transform hover:-translate-y-1"
-                                >
-                                    Apply for Duty Leave
-                                </button>
+                                event.isDutyLeaveEnabled && (
+                                    <button
+                                        onClick={() => setShowModal(true)}
+                                        className="px-8 py-3 bg-red-600 text-white font-bold rounded-xl shadow-lg hover:bg-red-700 transition transform hover:-translate-y-1"
+                                    >
+                                        Apply for Duty Leave
+                                    </button>
+                                )
                             )}
                             <Link
                                 to="/dashboard"

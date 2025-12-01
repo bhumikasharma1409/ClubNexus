@@ -15,6 +15,7 @@ const IEEEDashboard = () => {
     const [totalMembers, setTotalMembers] = useState(0);
     const [showModal, setShowModal] = useState(false);
     const [eventToEdit, setEventToEdit] = useState(null);
+    const [dutyLeaves, setDutyLeaves] = useState([]);
 
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const profileMenuRef = useRef(null);
@@ -40,6 +41,7 @@ const IEEEDashboard = () => {
                     await fetchEvents(ieeeClub._id);
                     await fetchRecentActivity(ieeeClub._id);
                     await fetchMemberCount(ieeeClub._id);
+                    await fetchDutyLeaves(ieeeClub._id);
                 } else {
                     console.error("IEEE club not found in database. Available clubs:", clubs.map(c => c.name));
                 }
@@ -101,6 +103,53 @@ const IEEEDashboard = () => {
         }
     };
 
+    const fetchDutyLeaves = async (clubId) => {
+        try {
+            const res = await fetch(`/api/duty-leaves/${clubId}`);
+            const data = await res.json();
+            if (res.ok) {
+                setDutyLeaves(data);
+            }
+        } catch (err) {
+            console.error("Failed to fetch duty leaves", err);
+        }
+    };
+
+    const handleUpdateDLStatus = async (id, status) => {
+        try {
+            const res = await fetch(`/api/duty-leaves/${id}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status })
+            });
+            if (res.ok) {
+                // Update local state
+                setDutyLeaves(dutyLeaves.map(dl => dl._id === id ? { ...dl, status } : dl));
+            } else {
+                alert('Failed to update status');
+            }
+        } catch (err) {
+            console.error("Failed to update DL status", err);
+        }
+    };
+
+    const handleToggleDL = async (event) => {
+        try {
+            const res = await fetch(`/api/events/${event._id}/toggle-dl`, {
+                method: 'PATCH'
+            });
+            const data = await res.json();
+            if (res.ok) {
+                // Update local state
+                setEvents(events.map(e => e._id === event._id ? { ...e, isDutyLeaveEnabled: data.isDutyLeaveEnabled } : e));
+            } else {
+                alert('Failed to toggle Duty Leave status');
+            }
+        } catch (err) {
+            console.error("Failed to toggle DL", err);
+        }
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
@@ -151,7 +200,101 @@ const IEEEDashboard = () => {
             return <MembersManagement clubId={clubId} />;
         }
         if (activeTab === 'settings') {
-            return <div className="p-6 bg-white rounded-xl shadow-sm">Settings Placeholder</div>;
+            return <div className="p-6 bg-white rounded-xl shadow-sm">Settings (Coming Soon)</div>;
+        }
+        if (activeTab === 'duty-leave') {
+            const appliedDLs = dutyLeaves.filter(dl => dl.status === 'Pending');
+            const processedDLs = dutyLeaves.filter(dl => dl.status === 'Approved' || dl.status === 'Rejected');
+
+            return (
+                <div className="space-y-8">
+                    {/* DL Applied Table */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h3 className="text-xl font-bold text-gray-800 mb-4">DL Applied</h3>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse">
+                                <thead>
+                                    <tr className="border-b border-gray-100 text-gray-500 text-sm">
+                                        <th className="py-3 px-4">Student Name</th>
+                                        <th className="py-3 px-4">Roll No</th>
+                                        <th className="py-3 px-4">Event</th>
+                                        <th className="py-3 px-4">Date</th>
+                                        <th className="py-3 px-4">Status</th>
+                                        <th className="py-3 px-4">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-gray-700 text-sm">
+                                    {appliedDLs.length === 0 ? (
+                                        <tr><td colSpan="6" className="py-4 text-center text-gray-500">No pending requests</td></tr>
+                                    ) : (
+                                        appliedDLs.map(dl => (
+                                            <tr key={dl._id} className="border-b border-gray-50 hover:bg-gray-50">
+                                                <td className="py-3 px-4">{dl.studentName}</td>
+                                                <td className="py-3 px-4">{dl.rollNo}</td>
+                                                <td className="py-3 px-4">{dl.eventName}</td>
+                                                <td className="py-3 px-4">{new Date(dl.date).toLocaleDateString()}</td>
+                                                <td className="py-3 px-4"><span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs">{dl.status}</span></td>
+                                                <td className="py-3 px-4">
+                                                    <button
+                                                        onClick={() => handleUpdateDLStatus(dl._id, 'Approved')}
+                                                        className="text-green-600 hover:text-green-800 mr-2 font-medium"
+                                                    >
+                                                        Approve
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleUpdateDLStatus(dl._id, 'Rejected')}
+                                                        className="text-red-600 hover:text-red-800 font-medium"
+                                                    >
+                                                        Reject
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {/* Processed Requests Table */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h3 className="text-xl font-bold text-gray-800 mb-4">Processed Requests</h3>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse">
+                                <thead>
+                                    <tr className="border-b border-gray-100 text-gray-500 text-sm">
+                                        <th className="py-3 px-4">Student Name</th>
+                                        <th className="py-3 px-4">Roll No</th>
+                                        <th className="py-3 px-4">Event</th>
+                                        <th className="py-3 px-4">Date</th>
+                                        <th className="py-3 px-4">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-gray-700 text-sm">
+                                    {processedDLs.length === 0 ? (
+                                        <tr><td colSpan="5" className="py-4 text-center text-gray-500">No processed requests</td></tr>
+                                    ) : (
+                                        processedDLs.map(dl => (
+                                            <tr key={dl._id} className="border-b border-gray-50 hover:bg-gray-50">
+                                                <td className="py-3 px-4">{dl.studentName}</td>
+                                                <td className="py-3 px-4">{dl.rollNo}</td>
+                                                <td className="py-3 px-4">{dl.eventName}</td>
+                                                <td className="py-3 px-4">{new Date(dl.date).toLocaleDateString()}</td>
+                                                <td className="py-3 px-4">
+                                                    <span className={`px-2 py-1 rounded-full text-xs ${dl.status === 'Approved' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                                        }`}>
+                                                        {dl.status}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            );
         }
 
         // Content for 'dashboard' and 'events' tabs
@@ -170,7 +313,7 @@ const IEEEDashboard = () => {
                         </div>
                         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                             <h3 className="text-gray-500 font-medium">Pending Approvals</h3>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">0</p>
+                            <p className="text-3xl font-bold text-gray-800 mt-2">{dutyLeaves.filter(dl => dl.status === 'Pending').length}</p>
                         </div>
                     </div>
                 )}
@@ -184,7 +327,7 @@ const IEEEDashboard = () => {
                                 <h3 className="text-xl font-bold text-gray-800">Upcoming Events</h3>
                                 <button
                                     onClick={() => setShowModal(true)}
-                                    className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-colors text-sm"
+                                    className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition-colors text-sm"
                                 >
                                     + Add Event
                                 </button>
@@ -199,18 +342,18 @@ const IEEEDashboard = () => {
                                     {events.map((event) => (
                                         <div key={event._id} className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow flex flex-col">
                                             {event.poster && (
-                                                <div className="h-48 overflow-hidden">
+                                                <div className="h-48 overflow-hidden bg-gray-50 flex items-center justify-center">
                                                     <img
                                                         src={event.poster}
                                                         alt={event.title}
-                                                        className="w-full h-full object-cover"
+                                                        className="w-full h-full object-contain"
                                                     />
                                                 </div>
                                             )}
                                             <div className="p-4 flex-1">
                                                 <div className="flex justify-between items-start mb-2">
                                                     <h4 className="font-bold text-lg text-gray-800 line-clamp-1">{event.title}</h4>
-                                                    <span className="text-xs font-medium bg-blue-50 text-blue-600 px-2 py-1 rounded-full whitespace-nowrap">
+                                                    <span className="text-xs font-medium bg-red-50 text-red-600 px-2 py-1 rounded-full whitespace-nowrap">
                                                         {new Date(event.date).toLocaleDateString()}
                                                     </span>
                                                 </div>
@@ -226,6 +369,15 @@ const IEEEDashboard = () => {
 
                                                 <div className="flex gap-2 mt-auto">
                                                     <button
+                                                        onClick={() => handleToggleDL(event)}
+                                                        className={`flex-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${event.isDutyLeaveEnabled
+                                                            ? 'bg-purple-100 text-purple-700 hover:bg-purple-200'
+                                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                            }`}
+                                                    >
+                                                        {event.isDutyLeaveEnabled ? 'Stop DL' : 'Start DL'}
+                                                    </button>
+                                                    <button
                                                         onClick={() => navigate(`/admin/events/${event._id}/registrations`)}
                                                         className="flex-1 px-3 py-1.5 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 transition-colors"
                                                     >
@@ -233,7 +385,7 @@ const IEEEDashboard = () => {
                                                     </button>
                                                     <button
                                                         onClick={() => handleEditEvent(event)}
-                                                        className="flex-1 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors"
+                                                        className="flex-1 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors"
                                                     >
                                                         Edit
                                                     </button>
@@ -300,31 +452,37 @@ const IEEEDashboard = () => {
                 <nav className="flex-1 p-4 space-y-2">
                     <button
                         onClick={() => setActiveTab('dashboard')}
-                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'dashboard' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
+                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'dashboard' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
                     >
                         Dashboard
                     </button>
                     <button
                         onClick={() => setActiveTab('members')}
-                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'members' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
+                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'members' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
                     >
                         Openings
                     </button>
                     <button
+                        onClick={() => setActiveTab('duty-leave')}
+                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'duty-leave' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
+                    >
+                        Duty Leave
+                    </button>
+                    <button
                         onClick={() => setActiveTab('team')}
-                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'team' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
+                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'team' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
                     >
                         Members
                     </button>
                     <button
                         onClick={() => setActiveTab('events')}
-                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'events' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
+                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'events' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
                     >
                         Events
                     </button>
                     <button
                         onClick={() => setActiveTab('settings')}
-                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'settings' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
+                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'settings' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
                     >
                         Settings
                     </button>
@@ -343,7 +501,7 @@ const IEEEDashboard = () => {
                         {activeTab === 'dashboard' && (
                             <button
                                 onClick={() => setShowModal(true)}
-                                className="px-6 py-2.5 bg-blue-600 text-white font-semibold rounded-xl shadow-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                                className="px-6 py-2.5 bg-red-600 text-white font-semibold rounded-xl shadow-lg hover:bg-red-700 transition-colors flex items-center gap-2"
                             >
                                 <span>+</span> Add Event
                             </button>
@@ -352,7 +510,7 @@ const IEEEDashboard = () => {
                         <div className="relative" ref={profileMenuRef}>
                             <button
                                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                                className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold hover:bg-blue-200 transition-colors focus:outline-none"
+                                className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold hover:bg-red-200 transition-colors focus:outline-none"
                             >
                                 {user.name ? user.name[0] : 'A'}
                             </button>
