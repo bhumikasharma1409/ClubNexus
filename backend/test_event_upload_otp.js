@@ -8,7 +8,7 @@ require('dotenv').config();
 async function run() {
     try {
         // Connect to DB to read OTP
-        await mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://Bhanvi:Atlas%230302@cluster0.elci9ii.mongodb.net/?appName=Cluster0');
+        await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/clubnexus');
 
         // 1. Login (Trigger OTP)
         console.log('1. Logging in...');
