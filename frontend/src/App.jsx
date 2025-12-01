@@ -27,6 +27,8 @@ import CodingBlocks from "./pages/CodingBlocks";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import OpenSourceDashboard from "./pages/OpenSourceDashboard";
+import CodingNinjasDashboard from "./pages/CodingNinjasDashboard";
+import IEEEDashboard from "./pages/IEEEDashboard";
 
 import AddEventModal from "./components/AddEventModal";
 
@@ -72,6 +74,8 @@ export default function App() {
         <Route path="/admin-events" element={<AdminEvents />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/dashboard/open-source" element={<OpenSourceDashboard />} />
+        <Route path="/admin/dashboard/coding-ninjas" element={<CodingNinjasDashboard />} />
+        <Route path="/admin/dashboard/ieee" element={<IEEEDashboard />} />
         <Route path="/admin/events/:eventId/registrations" element={<EventRegistrations />} />
 
 
