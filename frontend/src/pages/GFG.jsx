@@ -1,90 +1,197 @@
-import React from 'react';
-import { Link } from 'react-router-dom'; 
-import Navbar from '../components/Navbar'; 
-import Slideshow from '../components/Slideshow'; 
-import EventCard from '../components/EventCard'; 
-
-
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import Slideshow from '../components/Slideshow';
+import EventCard from '../components/EventCard';
 
 const slideshowImages = [
+  '/gfg.jpeg', // Assuming this exists or using a placeholder
   '/gfg.jpeg',
-  '/eight.jpg',
-  '/first.jpg',
-  '/second.jpg',
 ];
-
-const upcomingEvents = [
-  {
-    title: 'DSA Problem Solving Marathon',
-    date: 'Dec 02, 2025',
-    time: '6:00 PM - 9:00 PM',
-    description: 'A 3-hour marathon focused on solving medium to hard DSA problems. Great practice for upcoming placements!'
-  },
-  {
-    title: 'Guide to Open Source (GSSOC)',
-    date: 'Dec 09, 2025',
-    time: '4:00 PM - 5:00 PM',
-    description: 'Learn how to get started with open source contributions and prepare for programs like GSSOC. We will cover Git & GitHub basics.'
-  },
-  {
-    title: 'Mock Interview Sessions',
-    date: 'Dec 16, 2025',
-    time: '1:00 PM - 4:00 PM',
-    description: 'Practice your technical interviews with peers and mentors. Get valuable feedback on your problem-solving and communication skills.'
-  }
-];
-
 
 export default function GFG() {
+  const [events, setEvents] = useState([]);
+  const [opening, setOpening] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // 1. Get Club ID
+        const clubRes = await fetch('/api/clubs');
+        const clubs = await clubRes.json();
+        if (!Array.isArray(clubs)) {
+          console.warn('/api/clubs did not return an array', clubs);
+          return;
+        }
+        const gfgClub = clubs.find((c) => c.name === 'GFG' || c.name === 'GeeksforGeeks');
+
+        if (gfgClub) {
+          // 2. Get Events
+          const eventRes = await fetch(`/api/events/${gfgClub._id}`);
+          if (eventRes.ok) {
+            const eventData = await eventRes.json();
+            setEvents(Array.isArray(eventData) ? eventData : []);
+          } else {
+            console.warn('Failed to fetch events:', eventRes.status);
+            setEvents([]);
+          }
+
+          // 3. Get Openings
+          const openingRes = await fetch(`/api/openings/${gfgClub._id}`);
+          if (openingRes.ok) {
+            const openingData = await openingRes.json();
+            setOpening(openingData || null);
+          } else {
+            setOpening(null);
+          }
+        } else {
+          // no GFG club found
+          setEvents([]);
+          setOpening(null);
+        }
+      } catch (err) {
+        console.error('Failed to fetch data:', err);
+        setEvents([]);
+        setOpening(null);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const pageStyle = {
-    backgroundImage: "url('/eight.jpg')", 
+    backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/gfg.jpeg')",
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',
   };
 
   return (
-    <div style={pageStyle} className="min-h-screen text-white">
-      <Navbar /> {/* CHANGED: Using main navbar */}
-      <div className="h-28"></div>
+    <div style={pageStyle} className="min-h-screen text-white font-serif">
+      <Navbar />
+      <div className="h-28" />
 
       <main className="container mx-auto px-4 py-10">
         {/* --- GLASS EFFECT CONTAINER --- */}
-        <div className="bg-black bg-opacity-40 p-8 rounded-2xl shadow-xl backdrop-blur-lg border border-white border-opacity-20 max-w-4xl mx-auto">
-          
+        <div className="bg-black bg-opacity-60 p-8 rounded-2xl shadow-xl backdrop-blur-lg border border-white border-opacity-20 max-w-4xl mx-auto">
+
           {/* --- 1. HEADER (Name & Tagline) --- */}
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-            <img 
-              src="/gfg.jpeg" // From seed.js
-              alt="GFG Club" 
-              className="w-48 h-48 rounded-full object-cover border-4 border-green-500 shadow-lg"
+            <img
+              src="/gfg.jpeg"
+              alt="GFG Club Logo"
+              className="w-48 h-48 rounded-full object-cover border-4 border-green-600 shadow-lg"
             />
             <div className="text-center md:text-left mt-4">
-              <h1 className="text-6xl font-extrabold text-green-500 mb-3">
-                GFG Student Chapter
-              </h1>
-              <p className="text-2xl text-gray-200 mb-4">
-                Dive into Open Source & Problem Solving
-              </p>
+              <h1 className="text-5xl md:text-6xl font-extrabold text-green-500 mb-3">GFG Student Chapter</h1>
+              <p className="text-xl md:text-2xl text-gray-200 mb-4">Master Data Structures & Algorithms</p>
               <div className="flex justify-center md:justify-start space-x-4">
-                <a 
-                  href="https://www.instagram.com/gfg_cuiet?igsh=bnptdWtsZTRlcWFq" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href="https://www.instagram.com/gfg_cuiet?igsh=bnptdWtsZTRlcWFq"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-3xl text-gray-300 hover:text-pink-500 transition-colors"
+                  aria-label="GFG Instagram"
                 >
-                  <i className="fab fa-instagram"></i>
+                  <i className="fab fa-instagram" />
                 </a>
-                <a 
-                  href="https://www.linkedin.com/company/gfg-cuiet/" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-3xl text-gray-300 hover:text-blue-500 transition-colors"
+                  aria-label="GFG LinkedIn"
                 >
-                  <i className="fab fa-linkedin"></i>
+                  <i className="fab fa-linkedin" />
                 </a>
               </div>
             </div>
+          </div>
+
+          {/* --- RECRUITMENT BANNER --- */}
+          {opening && (opening.technicalRoles?.length > 0 || opening.nonTechnicalRoles?.length > 0) && (
+            <div className="mt-12 relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-pulse" />
+              <div className="relative bg-black bg-opacity-80 p-8 rounded-xl border border-green-500/50 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
+                <div className="flex flex-col md:flex-row items-start justify-between gap-8">
+                  <div className="flex-1 text-center md:text-left">
+                    <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-white mb-4 animate-pulse">
+                      WE ARE HIRING!
+                    </h2>
+                    <p className="text-gray-300 mb-6 text-lg">
+                      Join the team and make an impact. We are looking for passionate individuals for the following roles:
+                    </p>
+
+                    <div className="space-y-4">
+                      {opening.technicalRoles?.length > 0 && (
+                        <div>
+                          <h3 className="text-green-400 font-bold mb-2 uppercase tracking-wider text-sm">Technical</h3>
+                          <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+                            {opening.technicalRoles.map((role) => (
+                              <span key={role} className="px-3 py-1 bg-green-900/30 border border-green-500/30 rounded-full text-green-200 text-sm">
+                                {role}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {opening.nonTechnicalRoles?.length > 0 && (
+                        <div>
+                          <h3 className="text-emerald-400 font-bold mb-2 uppercase tracking-wider text-sm">Non-Technical</h3>
+                          <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+                            {opening.nonTechnicalRoles.map((role) => (
+                              <span key={role} className="px-3 py-1 bg-emerald-900/30 border border-emerald-500/30 rounded-full text-emerald-200 text-sm">
+                                {role}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="w-full md:w-1/3 flex flex-col items-end gap-6">
+                    {opening.poster && (
+                      <img
+                        src={opening.poster}
+                        alt="Recruitment Poster"
+                        className="w-full h-auto rounded-lg shadow-2xl border-2 border-white/10 transform hover:scale-105 transition-transform duration-300"
+                      />
+                    )}
+                    <Link
+                      to="/register"
+                      className="inline-block px-8 py-3 bg-green-900/30 border border-green-500/30 text-green-200 font-bold rounded-full shadow-lg hover:bg-green-900/50 hover:shadow-green-500/20 transform hover:-translate-y-1 transition-all duration-300"
+                    >
+                      Join Now
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* --- 3. UPCOMING EVENTS --- */}
+          <div className="mt-12">
+            <h2 className="text-3xl font-bold mb-4 text-white">Upcoming Events</h2>
+            {events.length === 0 ? (
+              <p className="text-gray-300">No upcoming events at the moment.</p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {events.map((event) => (
+                  <EventCard
+                    key={event._id}
+                    id={event._id}
+                    title={event.title}
+                    date={event.date ? new Date(event.date).toLocaleDateString() : ''}
+                    time={event.time}
+                    description={event.description}
+                    poster={event.poster}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           {/* --- 2. SLIDESHOW --- */}
@@ -93,70 +200,25 @@ export default function GFG() {
             <Slideshow images={slideshowImages} />
           </div>
 
-          {/* --- 3. UPCOMING EVENTS --- */}
-          <div className="mt-12">
-            <h2 className="text-3xl font-bold mb-4 text-white">Upcoming Events</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {upcomingEvents.map((event) => (
-                <EventCard
-                  key={event.title}
-                  title={event.title}
-                  date={event.date}
-                  time={event.time}
-                  description={event.description}
-                />
-              ))}
-            </div>
-          </div>
-
           {/* --- 4. ABOUT US --- */}
           <div className="mt-12 border-t border-gray-600 pt-8">
-            <h2 className="text-3xl font-bold mb-4 text-green-400">About Us</h2>
+            <h2 className="text-3xl font-bold mb-4 text-green-500">About Us</h2>
             <p className="text-lg text-gray-300 leading-relaxed">
-              Dive into open source contributions and problem solving. We are the official student chapter of GeeksforGeeks, helping students excel in programming and DSA.
+              GFG Student Chapter at Chitkara University is a community of coding enthusiasts who come together to learn, share, and grow. We focus on Data Structures, Algorithms, and competitive programming, helping students prepare for placements and improve their problem-solving skills.
+            </p>
+          </div>
+
+          <div className="mt-12 border-t border-gray-600 pt-8">
+            <h2 className="text-3xl font-bold mb-4 text-green-500">Why Join GFG?</h2>
+            <p className="text-lg text-gray-300 leading-relaxed">
+              Join us to master DSA, participate in coding contests, get mentorship from seniors, and be part of a vibrant coding culture. We organize workshops, hackathons, and regular coding sessions to keep you sharp and industry-ready.
             </p>
           </div>
         </div>
       </main>
 
-      {/* --- 5. FOOTER (from Home.jsx) --- */}
-      <footer className="relative z-10 bg-gradient-to-r from-red-600 via-red-800 to-black text-white pt-16 pb-12 mt-16">
-        <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <img src="/logo.png" alt="ClubNexus Logo" className="h-16 w-auto mb-4" />
-            <p className="text-gray-300">
-              Your one-stop platform for discovering and connecting with all the clubs at Chitkara University.
-            </p>
-          </div>
-          <div>
-            <h5 className="text-xl font-bold mb-4">Quick Links</h5>
-            <ul className="space-y-2">
-              <li><Link to="/" className="hover:text-yellow-300">Home</Link></li>
-              <li><a href="/#about" className="hover:text-yellow-300">About Us</a></li>
-              <li><a href="/#faq" className="hover:text-yellow-300">FAQs</a></li>
-              <li><Link to="/login" className="hover:text-yellow-300">Login</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h5 className="text-xl font-bold mb-4">Discover</h5>
-            <ul className="space-y-2">
-              <li><Link to="/technical-clubs" className="hover:text-yellow-300">Technical Clubs</Link></li>
-              <li><Link to="/nontechnical-clubs" className="hover:text-yellow-300">Non-Technical Clubs</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h5 className="text-xl font-bold mb-4">Follow Us</h5>
-            <div className="flex space-x-4">
-              <a href="#" className="text-2xl hover:text-yellow-300"><i className="fab fa-instagram"></i></a>
-              <a href="#" className="text-2xl hover:text-yellow-300"><i className="fab fa-linkedin"></i></a>
-              <a href="#" className="text-2xl hover:text-yellow-300"><i className="fab fa-github"></i></a>
-            </div>
-          </div>
-        </div>
-        <div className="text-center text-gray-400 mt-12 pt-8 border-t border-red-700">
-          © 2024 ClubNexus. Developed by Students.
-        </div>
-      </footer>
+      {/* --- FOOTER --- */}
+      <Footer />
     </div>
   );
 }

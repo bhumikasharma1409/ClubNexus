@@ -299,6 +299,8 @@ export default function Home() {
     { id: 'n8', name: 'C2S2 Giddha', icon: '/giddha.jpeg' },
   ];
 
+
+
   return (
     <div className="bg-white text-gray-900 font-serif">
       <ParticlesBg />
@@ -324,21 +326,20 @@ export default function Home() {
 `}</style>
 
       {/* HERO */}
-      <main id="home" className="flex flex-col md:flex-row items-center justify-between min-h-screen px-4 md:px-28 font-serif pt-28">
-        <AnimatedSection as="div" className="max-w-2xl text-left" delay="0.08s" threshold={0.05}>
+      <main id="home" className="flex flex-col md:flex-row items-center justify-center md:justify-between gap-8 md:gap-0 min-h-screen px-4 md:px-28 font-serif pt-28">
+        <AnimatedSection as="div" className="max-w-2xl text-center md:text-left" delay="0.08s" threshold={0.05}>
           <span className="inline-block px-4 py-1 mb-6 text-sm font-serif font-medium text-blue-700 bg-blue-100 rounded-full shadow">
             College Clubs Made Simple
           </span>
 
-          <h1 className="text-3xl md:text-6xl font-serif font-extrabold leading-tight text-gray-900">
+          <h1 className="text-4xl md:text-6xl font-serif font-extrabold leading-tight text-gray-900">
             Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-800 to-black">ClubNexus</span>
           </h1>
 
-          <h2 className="mt-3 text-xl md:text-3xl font-serif font-bold text-gray-700">Discover • Register • Connect</h2>
+          <h2 className="mt-3 text-2xl md:text-3xl font-serif font-bold text-gray-700">Discover • Register • Connect</h2>
 
-          <p className="mt-6 text-lg text-gray-600 max-w-xl">
+          <p className="mt-6 text-lg text-gray-600 max-w-xl mx-auto md:mx-0">
             All your college events, in one place. Stay updated and never miss an opportunity again.
-
           </p>
 
           {!user && (
@@ -348,7 +349,7 @@ export default function Home() {
           )}
         </AnimatedSection>
 
-        <AnimatedSection className="mt-10 md:mt-0 md:ml-12 w-full md:w-4/5 lg:w-2/3 relative overflow-hidden rounded-2xl shadow-xl h-64 md:h-96" delay="0.24s" threshold={0.05}>
+        <AnimatedSection className="mt-0 md:ml-12 w-full md:w-4/5 lg:w-2/3 relative overflow-hidden rounded-2xl shadow-xl h-64 md:h-96" delay="0.24s" threshold={0.05}>
           {/* Slider */}
           <div className="hero-slider">
             <div
@@ -383,7 +384,7 @@ export default function Home() {
             </div>
           </div>
         </AnimatedSection>
-      </main>
+      </main >
 
 
 
@@ -398,7 +399,7 @@ export default function Home() {
 
           {/* TECH CLUBS LOGO ROW */}
           <div className="py-4 px-4 overflow-hidden">
-            <div className="flex justify-center items-center gap-8 md:gap-16 flex-wrap opacity-90">
+            <div className="flex justify-center items-center gap-4 md:gap-16 flex-wrap opacity-90">
               {defaultTech.map((club, index) => (
                 <div
                   key={club.id}
@@ -407,7 +408,7 @@ export default function Home() {
                   <img
                     src={club.icon}
                     alt={club.name}
-                    className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-red-100 shadow-sm club-logo-glow"
+                    className="w-10 h-10 md:w-16 md:h-16 rounded-full object-cover border-2 border-red-100 shadow-sm club-logo-glow"
                     title={club.name}
                   />
                 </div>
@@ -416,15 +417,15 @@ export default function Home() {
           </div>
 
           {/* <-- increased spacing between boxes here --> */}
-          <div className="flex flex-wrap lg:items-stretch gap-6 md:gap-16 lg:gap-24 justify-center">
+          <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-8 lg:gap-24 justify-center">
 
-            <AnimatedSection className="relative flex-1 min-w-[260px] max-w-[480px]" delay="0.12s">
+            <AnimatedSection className="relative w-full max-w-xl lg:max-w-[480px] lg:flex-1" delay="0.12s">
               <Link to="/technical-clubs" className="block">
                 <div className="relative rounded-2xl p-6 shadow-md overflow-hidden bg-gradient-to-r from-[#ffe5e5] via-[#fff1f1] to-white border border-transparent hover:shadow-xl hover:scale-105 transform transition-all duration-200 cursor-pointer">
                   <h3 className="text-2xl font-serif font-bold text-black mb-1">Technical Clubs</h3>
                   <p className="text-sm text-yellow-800 mb-6">Innovate, build, and code with the brightest minds on campus.</p>
 
-                  <div className="grid grid-cols-2 gap-2 mb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
                     {(technicalClubs && technicalClubs.length ? technicalClubs : defaultTech).slice(0, 8).map((club, i) => (
                       <div
                         key={club.id ?? i}
@@ -452,13 +453,13 @@ export default function Home() {
             </AnimatedSection>
 
 
-            <AnimatedSection className="relative flex-1 min-w-[260px] max-w-[480px]" delay="0.24s">
+            <AnimatedSection className="relative w-full max-w-xl lg:max-w-[480px] lg:flex-1" delay="0.24s">
               <Link to="/nontechnical-clubs" className="block">
                 <div className="relative rounded-2xl p-6 shadow-md overflow-hidden bg-gradient-to-r from-[#ffe5e5] via-[#fff1f1] to-white border border-transparent hover:shadow-xl hover:scale-105 transform transition-all duration-200 cursor-pointer">
                   <h3 className="text-2xl font-serif font-bold text-black mb-1">Non-Technical Clubs</h3>
                   <p className="text-sm text-yellow-800 mb-6">Explore your passion in arts, culture, dance, and more.</p>
 
-                  <div className="grid grid-cols-2 gap-2 mb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
                     {(nonTechnicalClubs && nonTechnicalClubs.length ? nonTechnicalClubs : defaultNonTech).slice(0, 8).map((club, i) => (
                       <div
                         key={club.id ?? i}
@@ -586,16 +587,16 @@ export default function Home() {
       </AnimatedSection>
 
       {/* Quote card (hidden by default) */}
-      <div id="quoteCard" className="hidden lg:block fixed bottom-10 right-10 w-80 bg-white rounded-xl shadow-2xl p-5 opacity-0 pointer-events-none transition-opacity duration-500 z-50">
+      <div id="quoteCard" className="hidden lg:block fixed bottom-10 right-10 w-80 bg-white rounded-xl shadow-2xl p-5 opacity-0 pointer-events-none transition-opacity duration-500 z-50" >
         <p id="cardText" className="text-gray-800 text-lg italic"></p>
         <p id="cardAuthor" className="text-gray-600 text-sm mt-2 text-right">— Unknown</p>
-      </div>
+      </div >
 
       {/* FOOTER (component) */}
       <Footer />
 
       {/* AI Chatbot */}
       <Chatbot />
-    </div>
+    </div >
   );
 }
