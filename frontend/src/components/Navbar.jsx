@@ -104,27 +104,20 @@ export default function Navbar() {
         {/* Right area: auth buttons + mobile toggle */}
         <div className="flex items-center gap-3">
           {/* Desktop auth buttons */}
+          {/* Desktop auth buttons */}
           <div className="hidden md:flex items-center gap-3">
             {user ? (
-              <>
-                <Link to="/dashboard" className="relative w-10 h-10 md:w-11 md:h-11 group cursor-pointer block">
-                  <div className="w-full h-full rounded-full bg-gradient-to-br from-[#ffe5e5] to-[#ffcaca] border-2 border-white/20 shadow-md flex items-center justify-center overflow-hidden transform group-hover:scale-105 transition-transform duration-200">
-                    <span className="text-red-900 font-bold text-lg md:text-xl uppercase select-none">
-                      {user.name ? user.name.charAt(0) : user.email.charAt(0)}
-                    </span>
-                  </div>
-                  {/* Tooltip on hover */}
-                  <div className="absolute top-full right-0 mt-2 w-max px-3 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                    {user.name || user.email}
-                  </div>
-                </Link>
-                <button
-                  onClick={logout}
-                  className="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg shadow hover:bg-gray-300 transition"
-                >
-                  Sign Out
-                </button>
-              </>
+              <Link to="/dashboard" className="relative w-10 h-10 md:w-11 md:h-11 group cursor-pointer block">
+                <div className="w-full h-full rounded-full bg-gradient-to-br from-[#ffe5e5] to-[#ffcaca] border-2 border-white/20 shadow-md flex items-center justify-center overflow-hidden transform group-hover:scale-105 transition-transform duration-200">
+                  <span className="text-red-900 font-bold text-lg md:text-xl uppercase select-none">
+                    {user.name ? user.name.charAt(0) : user.email.charAt(0)}
+                  </span>
+                </div>
+                {/* Tooltip on hover */}
+                <div className="absolute top-full right-0 mt-2 w-max px-3 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                  {user.name || user.email}
+                </div>
+              </Link>
             ) : (
               <>
                 <Link

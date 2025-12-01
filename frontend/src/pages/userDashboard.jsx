@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 
 export default function UserDashboard() {
-  const { user, token } = useAuth();
+  const { user, token, logout } = useAuth();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('upcoming'); // 'upcoming' or 'past'
@@ -61,24 +61,33 @@ export default function UserDashboard() {
       <div className="pt-24 pb-12 container mx-auto px-4 md:px-8">
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-sm p-8 mb-8 border border-gray-100">
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#ffe5e5] to-[#ffcaca] border-4 border-white shadow-lg flex items-center justify-center text-4xl font-bold text-red-900 uppercase">
-              {user.name ? user.name.charAt(0) : user.email.charAt(0)}
-            </div>
-            <div className="text-center md:text-left">
-              <h1 className="text-3xl font-bold text-gray-900 mb-1">{user.name}</h1>
-              <p className="text-gray-500">{user.email}</p>
-              <div className="mt-4 flex flex-wrap gap-3 justify-center md:justify-start">
-                <div className="px-4 py-1 bg-red-50 text-red-700 rounded-full text-sm font-medium border border-red-100">
-                  {user.course || 'Student'}
-                </div>
-                {user.year && (
-                  <div className="px-4 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium border border-blue-100">
-                    Year {user.year}
+          <div className="flex flex-col md:flex-row items-center gap-6 justify-between">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#ffe5e5] to-[#ffcaca] border-4 border-white shadow-lg flex items-center justify-center text-4xl font-bold text-red-900 uppercase">
+                {user.name ? user.name.charAt(0) : user.email.charAt(0)}
+              </div>
+              <div className="text-center md:text-left">
+                <h1 className="text-3xl font-bold text-gray-900 mb-1">{user.name}</h1>
+                <p className="text-gray-500">{user.email}</p>
+                <div className="mt-4 flex flex-wrap gap-3 justify-center md:justify-start">
+                  <div className="px-4 py-1 bg-red-50 text-red-700 rounded-full text-sm font-medium border border-red-100">
+                    {user.course || 'Student'}
                   </div>
-                )}
+                  {user.year && (
+                    <div className="px-4 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium border border-blue-100">
+                      Year {user.year}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
+
+            <button
+              onClick={logout}
+              className="px-6 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 transition-colors"
+            >
+              Sign Out
+            </button>
           </div>
         </div>
 
@@ -87,8 +96,8 @@ export default function UserDashboard() {
           <button
             onClick={() => setActiveTab('upcoming')}
             className={`pb-3 text-lg font-medium transition-colors relative ${activeTab === 'upcoming'
-                ? 'text-red-600'
-                : 'text-gray-500 hover:text-gray-700'
+              ? 'text-red-600'
+              : 'text-gray-500 hover:text-gray-700'
               }`}
           >
             Upcoming Events
@@ -99,8 +108,8 @@ export default function UserDashboard() {
           <button
             onClick={() => setActiveTab('past')}
             className={`pb-3 text-lg font-medium transition-colors relative ${activeTab === 'past'
-                ? 'text-red-600'
-                : 'text-gray-500 hover:text-gray-700'
+              ? 'text-red-600'
+              : 'text-gray-500 hover:text-gray-700'
               }`}
           >
             Past Events
