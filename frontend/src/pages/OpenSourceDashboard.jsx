@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AddEventModal from '../components/AddEventModal';
 import MembersTab from '../components/MembersTab';
+import MembersManagement from '../components/MembersManagement';
 
 const OpenSourceDashboard = () => {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ const OpenSourceDashboard = () => {
     const [activeTab, setActiveTab] = useState('dashboard');
     const [events, setEvents] = useState([]);
     const [recentActivity, setRecentActivity] = useState([]);
+    const [totalMembers, setTotalMembers] = useState(0);
     const [showModal, setShowModal] = useState(false);
     const [eventToEdit, setEventToEdit] = useState(null);
 
@@ -37,6 +39,7 @@ const OpenSourceDashboard = () => {
                     // 2. Fetch Events & Activity
                     await fetchEvents(openSourceClub._id);
                     await fetchRecentActivity(openSourceClub._id);
+                    await fetchMemberCount(openSourceClub._id);
                 } else {
                     console.error("Open Source club not found in database. Available clubs:", clubs.map(c => c.name));
                 }
@@ -82,6 +85,19 @@ const OpenSourceDashboard = () => {
             }
         } catch (err) {
             console.error("Failed to fetch activity", err);
+        }
+    };
+
+    const fetchMemberCount = async (clubId) => {
+        try {
+            const res = await fetch(`/api/teams/${clubId}`);
+            const teams = await res.json();
+            if (res.ok) {
+                const count = teams.reduce((acc, team) => acc + team.members.length, 0);
+                setTotalMembers(count);
+            }
+        } catch (err) {
+            console.error("Failed to fetch member count", err);
         }
     };
 
@@ -131,6 +147,12 @@ const OpenSourceDashboard = () => {
         if (activeTab === 'members') {
             return <MembersTab clubId={clubId} />;
         }
+        if (activeTab === 'team') {
+            return <MembersManagement clubId={clubId} />;
+        }
+        if (activeTab === 'settings') {
+            return <SettingsTab clubId={clubId} />;
+        }
 
         // Content for 'dashboard' and 'events' tabs
         return (
@@ -144,7 +166,7 @@ const OpenSourceDashboard = () => {
                         </div>
                         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                             <h3 className="text-gray-500 font-medium">Active Members</h3>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">45</p>
+                            <p className="text-3xl font-bold text-gray-800 mt-2">{totalMembers}</p>
                         </div>
                         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                             <h3 className="text-gray-500 font-medium">Pending Approvals</h3>
@@ -155,98 +177,108 @@ const OpenSourceDashboard = () => {
 
 
                 {/* Events Section */}
-                {(activeTab === 'dashboard' || activeTab === 'events') && (
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-bold text-gray-800">Upcoming Events</h3>
-                            <button
-                                onClick={() => setShowModal(true)}
-                                className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition-colors text-sm"
-                            >
-                                + Add Event
-                            </button>
-                        </div>
-
-                        {events.length === 0 ? (
-                            <div className="text-center py-10 text-gray-500">
-                                No events found. Click "Add Event" to create one.
+                {
+                    (activeTab === 'dashboard' || activeTab === 'events') && (
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className="text-xl font-bold text-gray-800">Upcoming Events</h3>
+                                <button
+                                    onClick={() => setShowModal(true)}
+                                    className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition-colors text-sm"
+                                >
+                                    + Add Event
+                                </button>
                             </div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {events.map((event) => (
-                                    <div key={event._id} className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow flex flex-col">
-                                        {event.poster && (
-                                            <div className="h-48 overflow-hidden">
-                                                <img
-                                                    src={event.poster}
-                                                    alt={event.title}
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            </div>
-                                        )}
-                                        <div className="p-4 flex-1">
-                                            <div className="flex justify-between items-start mb-2">
-                                                <h4 className="font-bold text-lg text-gray-800 line-clamp-1">{event.title}</h4>
-                                                <span className="text-xs font-medium bg-red-50 text-red-600 px-2 py-1 rounded-full whitespace-nowrap">
-                                                    {new Date(event.date).toLocaleDateString()}
-                                                </span>
-                                            </div>
-                                            <p className="text-gray-600 text-sm mb-3 line-clamp-2">{event.description}</p>
-                                            <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                                                <span className="flex items-center gap-1">
-                                                    🕒 {event.time}
-                                                </span>
-                                                <span className="flex items-center gap-1">
-                                                    📍 {event.place}
-                                                </span>
-                                            </div>
 
-                                            <div className="flex gap-2 mt-auto">
-                                                <button
-                                                    onClick={() => handleEditEvent(event)}
-                                                    className="flex-1 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors"
-                                                >
-                                                    Edit
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDeleteEvent(event._id)}
-                                                    className="flex-1 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors"
-                                                >
-                                                    Delete
-                                                </button>
+                            {events.length === 0 ? (
+                                <div className="text-center py-10 text-gray-500">
+                                    No events found. Click "Add Event" to create one.
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {events.map((event) => (
+                                        <div key={event._id} className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+                                            {event.poster && (
+                                                <div className="h-48 overflow-hidden">
+                                                    <img
+                                                        src={event.poster}
+                                                        alt={event.title}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                </div>
+                                            )}
+                                            <div className="p-4 flex-1">
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <h4 className="font-bold text-lg text-gray-800 line-clamp-1">{event.title}</h4>
+                                                    <span className="text-xs font-medium bg-red-50 text-red-600 px-2 py-1 rounded-full whitespace-nowrap">
+                                                        {new Date(event.date).toLocaleDateString()}
+                                                    </span>
+                                                </div>
+                                                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{event.description}</p>
+                                                <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                                                    <span className="flex items-center gap-1">
+                                                        🕒 {event.time}
+                                                    </span>
+                                                    <span className="flex items-center gap-1">
+                                                        📍 {event.place}
+                                                    </span>
+                                                </div>
+
+                                                <div className="flex gap-2 mt-auto">
+                                                    <button
+                                                        onClick={() => navigate(`/admin/events/${event._id}/registrations`)}
+                                                        className="flex-1 px-3 py-1.5 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 transition-colors"
+                                                    >
+                                                        View Registrations
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleEditEvent(event)}
+                                                        className="flex-1 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDeleteEvent(event._id)}
+                                                        className="flex-1 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                )}
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )
+                }
 
 
                 {/* Recent Activity */}
-                {(activeTab === 'dashboard') && (
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                        <h3 className="text-xl font-bold text-gray-800 mb-4">Recent Activity</h3>
-                        <div className="space-y-4">
-                            {recentActivity.length === 0 ? (
-                                <p className="text-gray-500 text-sm">No recent activity.</p>
-                            ) : (
-                                recentActivity.map((activity) => (
-                                    <div key={activity._id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                        <div>
-                                            <p className="font-medium text-gray-800">{activity.action}</p>
-                                            <p className="text-sm text-gray-500">{activity.details}</p>
+                {
+                    (activeTab === 'dashboard') && (
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                            <h3 className="text-xl font-bold text-gray-800 mb-4">Recent Activity</h3>
+                            <div className="space-y-4">
+                                {recentActivity.length === 0 ? (
+                                    <p className="text-gray-500 text-sm">No recent activity.</p>
+                                ) : (
+                                    recentActivity.map((activity) => (
+                                        <div key={activity._id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                            <div>
+                                                <p className="font-medium text-gray-800">{activity.action}</p>
+                                                <p className="text-sm text-gray-500">{activity.details}</p>
+                                            </div>
+                                            <span className="text-sm text-gray-500">
+                                                {new Date(activity.createdAt).toLocaleString()}
+                                            </span>
                                         </div>
-                                        <span className="text-sm text-gray-500">
-                                            {new Date(activity.createdAt).toLocaleString()}
-                                        </span>
-                                    </div>
-                                ))
-                            )}
+                                    ))
+                                )}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )
+                }
             </>
         );
     };
@@ -254,33 +286,45 @@ const OpenSourceDashboard = () => {
     return (
         <div className="min-h-screen bg-gray-100 flex">
             {/* Sidebar */}
-            <aside className="w-64 bg-white shadow-md flex flex-col fixed h-full">
-                <div className="p-6 border-b">
-                    <h1 className="text-2xl font-bold text-red-600">ClubNexus</h1>
-                    <p className="text-sm text-gray-500 mt-1">Open Source Admin</p>
+            <aside className="w-64 bg-black shadow-md flex flex-col fixed h-full border-r border-gray-800">
+                <div className="p-6 border-b border-gray-800">
+                    <div className="flex items-center gap-3 mb-3">
+                        <img src="/logo.png" alt="ClubNexus Logo" className="w-8 h-8 object-contain" />
+                        <h1 className="text-2xl font-bold text-white">ClubNexus</h1>
+                    </div>
+                    <div className="flex items-center gap-2 pl-1">
+                        <img src="/open.jpg" alt="Open Source Logo" className="w-6 h-6 rounded-full object-cover border border-gray-600" />
+                        <p className="text-sm text-gray-400 font-medium">Open Source Admin</p>
+                    </div>
                 </div>
                 <nav className="flex-1 p-4 space-y-2">
                     <button
                         onClick={() => setActiveTab('dashboard')}
-                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'dashboard' ? 'bg-red-50 text-red-600' : 'text-gray-600 hover:bg-gray-50'}`}
+                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'dashboard' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
                     >
                         Dashboard
                     </button>
                     <button
-                        onClick={() => setActiveTab('events')}
-                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'events' ? 'bg-red-50 text-red-600' : 'text-gray-600 hover:bg-gray-50'}`}
+                        onClick={() => setActiveTab('members')}
+                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'members' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
                     >
-                        Events
+                        Openings
                     </button>
                     <button
-                        onClick={() => setActiveTab('members')}
-                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'members' ? 'bg-red-50 text-red-600' : 'text-gray-600 hover:bg-gray-50'}`}
+                        onClick={() => setActiveTab('team')}
+                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'team' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
                     >
                         Members
                     </button>
                     <button
+                        onClick={() => setActiveTab('events')}
+                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'events' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
+                    >
+                        Events
+                    </button>
+                    <button
                         onClick={() => setActiveTab('settings')}
-                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'settings' ? 'bg-red-50 text-red-600' : 'text-gray-600 hover:bg-gray-50'}`}
+                        className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'settings' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-900 hover:text-white'}`}
                     >
                         Settings
                     </button>

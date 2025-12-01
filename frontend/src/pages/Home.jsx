@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/footer';
+import Chatbot from '../components/Chatbot';
 import ParticlesBg from '../components/ParticlesBg';
 
 /* -------------------------
@@ -318,7 +319,7 @@ export default function Home() {
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
-      `}</style>
+`}</style>
 
       {/* HERO */}
       <main id="home" className="flex flex-col md:flex-row items-center justify-between min-h-screen px-4 md:px-28 font-serif pt-20">
@@ -344,12 +345,12 @@ export default function Home() {
             <div
               ref={trackRef}
               className="hero-slider-track"
-              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              style={{ transform: `translateX(-${currentSlide * 100} %)` }}
               aria-hidden={false}
             >
               {slidesExtended.map((src, i) => (
                 <div className="hero-slide" key={i}>
-                  <img src={src} alt={`slide-${i}`} />
+                  <img src={src} alt={`slide - ${i} `} />
                 </div>
               ))}
             </div>
@@ -360,8 +361,8 @@ export default function Home() {
                 <button
                   key={idx}
                   onClick={() => goToSlide(idx)}
-                  className={`w-2 h-2 rounded-full ${currentSlide % slides.length === idx ? 'bg-white' : 'bg-white/40'}`}
-                  aria-label={`Go to slide ${idx + 1}`}
+                  className={`w - 2 h - 2 rounded - full ${currentSlide % slides.length === idx ? 'bg-white' : 'bg-white/40'} `}
+                  aria-label={`Go to slide ${idx + 1} `}
                 />
               ))}
             </div>
@@ -395,7 +396,7 @@ export default function Home() {
                     >
                       <div className="w-9 h-9 rounded-full overflow-hidden bg-white/8 flex items-center justify-center flex-shrink-0 ring-1 ring-white/10">
                         <img
-                          src={club.icon || `/${slugify(club.name)}.jpg`}
+                          src={club.icon || `/ ${slugify(club.name)}.jpg`}
                           alt={`${club.name} icon`}
                           className="w-full h-full object-cover"
                           onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/default.png'; }}
@@ -433,7 +434,7 @@ export default function Home() {
                     >
                       <div className="w-9 h-9 rounded-full overflow-hidden bg-white/8 flex items-center justify-center flex-shrink-0 ring-1 ring-white/10">
                         <img
-                          src={club.icon || `/${slugify(club.name)}.jpg`}
+                          src={club.icon || `/ ${slugify(club.name)}.jpg`}
                           alt={`${club.name} icon`}
                           className="w-full h-full object-cover"
                           onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/default.png'; }}
@@ -564,6 +565,9 @@ export default function Home() {
 
       {/* FOOTER (component) */}
       <Footer />
+
+      {/* AI Chatbot */}
+      <Chatbot />
     </div>
   );
 }

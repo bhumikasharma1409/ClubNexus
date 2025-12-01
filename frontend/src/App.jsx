@@ -34,6 +34,8 @@ import AddEventModal from "./components/AddEventModal";
 
 import UserDashboard from "./pages/UserDashboard";
 
+import EventRegistrations from "./pages/EventRegistrations";
+
 export default function App() {
   return (
     <div className="relative z-10 min-h-screen">
@@ -70,6 +72,7 @@ export default function App() {
         <Route path="/admin-events" element={<AdminEvents />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/dashboard/open-source" element={<OpenSourceDashboard />} />
+        <Route path="/admin/events/:eventId/registrations" element={<EventRegistrations />} />
 
 
 

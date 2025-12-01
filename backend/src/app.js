@@ -9,6 +9,8 @@ const userRoutes = require('./routes/userRoutes'); // Keep this as it's used in 
 const clubRoutes = require('./routes/clubRoutes');
 const activityRoutes = require('./routes/activityRoutes');
 const openingRoutes = require('./routes/openingRoutes');
+const teamRoutes = require('./routes/teamRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 const path = require('path');
 const errorMiddleware = require('./middleware/errorMiddleware');
 
@@ -32,8 +34,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/clubs', clubRoutes);
 app.use('/api/events', eventRoutes);
-app.use('/api/activities', require('./routes/activityRoutes'));
+app.use('/api/activities', activityRoutes);
 app.use('/api/openings', openingRoutes);
+app.use('/api/teams', teamRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Error handler (should be last)
 app.use(errorMiddleware);

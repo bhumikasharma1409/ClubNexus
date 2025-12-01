@@ -20,8 +20,12 @@ const ManageOpeningsModal = ({ onClose, clubId, initialData }) => {
 
     useEffect(() => {
         if (initialData) {
-            setSelectedTech(initialData.technicalRoles || []);
-            setSelectedNonTech(initialData.nonTechnicalRoles || []);
+            // Filter out roles that are no longer in the allowed lists
+            const validTech = (initialData.technicalRoles || []).filter(r => TECHNICAL_ROLES.includes(r));
+            const validNonTech = (initialData.nonTechnicalRoles || []).filter(r => NON_TECHNICAL_ROLES.includes(r));
+
+            setSelectedTech(validTech);
+            setSelectedNonTech(validNonTech);
             if (initialData.poster) {
                 setPreview(initialData.poster);
             }
