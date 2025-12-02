@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import ManageOpeningsModal from './ManageOpeningsModal';
+import * as XLSX from 'xlsx';
 
 const MembersTab = ({ clubId }) => {
     const [showModal, setShowModal] = useState(false);
     const [openingData, setOpeningData] = useState(null);
+    const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchOpeningData = async () => {
@@ -20,13 +22,42 @@ const MembersTab = ({ clubId }) => {
         }
     };
 
+    const fetchApplications = async () => {
+        try {
+            const res = await fetch(`/api/applications/${clubId}`);
+            if (res.ok) {
+                const data = await res.json();
+                setApplications(data);
+            }
+        } catch (err) {
+            console.error("Failed to fetch applications", err);
+        }
+    };
+
     useEffect(() => {
-        if (clubId) fetchOpeningData();
+        if (clubId) {
+            fetchOpeningData();
+            fetchApplications();
+        }
     }, [clubId]);
 
     const handleModalClose = () => {
         setShowModal(false);
         fetchOpeningData(); // Refresh data after close
+    };
+
+    const exportToExcel = () => {
+        const worksheet = XLSX.utils.json_to_sheet(applications.map(app => ({
+            Name: app.name,
+            'Roll No': app.rollNo,
+            Year: app.year,
+            'Contact Number': app.contactNumber,
+            Position: app.position,
+            'Applied At': new Date(app.createdAt).toLocaleDateString()
+        })));
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Applicants");
+        XLSX.writeFile(workbook, "Club_Applicants.xlsx");
     };
 
     if (loading) return <div className="p-8 text-center text-gray-500">Loading...</div>;
@@ -111,6 +142,55 @@ const MembersTab = ({ clubId }) => {
                         </div>
                     </div>
                 )}
+            </div>
+
+            {/* Applicants Table */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-xl font-bold text-gray-800">Applicants</h3>
+                    <button
+                        onClick={exportToExcel}
+                        className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors text-sm flex items-center gap-2"
+                        disabled={applications.length === 0}
+                    >
+                        <span>Export to Excel</span>
+                    </button>
+                </div>
+
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="border-b border-gray-100 text-gray-500 text-sm">
+                                <th className="py-3 px-4">Name</th>
+                                <th className="py-3 px-4">Roll No</th>
+                                <th className="py-3 px-4">Year</th>
+                                <th className="py-3 px-4">Phone Number</th>
+                                <th className="py-3 px-4">Position</th>
+                                <th className="py-3 px-4">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody className="text-gray-700 text-sm">
+                            {applications.length === 0 ? (
+                                <tr><td colSpan="6" className="py-4 text-center text-gray-500">No applications received yet</td></tr>
+                            ) : (
+                                applications.map(app => (
+                                    <tr key={app._id} className="border-b border-gray-50 hover:bg-gray-50">
+                                        <td className="py-3 px-4 font-medium">{app.name}</td>
+                                        <td className="py-3 px-4">{app.rollNo}</td>
+                                        <td className="py-3 px-4">{app.year}</td>
+                                        <td className="py-3 px-4">{app.contactNumber}</td>
+                                        <td className="py-3 px-4">
+                                            <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs border border-blue-100">
+                                                {app.position}
+                                            </span>
+                                        </td>
+                                        <td className="py-3 px-4 text-gray-500">{new Date(app.createdAt).toLocaleDateString()}</td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {showModal && (

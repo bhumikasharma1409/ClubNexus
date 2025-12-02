@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Slideshow from '../components/Slideshow';
 import EventCard from '../components/EventCard';
+import ApplicationFormModal from '../components/ApplicationFormModal';
+import { useAuth } from '../context/AuthContext';
 
 const slideshowImages = [
   '/open.jpg',
@@ -12,8 +14,12 @@ const slideshowImages = [
 ];
 
 export default function OpenSource() {
+  const { user } = useAuth();
   const [events, setEvents] = useState([]);
   const [opening, setOpening] = useState(null);
+  const [showApplicationModal, setShowApplicationModal] = useState(false);
+
+  const [clubId, setClubId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,6 +30,7 @@ export default function OpenSource() {
         const openSourceClub = clubs.find(c => c.name === 'Open Source');
 
         if (openSourceClub) {
+          setClubId(openSourceClub._id);
           // 2. Get Events
           const eventRes = await fetch(`/api/events/${openSourceClub._id}`);
           const eventData = await eventRes.json();
@@ -146,12 +153,14 @@ export default function OpenSource() {
                         className="w-full h-auto rounded-lg shadow-2xl border-2 border-white/10 transform hover:scale-105 transition-transform duration-300"
                       />
                     )}
-                    <Link
-                      to="/register"
-                      className="inline-block px-8 py-3 bg-red-900/30 border border-red-500/30 text-red-200 font-bold rounded-full shadow-lg hover:bg-red-900/50 hover:shadow-red-500/20 transform hover:-translate-y-1 transition-all duration-300"
+                    <button
+                      onClick={() => {
+                        setShowApplicationModal(true);
+                      }}
+                      className="inline-block px-8 py-3 bg-red-900/30 border border-red-500/30 text-red-200 font-bold rounded-full shadow-lg hover:bg-red-900/50 hover:shadow-red-500/20 transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                     >
                       Join Now
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -234,6 +243,18 @@ export default function OpenSource() {
           © 2024 ClubNexus. Developed by Students.
         </div>
       </footer>
-    </div>
+
+
+      {
+        showApplicationModal && (
+          <ApplicationFormModal
+            onClose={() => setShowApplicationModal(false)}
+            clubId={clubId}
+            roles={[...(opening?.technicalRoles || []), ...(opening?.nonTechnicalRoles || [])]}
+            user={user}
+          />
+        )
+      }
+    </div >
   );
 }

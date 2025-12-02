@@ -4,6 +4,8 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Slideshow from '../components/Slideshow';
 import EventCard from '../components/EventCard';
+import ApplicationFormModal from '../components/ApplicationFormModal';
+import { useAuth } from '../context/AuthContext';
 
 const slideshowImages = [
   '/firstieee.webp',
@@ -13,8 +15,11 @@ const slideshowImages = [
 ];
 
 export default function IEEE() {
+  const { user } = useAuth();
   const [events, setEvents] = useState([]);
   const [opening, setOpening] = useState(null);
+  const [showApplicationModal, setShowApplicationModal] = useState(false);
+  const [clubId, setClubId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +34,7 @@ export default function IEEE() {
         const ieeeClub = clubs.find((c) => c.name === 'IEEE');
 
         if (ieeeClub) {
+          setClubId(ieeeClub._id);
           // 2. Get Events
           const eventRes = await fetch(`/api/events/${ieeeClub._id}`);
           if (eventRes.ok) {
@@ -162,12 +168,12 @@ export default function IEEE() {
                         className="w-full h-auto rounded-lg shadow-2xl border-2 border-white/10 transform hover:scale-105 transition-transform duration-300"
                       />
                     )}
-                    <Link
-                      to="/register"
-                      className="inline-block px-8 py-3 bg-blue-900/30 border border-blue-500/30 text-blue-200 font-bold rounded-full shadow-lg hover:bg-blue-900/50 hover:shadow-blue-500/20 transform hover:-translate-y-1 transition-all duration-300"
+                    <button
+                      onClick={() => setShowApplicationModal(true)}
+                      className="inline-block px-8 py-3 bg-blue-900/30 border border-blue-500/30 text-blue-200 font-bold rounded-full shadow-lg hover:bg-blue-900/50 hover:shadow-blue-500/20 transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                     >
                       Join Now
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -221,6 +227,17 @@ export default function IEEE() {
 
       {/* --- FOOTER --- */}
       <Footer />
+
+      {
+        showApplicationModal && (
+          <ApplicationFormModal
+            onClose={() => setShowApplicationModal(false)}
+            clubId={clubId}
+            roles={[...(opening?.technicalRoles || []), ...(opening?.nonTechnicalRoles || [])]}
+            user={user}
+          />
+        )
+      }
     </div>
   );
 }
