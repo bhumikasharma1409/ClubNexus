@@ -40,6 +40,7 @@ app.use('/api/teams', teamRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/duty-leaves', require('./routes/dutyLeaveRoutes'));
 app.use('/api/applications', require('./routes/applicationRoutes'));
+app.use('/api/contact', require('./routes/contactRoutes'));
 
 // Error handler (should be last)
 app.use(errorMiddleware);

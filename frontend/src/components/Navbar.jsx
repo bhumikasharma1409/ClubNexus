@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
+import ContactFormModal from './ContactFormModal';
 
 export default function Navbar() {
   const auth = useAuth();
@@ -15,6 +16,7 @@ export default function Navbar() {
   const NAV_OFFSET = 75;
 
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   // close mobile menu when route changes
   useEffect(() => {
@@ -33,6 +35,11 @@ export default function Navbar() {
     e.preventDefault();
     // close mobile panel if open
     setMobileOpen(false);
+
+    if (id === 'contact') {
+      setShowContactModal(true);
+      return;
+    }
 
     if (location.pathname === '/') {
       scrollToSection(id);
@@ -100,19 +107,17 @@ export default function Navbar() {
             </a>
           </li>
           <li>
-            <a
-              href="#contact"
+            <button
               onClick={handleNavClick('contact')}
-              className="text-white font-serif hover:text-yellow-300 text-lg font-medium"
+              className="text-white font-serif hover:text-yellow-300 text-lg font-medium bg-transparent border-none cursor-pointer"
             >
               Contact Us
-            </a>
+            </button>
           </li>
         </ul>
 
         {/* Right area: auth buttons + mobile toggle */}
         <div className="flex items-center gap-3">
-          {/* Desktop auth buttons */}
           {/* Desktop auth buttons */}
           <div className="hidden md:flex items-center gap-3">
             {user ? (
@@ -190,13 +195,12 @@ export default function Navbar() {
               >
                 FAQs
               </a>
-              <a
-                href="#contact"
+              <button
                 onClick={handleNavClick('contact')}
-                className="block text-gray-800 font-medium py-2 px-2 rounded hover:bg-gray-50"
+                className="block w-full text-left text-gray-800 font-medium py-2 px-2 rounded hover:bg-gray-50"
               >
                 Contact Us
-              </a>
+              </button>
             </nav>
 
             <div className="border-t border-gray-100 my-3" />
@@ -230,6 +234,12 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-    </header >
+
+      <ContactFormModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+        user={user}
+      />
+    </header>
   );
 }
