@@ -34,9 +34,8 @@ const Chatbot = () => {
                 body: JSON.stringify({ message: userMsg })
             });
             const data = await res.json();
-
             setMessages(prev => [...prev, { text: data.reply, sender: 'bot' }]);
-        } catch (err) {
+        } catch {
             setMessages(prev => [...prev, { text: "Sorry, I'm having trouble connecting right now.", sender: 'bot' }]);
         } finally {
             setLoading(false);
@@ -49,14 +48,14 @@ const Chatbot = () => {
             {isOpen && (
                 <div className="bg-white rounded-2xl shadow-2xl w-80 sm:w-96 mb-4 overflow-hidden border border-gray-200 flex flex-col h-[500px] animate-fade-in-up">
                     {/* Header */}
-                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 flex justify-between items-center text-white">
+                    <div className="bg-gradient-to-r from-red-600 to-black p-4 flex justify-between items-center text-white">
                         <div className="flex items-center gap-2">
                             <div className="bg-white/20 p-1.5 rounded-full">
                                 <FaRobot className="text-lg" />
                             </div>
                             <div>
                                 <h3 className="font-bold text-sm">ClubNexus AI</h3>
-                                <p className="text-xs text-blue-100 flex items-center gap-1">
+                                <p className="text-xs text-red-100 flex items-center gap-1">
                                     <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
                                     Online
                                 </p>
@@ -79,8 +78,8 @@ const Chatbot = () => {
                             >
                                 <div
                                     className={`max-w-[80%] p-3 rounded-2xl text-sm shadow-sm ${msg.sender === 'user'
-                                            ? 'bg-blue-600 text-white rounded-br-none'
-                                            : 'bg-white text-gray-700 border border-gray-100 rounded-bl-none'
+                                        ? 'bg-red-600 text-white rounded-br-none'
+                                        : 'bg-white text-gray-700 border border-gray-100 rounded-bl-none'
                                         }`}
                                 >
                                     {msg.text}
@@ -108,12 +107,12 @@ const Chatbot = () => {
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             placeholder="Type a message..."
-                            className="flex-1 bg-gray-100 text-gray-800 text-sm rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+                            className="flex-1 bg-gray-100 text-gray-800 text-sm rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500/50 transition-all"
                         />
                         <button
                             type="submit"
                             disabled={!input.trim() || loading}
-                            className="bg-blue-600 text-white p-2.5 rounded-full hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-md"
+                            className="bg-red-600 text-white p-2.5 rounded-full hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-md"
                         >
                             <FaPaperPlane className="text-sm" />
                         </button>
@@ -125,8 +124,8 @@ const Chatbot = () => {
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 ${isOpen
-                        ? 'bg-gray-800 text-white rotate-90'
-                        : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white animate-bounce-slow'
+                    ? 'bg-gray-800 text-white rotate-90'
+                    : 'bg-gradient-to-r from-red-600 to-black text-white animate-bounce-slow'
                     }`}
             >
                 {isOpen ? <FaTimes className="text-xl" /> : <FaRobot className="text-2xl" />}

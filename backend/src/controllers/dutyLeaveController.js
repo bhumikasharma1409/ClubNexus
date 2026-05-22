@@ -1,11 +1,13 @@
-const DutyLeave = require('../models/DutyLeave');
-const Club = require('../models/Club');
+const { DutyLeave, Club } = require('../models');
 
 // Get all duty leaves for a club
 exports.getDutyLeaves = async (req, res) => {
     try {
         const { clubId } = req.params;
-        const dutyLeaves = await DutyLeave.find({ club: clubId }).sort({ createdAt: -1 });
+        const dutyLeaves = await DutyLeave.findAll({
+            where: { clubId },
+            order: [['createdAt', 'DESC']]
+        });
         res.status(200).json(dutyLeaves);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching duty leaves', error: error.message });
@@ -22,17 +24,15 @@ exports.updateStatus = async (req, res) => {
             return res.status(400).json({ message: 'Invalid status' });
         }
 
-        const updatedDL = await DutyLeave.findByIdAndUpdate(
-            id,
-            { status },
-            { new: true }
-        );
-
-        if (!updatedDL) {
+        const dl = await DutyLeave.findByPk(id);
+        if (!dl) {
             return res.status(404).json({ message: 'Duty leave request not found' });
         }
 
-        res.status(200).json(updatedDL);
+        dl.status = status;
+        await dl.save();
+
+        res.status(200).json(dl);
     } catch (error) {
         res.status(500).json({ message: 'Error updating status', error: error.message });
     }
@@ -46,7 +46,7 @@ exports.createDutyLeave = async (req, res) => {
 
         // Check if already applied
         if (userId && eventId) {
-            const existing = await DutyLeave.findOne({ user: userId, event: eventId });
+            const existing = await DutyLeave.findOne({ where: { userId, eventId } });
             if (existing) {
                 console.log("DL already exists for user/event");
                 return res.status(400).json({ message: 'Already applied for duty leave for this event' });
@@ -54,18 +54,17 @@ exports.createDutyLeave = async (req, res) => {
         }
 
         console.log("Creating new DL with ClubID:", clubId);
-        const newDL = new DutyLeave({
+        const newDL = await DutyLeave.create({
             studentName,
             rollNo,
             eventName,
             date,
-            club: clubId,
-            user: userId,
-            event: eventId
+            clubId,
+            userId,
+            eventId
         });
 
-        await newDL.save();
-        console.log("DL Created Successfully:", newDL._id);
+        console.log("DL Created Successfully:", newDL.id);
         res.status(201).json(newDL);
     } catch (error) {
         console.error("Error creating DL:", error);
@@ -82,7 +81,7 @@ exports.checkStatus = async (req, res) => {
             return res.status(400).json({ message: 'Missing userId or eventId' });
         }
 
-        const dl = await DutyLeave.findOne({ user: userId, event: eventId });
+        const dl = await DutyLeave.findOne({ where: { userId, eventId } });
         console.log('Found DL:', dl);
         if (!dl) {
             return res.json({ status: null });

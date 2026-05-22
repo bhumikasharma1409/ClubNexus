@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import Footer from '../components/footer';
 import Chatbot from '../components/Chatbot';
 import ParticlesBg from '../components/ParticlesBg';
 import { useAuth } from '../context/AuthContext';
@@ -20,7 +20,7 @@ const useInViewAnimation = (options = {}) => {
       if (observerRef.current && node) {
         try {
           observerRef.current.unobserve(node);
-        } catch (e) { }
+        } catch { /* ignore */ }
       }
       setNode(element);
     },
@@ -40,7 +40,7 @@ const useInViewAnimation = (options = {}) => {
           setIsVisible(true);
           try {
             if (node) observer.unobserve(node);
-          } catch (e) { }
+          } catch { /* ignore */ }
         }
       },
       options
@@ -52,7 +52,7 @@ const useInViewAnimation = (options = {}) => {
     return () => {
       try {
         if (observerRef.current && node) observerRef.current.unobserve(node);
-      } catch (e) { }
+      } catch { /* ignore */ }
       if (observerRef.current && typeof observerRef.current.disconnect === 'function') {
         observerRef.current.disconnect();
       }
@@ -222,7 +222,6 @@ export default function Home() {
         node.style.transform = `translateX(0)`; // instant snap
 
         // force reflow so the instant transform is applied immediately
-        // eslint-disable-next-line no-unused-expressions
         node.getBoundingClientRect();
 
         // next frame: restore transition and sync React state to 0
@@ -313,7 +312,7 @@ export default function Home() {
 
   /* slider styles - updated */
   .hero-slider { width: 100%; height: 100%; overflow: hidden; position: relative; }
-  .hero-slider-track { display: flex; transition: transform 600ms ease; /* no fixed width */ }
+  .hero-slider-track { display: flex; transition: transform 600ms ease; height: 100%; /* no fixed width */ }
   .hero-slide { flex: 0 0 100%; width: 100%; height: 100%; }
   .hero-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
@@ -371,11 +370,7 @@ export default function Home() {
               {slides.map((_, idx) => (
                 <button
                   key={idx}
-                  onClick={() => {
-                    // ensure transition is enabled for manual jumps
-                    if (trackRef.current) trackRef.current.style.transition = 'transform 600ms ease';
-                    setCurrentSlide(idx);
-                  }}
+                  onClick={() => goToSlide(idx)}
                   className={`w-2 h-2 rounded-full ${currentSlide % slides.length === idx ? 'bg-white' : 'bg-white/40'} focus:outline-none`}
                   aria-label={`Go to slide ${idx + 1}`}
                   type="button"
@@ -400,7 +395,7 @@ export default function Home() {
           {/* TECH CLUBS LOGO ROW */}
           <div className="py-4 px-4 overflow-hidden">
             <div className="flex justify-center items-center gap-4 md:gap-16 flex-wrap opacity-90">
-              {defaultTech.map((club, index) => (
+              {defaultTech.map((club) => (
                 <div
                   key={club.id}
                   className="p-2"

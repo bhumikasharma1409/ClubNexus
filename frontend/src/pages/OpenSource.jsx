@@ -30,14 +30,14 @@ export default function OpenSource() {
         const openSourceClub = clubs.find(c => c.name === 'Open Source');
 
         if (openSourceClub) {
-          setClubId(openSourceClub._id);
+          setClubId(openSourceClub.id);
           // 2. Get Events
-          const eventRes = await fetch(`/api/events/${openSourceClub._id}`);
+          const eventRes = await fetch(`/api/events/${openSourceClub.id}`);
           const eventData = await eventRes.json();
           setEvents(eventData);
 
           // 3. Get Openings
-          const openingRes = await fetch(`/api/openings/${openSourceClub._id}`);
+          const openingRes = await fetch(`/api/openings/${openSourceClub.id}`);
           if (openingRes.ok) {
             const openingData = await openingRes.json();
             setOpening(openingData);
@@ -182,8 +182,8 @@ export default function OpenSource() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {events.map((event) => (
                   <EventCard
-                    key={event._id}
-                    id={event._id}
+                    key={event.id}
+                    id={event.id}
                     title={event.title}
                     date={new Date(event.date).toLocaleDateString()}
                     time={event.time}

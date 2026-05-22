@@ -1,19 +1,20 @@
-const mongoose = require('mongoose');
-const User = require('./src/models/User');
-const Club = require('./src/models/Club');
+const { connectDB } = require('./src/config/sequelize');
+const { User, Club } = require('./src/models');
 require('dotenv').config();
 
 const run = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/clubnexus');
+        await connectDB();
         console.log('Connected to DB');
 
-        const admin = await User.findOne({ email: 'bhanvisahni@gmail.com' });
-        console.log('Admin User:', admin);
+        const admin = await User.findOne({
+            where: { email: 'bhanvisahni@gmail.com' },
+            include: [Club]
+        });
+        console.log('Admin User:', admin ? admin.toJSON() : 'Not found');
 
-        if (admin && admin.club) {
-            const club = await Club.findById(admin.club);
-            console.log('Linked Club:', club);
+        if (admin && admin.Club) {
+            console.log('Linked Club:', admin.Club.toJSON());
         } else {
             console.log('Admin has no club linked.');
         }

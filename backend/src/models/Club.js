@@ -1,10 +1,14 @@
-// src/models/Club.js
-const mongoose = require('mongoose');
-
-const clubSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true, trim: true },
-  description: { type: String },
-  createdAt: { type: Date, default: Date.now }
-});
-
-module.exports = mongoose.model('Club', clubSchema);
+module.exports = (sequelize, DataTypes) => {
+  const Club = sequelize.define('Club', {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: { notEmpty: true }
+    },
+    description: {
+      type: DataTypes.TEXT
+    }
+  });
+  return Club;
+};

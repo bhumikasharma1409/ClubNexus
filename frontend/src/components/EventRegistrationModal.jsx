@@ -59,7 +59,7 @@ export default function EventRegistrationModal({ isOpen, onClose, onRegister, ev
                 </div>
 
                 {/* Scrollable Form Container */}
-                <div className="overflow-y-auto p-6 custom-scrollbar">
+                <div className="overflow-y-auto p-6 custom-scrollbar text-gray-900">
                     <form onSubmit={handleSubmit} className="space-y-4">
 
                         <div>

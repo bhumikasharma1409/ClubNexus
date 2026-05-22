@@ -1,4 +1,4 @@
-const Opening = require('../models/Opening');
+const { Opening } = require('../models');
 const fs = require('fs');
 const path = require('path');
 
@@ -15,8 +15,8 @@ exports.createOrUpdateOpening = async (req, res) => {
         let nonTechRoles = [];
 
         try {
-            techRoles = JSON.parse(technicalRoles || '[]');
-            nonTechRoles = JSON.parse(nonTechnicalRoles || '[]');
+            techRoles = typeof technicalRoles === 'string' ? JSON.parse(technicalRoles || '[]') : technicalRoles;
+            nonTechRoles = typeof nonTechnicalRoles === 'string' ? JSON.parse(nonTechnicalRoles || '[]') : nonTechnicalRoles;
         } catch (e) {
             return res.status(400).json({ message: 'Invalid roles format' });
         }
@@ -26,7 +26,7 @@ exports.createOrUpdateOpening = async (req, res) => {
             posterPath = '/uploads/' + req.file.filename;
         }
 
-        let opening = await Opening.findOne({ club: clubId });
+        let opening = await Opening.findOne({ where: { clubId } });
 
         if (opening) {
             // Update existing
@@ -43,13 +43,12 @@ exports.createOrUpdateOpening = async (req, res) => {
             await opening.save();
         } else {
             // Create new
-            opening = new Opening({
-                club: clubId,
+            opening = await Opening.create({
+                clubId,
                 technicalRoles: techRoles,
                 nonTechnicalRoles: nonTechRoles,
                 poster: posterPath
             });
-            await opening.save();
         }
 
         res.status(200).json({ message: 'Openings updated successfully', opening });
@@ -64,7 +63,7 @@ exports.createOrUpdateOpening = async (req, res) => {
 exports.getOpening = async (req, res) => {
     try {
         const { clubId } = req.params;
-        const opening = await Opening.findOne({ club: clubId });
+        const opening = await Opening.findOne({ where: { clubId } });
         res.json(opening || { technicalRoles: [], nonTechnicalRoles: [], poster: '' });
     } catch (err) {
         console.error(err);

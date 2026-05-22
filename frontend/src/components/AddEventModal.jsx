@@ -44,7 +44,9 @@ const AddEventModal = ({ onClose, onEventAdded, eventToEdit }) => {
     data.append('place', formData.place);
 
     const user = JSON.parse(localStorage.getItem('adminUser'));
-    data.append('club', user.club._id);
+    // Handle both MongoDB (_id) and MySQL (id) for compatibility during migration, defaulting to id
+    const clubId = user.club.id || user.club._id;
+    data.append('club', clubId);
 
     if (formData.poster) {
       data.append('poster', formData.poster);
@@ -52,7 +54,7 @@ const AddEventModal = ({ onClose, onEventAdded, eventToEdit }) => {
 
     try {
       const url = eventToEdit
-        ? `/api/events/${eventToEdit._id}`
+        ? `/api/events/${eventToEdit.id || eventToEdit._id}`
         : '/api/events';
 
       const method = eventToEdit ? 'PUT' : 'POST';

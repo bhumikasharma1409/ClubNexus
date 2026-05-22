@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import * as XLSX from 'xlsx';
 
 const MembersManagement = ({ clubId }) => {
@@ -13,11 +13,7 @@ const MembersManagement = ({ clubId }) => {
     const [activeTeamId, setActiveTeamId] = useState(null);
     const [newMember, setNewMember] = useState({ name: '', rollNo: '', phone: '' });
 
-    useEffect(() => {
-        if (clubId) fetchTeams();
-    }, [clubId]);
-
-    const fetchTeams = async () => {
+    const fetchTeams = useCallback(async () => {
         try {
             const res = await fetch(`/api/teams/${clubId}`);
             if (res.ok) {
@@ -29,7 +25,11 @@ const MembersManagement = ({ clubId }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [clubId]);
+
+    useEffect(() => {
+        if (clubId) fetchTeams();
+    }, [clubId, fetchTeams]);
 
     const handleCreateTeam = async (e) => {
         e.preventDefault();
@@ -228,7 +228,7 @@ const MembersManagement = ({ clubId }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {teams.map(team => (
-                    <div key={team._id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+                    <div key={team.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
                         {/* Header */}
                         <div
                             className="p-3 flex justify-between items-center"
@@ -242,19 +242,19 @@ const MembersManagement = ({ clubId }) => {
                                         type="file"
                                         accept=".xlsx, .xls, .csv"
                                         className="hidden"
-                                        onChange={(e) => handleImport(e, team._id)}
+                                        onChange={(e) => handleImport(e, team.id)}
                                     />
                                     <span>📥 Import</span>
                                 </label>
                                 <button
-                                    onClick={() => { setActiveTeamId(team._id); setShowAddMember(true); }}
+                                    onClick={() => { setActiveTeamId(team.id); setShowAddMember(true); }}
                                     className="p-1 bg-white/20 hover:bg-white/30 rounded text-white text-xs"
                                     title="Add Member"
                                 >
                                     + Add
                                 </button>
                                 <button
-                                    onClick={() => handleDeleteTeam(team._id)}
+                                    onClick={() => handleDeleteTeam(team.id)}
                                     className="p-1 bg-white/20 hover:bg-white/30 rounded text-white text-xs"
                                     title="Delete Team"
                                 >
@@ -270,7 +270,7 @@ const MembersManagement = ({ clubId }) => {
                                     <tbody className="divide-y divide-gray-100">
                                         {team.members.map(member => (
                                             <tr
-                                                key={member._id}
+                                                key={member.id}
                                                 className={`group hover:bg-gray-50 ${member.position?.toLowerCase().includes('head') ? 'bg-orange-50' : ''}`}
                                             >
                                                 <td className="p-2 pl-4 font-medium text-gray-700">
@@ -280,7 +280,7 @@ const MembersManagement = ({ clubId }) => {
                                                 <td className="p-2 text-gray-500 text-right font-mono text-xs">{member.phone || member.rollNo}</td>
                                                 <td className="p-2 pr-2 w-8 text-right">
                                                     <button
-                                                        onClick={() => handleDeleteMember(team._id, member._id)}
+                                                        onClick={() => handleDeleteMember(team.id, member.id)}
                                                         className="text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
                                                     >
                                                         &times;

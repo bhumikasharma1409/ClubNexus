@@ -1,13 +1,11 @@
-const Event = require('../models/Event');
-const Activity = require('../models/Activity');
-const Registration = require('../models/Registration');
+const { Event, Activity, Registration, Club } = require('../models');
 const fs = require('fs');
 const path = require('path');
 
 exports.getEventRegistrations = async (req, res) => {
     try {
         const { id } = req.params;
-        const registrations = await Registration.find({ event: id });
+        const registrations = await Registration.findAll({ where: { eventId: id } });
         res.json(registrations);
     } catch (err) {
         console.error(err);
@@ -19,7 +17,7 @@ exports.getEventById = async (req, res) => {
     try {
         const { id } = req.params;
         console.log('Fetching event details for ID:', id);
-        const event = await Event.findById(id).populate('club');
+        const event = await Event.findByPk(id, { include: [Club] });
         if (!event) {
             console.log('Event not found in DB');
             return res.status(404).json({ message: 'Event not found' });
@@ -34,7 +32,7 @@ exports.getEventById = async (req, res) => {
 
 exports.createEvent = async (req, res) => {
     try {
-        const { title, description, date, time, place, club } = req.body;
+        let { title, description, date, time, place, club } = req.body;
 
         // Check if file was uploaded
         let posterPath = '';
@@ -48,37 +46,44 @@ exports.createEvent = async (req, res) => {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
-        const event = new Event({
+        // Convert DD/MM/YYYY to YYYY-MM-DD if necessary
+        if (date.includes('/')) {
+            const [day, month, year] = date.split('/');
+            date = `${year}-${month}-${day}`;
+        }
+
+        const event = await Event.create({
             title,
             description,
             date,
             time,
             place,
             poster: posterPath,
-            club
+            clubId: club
         });
-
-        await event.save();
 
         // Log Activity
         await Activity.create({
             action: 'Event Created',
             details: `Created event: ${title}`,
-            club: club
+            clubId: club
         });
 
         res.status(201).json({ message: 'Event created successfully', event });
     } catch (err) {
         console.error(err);
         if (req.file) fs.unlinkSync(req.file.path); // Cleanup on error
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error: ' + err.message });
     }
 };
 
 exports.getEvents = async (req, res) => {
     try {
         const { clubId } = req.params;
-        const events = await Event.find({ club: clubId }).sort({ date: 1 });
+        const events = await Event.findAll({
+            where: { clubId },
+            order: [['date', 'ASC']]
+        });
         res.json(events);
     } catch (err) {
         console.error(err);
@@ -89,7 +94,7 @@ exports.getEvents = async (req, res) => {
 exports.deleteEvent = async (req, res) => {
     try {
         const { id } = req.params;
-        const event = await Event.findById(id);
+        const event = await Event.findByPk(id);
 
         if (!event) return res.status(404).json({ message: 'Event not found' });
 
@@ -101,13 +106,16 @@ exports.deleteEvent = async (req, res) => {
             }
         }
 
-        await Event.findByIdAndDelete(id);
+        const clubId = event.clubId;
+        const eventTitle = event.title;
+
+        await event.destroy();
 
         // Log Activity
         await Activity.create({
             action: 'Event Deleted',
-            details: `Deleted event: ${event.title}`,
-            club: event.club
+            details: `Deleted event: ${eventTitle}`,
+            clubId: clubId
         });
 
         res.json({ message: 'Event deleted' });
@@ -120,9 +128,9 @@ exports.deleteEvent = async (req, res) => {
 exports.updateEvent = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, description, date, time, place } = req.body;
+        let { title, description, date, time, place } = req.body;
 
-        let event = await Event.findById(id);
+        let event = await Event.findByPk(id);
         if (!event) return res.status(404).json({ message: 'Event not found' });
 
         // Handle new poster upload
@@ -133,6 +141,12 @@ exports.updateEvent = async (req, res) => {
                 if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
             }
             event.poster = '/uploads/' + req.file.filename;
+        }
+
+        // Convert DD/MM/YYYY to YYYY-MM-DD if necessary
+        if (date && date.includes('/')) {
+            const [day, month, year] = date.split('/');
+            date = `${year}-${month}-${day}`;
         }
 
         event.title = title || event.title;
@@ -147,7 +161,7 @@ exports.updateEvent = async (req, res) => {
         await Activity.create({
             action: 'Event Updated',
             details: `Updated event: ${event.title}`,
-            club: event.club
+            clubId: event.clubId
         });
 
         res.json(event);
@@ -160,7 +174,7 @@ exports.updateEvent = async (req, res) => {
 exports.toggleDutyLeave = async (req, res) => {
     try {
         const { id } = req.params;
-        const event = await Event.findById(id);
+        const event = await Event.findByPk(id);
 
         if (!event) {
             return res.status(404).json({ message: 'Event not found' });

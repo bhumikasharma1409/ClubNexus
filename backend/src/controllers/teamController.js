@@ -1,9 +1,9 @@
-const Team = require('../models/Team');
+const { Team } = require('../models');
 
 exports.getTeams = async (req, res) => {
     try {
         const { clubId } = req.params;
-        const teams = await Team.find({ club: clubId });
+        const teams = await Team.findAll({ where: { clubId } });
         res.json(teams);
     } catch (err) {
         console.error(err);
@@ -14,8 +14,7 @@ exports.getTeams = async (req, res) => {
 exports.createTeam = async (req, res) => {
     try {
         const { clubId, name, color } = req.body;
-        const team = new Team({ club: clubId, name, color, members: [] });
-        await team.save();
+        const team = await Team.create({ clubId, name, color, members: [] });
         res.status(201).json(team);
     } catch (err) {
         console.error(err);
@@ -27,7 +26,14 @@ exports.updateTeam = async (req, res) => {
     try {
         const { teamId } = req.params;
         const { name, color } = req.body;
-        const team = await Team.findByIdAndUpdate(teamId, { name, color }, { new: true });
+
+        const team = await Team.findByPk(teamId);
+        if (!team) return res.status(404).json({ message: 'Team not found' });
+
+        team.name = name;
+        team.color = color;
+        await team.save();
+
         res.json(team);
     } catch (err) {
         console.error(err);
@@ -38,7 +44,7 @@ exports.updateTeam = async (req, res) => {
 exports.deleteTeam = async (req, res) => {
     try {
         const { teamId } = req.params;
-        await Team.findByIdAndDelete(teamId);
+        await Team.destroy({ where: { id: teamId } });
         res.json({ message: 'Team deleted' });
     } catch (err) {
         console.error(err);
@@ -50,11 +56,18 @@ exports.addMember = async (req, res) => {
     try {
         const { teamId } = req.params;
         const { name, phone, rollNo, position } = req.body;
-        const team = await Team.findById(teamId);
+        const team = await Team.findByPk(teamId);
         if (!team) return res.status(404).json({ message: 'Team not found' });
 
-        team.members.push({ name, phone, rollNo, position });
+        const members = team.members || [];
+        // Add a simple ID for frontend key usage, though not strictly necessary in JSON
+        members.push({ id: Date.now().toString(), name, phone, rollNo, position });
+
+        // We must re-assign to trigger update for JSON type in some Sequelize versions/dialects
+        team.members = [...members];
+        team.changed('members', true);
         await team.save();
+
         res.json(team);
     } catch (err) {
         console.error(err);
@@ -65,11 +78,16 @@ exports.addMember = async (req, res) => {
 exports.removeMember = async (req, res) => {
     try {
         const { teamId, memberId } = req.params;
-        const team = await Team.findById(teamId);
+        const team = await Team.findByPk(teamId);
         if (!team) return res.status(404).json({ message: 'Team not found' });
 
-        team.members = team.members.filter(m => m._id.toString() !== memberId);
+        let members = team.members || [];
+        members = members.filter(m => m.id !== memberId);
+
+        team.members = [...members];
+        team.changed('members', true);
         await team.save();
+
         res.json(team);
     } catch (err) {
         console.error(err);
@@ -90,15 +108,19 @@ exports.addMembers = async (req, res) => {
             return res.status(400).json({ message: 'Members must be an array' });
         }
 
-        const team = await Team.findById(teamId);
+        const team = await Team.findByPk(teamId);
         if (!team) {
             console.error('[addMembers] Error: Team not found');
             return res.status(404).json({ message: 'Team not found' });
         }
 
-        // Append new members
-        team.members.push(...members);
+        const currentMembers = team.members || [];
+        const newMembers = members.map(m => ({ ...m, id: m.id || Date.now().toString() + Math.random() }));
+
+        team.members = [...currentMembers, ...newMembers];
+        team.changed('members', true);
         await team.save();
+
         console.log(`[addMembers] Successfully added ${members.length} members`);
         res.json(team);
     } catch (err) {

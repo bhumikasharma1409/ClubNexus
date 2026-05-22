@@ -35,13 +35,13 @@ const OpenSourceDashboard = () => {
                 const openSourceClub = clubs.find(c => c.name === 'Open Source');
 
                 if (openSourceClub) {
-                    console.log("Found Club ID:", openSourceClub._id);
-                    setClubId(openSourceClub._id); // Store clubId in state
+                    console.log("Found Club ID:", openSourceClub.id);
+                    setClubId(openSourceClub.id); // Store clubId in state
                     // 2. Fetch Events & Activity
-                    await fetchEvents(openSourceClub._id);
-                    await fetchRecentActivity(openSourceClub._id);
-                    await fetchMemberCount(openSourceClub._id);
-                    await fetchDutyLeaves(openSourceClub._id);
+                    await fetchEvents(openSourceClub.id);
+                    await fetchRecentActivity(openSourceClub.id);
+                    await fetchMemberCount(openSourceClub.id);
+                    await fetchDutyLeaves(openSourceClub.id);
                 } else {
                     console.error("Open Source club not found in database. Available clubs:", clubs.map(c => c.name));
                 }
@@ -124,7 +124,7 @@ const OpenSourceDashboard = () => {
             });
             if (res.ok) {
                 // Update local state
-                setDutyLeaves(dutyLeaves.map(dl => dl._id === id ? { ...dl, status } : dl));
+                setDutyLeaves(dutyLeaves.map(dl => dl.id === id ? { ...dl, status } : dl));
             } else {
                 alert('Failed to update status');
             }
@@ -135,13 +135,13 @@ const OpenSourceDashboard = () => {
 
     const handleToggleDL = async (event) => {
         try {
-            const res = await fetch(`/api/events/${event._id}/toggle-dl`, {
+            const res = await fetch(`/api/events/${event.id}/toggle-dl`, {
                 method: 'PATCH'
             });
             const data = await res.json();
             if (res.ok) {
                 // Update local state
-                setEvents(events.map(e => e._id === event._id ? { ...e, isDutyLeaveEnabled: data.isDutyLeaveEnabled } : e));
+                setEvents(events.map(e => e.id === event.id ? { ...e, isDutyLeaveEnabled: data.isDutyLeaveEnabled } : e));
             } else {
                 alert('Failed to toggle Duty Leave status');
             }
@@ -158,7 +158,7 @@ const OpenSourceDashboard = () => {
 
     const handleEventAddedWrapper = (newEvent) => {
         if (eventToEdit) {
-            setEvents(events.map(e => e._id === newEvent._id ? newEvent : e));
+            setEvents(events.map(e => e.id === newEvent.id ? newEvent : e));
         } else {
             setEvents([...events, newEvent]);
         }
@@ -172,7 +172,7 @@ const OpenSourceDashboard = () => {
         try {
             const res = await fetch(`/api/events/${id}`, { method: 'DELETE' });
             if (res.ok) {
-                setEvents(events.filter(e => e._id !== id));
+                setEvents(events.filter(e => e.id !== id));
                 if (clubId) fetchRecentActivity(clubId); // Re-fetch activity using the stored clubId
             } else {
                 alert('Failed to delete event');
@@ -228,7 +228,7 @@ const OpenSourceDashboard = () => {
                                         <tr><td colSpan="6" className="py-4 text-center text-gray-500">No pending requests</td></tr>
                                     ) : (
                                         appliedDLs.map(dl => (
-                                            <tr key={dl._id} className="border-b border-gray-50 hover:bg-gray-50">
+                                            <tr key={dl.id} className="border-b border-gray-50 hover:bg-gray-50">
                                                 <td className="py-3 px-4">{dl.studentName}</td>
                                                 <td className="py-3 px-4">{dl.rollNo}</td>
                                                 <td className="py-3 px-4">{dl.eventName}</td>
@@ -236,13 +236,13 @@ const OpenSourceDashboard = () => {
                                                 <td className="py-3 px-4"><span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs">{dl.status}</span></td>
                                                 <td className="py-3 px-4">
                                                     <button
-                                                        onClick={() => handleUpdateDLStatus(dl._id, 'Approved')}
+                                                        onClick={() => handleUpdateDLStatus(dl.id, 'Approved')}
                                                         className="text-green-600 hover:text-green-800 mr-2 font-medium"
                                                     >
                                                         Approve
                                                     </button>
                                                     <button
-                                                        onClick={() => handleUpdateDLStatus(dl._id, 'Rejected')}
+                                                        onClick={() => handleUpdateDLStatus(dl.id, 'Rejected')}
                                                         className="text-red-600 hover:text-red-800 font-medium"
                                                     >
                                                         Reject
@@ -275,7 +275,7 @@ const OpenSourceDashboard = () => {
                                         <tr><td colSpan="5" className="py-4 text-center text-gray-500">No processed requests</td></tr>
                                     ) : (
                                         processedDLs.map(dl => (
-                                            <tr key={dl._id} className="border-b border-gray-50 hover:bg-gray-50">
+                                            <tr key={dl.id} className="border-b border-gray-50 hover:bg-gray-50">
                                                 <td className="py-3 px-4">{dl.studentName}</td>
                                                 <td className="py-3 px-4">{dl.rollNo}</td>
                                                 <td className="py-3 px-4">{dl.eventName}</td>
@@ -340,7 +340,7 @@ const OpenSourceDashboard = () => {
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {events.map((event) => (
-                                        <div key={event._id} className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+                                        <div key={event.id} className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow flex flex-col">
                                             {event.poster && (
                                                 <div className="h-48 overflow-hidden bg-gray-50 flex items-center justify-center">
                                                     <img
@@ -378,7 +378,7 @@ const OpenSourceDashboard = () => {
                                                         {event.isDutyLeaveEnabled ? 'Stop DL' : 'Start DL'}
                                                     </button>
                                                     <button
-                                                        onClick={() => navigate(`/admin/events/${event._id}/registrations`)}
+                                                        onClick={() => navigate(`/admin/events/${event.id}/registrations`)}
                                                         className="flex-1 px-3 py-1.5 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 transition-colors"
                                                     >
                                                         View Registrations
@@ -390,7 +390,7 @@ const OpenSourceDashboard = () => {
                                                         Edit
                                                     </button>
                                                     <button
-                                                        onClick={() => handleDeleteEvent(event._id)}
+                                                        onClick={() => handleDeleteEvent(event.id)}
                                                         className="flex-1 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors"
                                                     >
                                                         Delete
@@ -416,7 +416,7 @@ const OpenSourceDashboard = () => {
                                     <p className="text-gray-500 text-sm">No recent activity.</p>
                                 ) : (
                                     recentActivity.map((activity) => (
-                                        <div key={activity._id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                        <div key={activity.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                                             <div>
                                                 <p className="font-medium text-gray-800">{activity.action}</p>
                                                 <p className="text-sm text-gray-500">{activity.details}</p>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/footer';
 import EventCard from '../components/EventCard';
@@ -12,13 +12,7 @@ export default function UserDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('upcoming'); // 'upcoming' or 'past'
 
-  useEffect(() => {
-    if (token) {
-      fetchEvents();
-    }
-  }, [token]);
-
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
       const res = await fetch('/api/user/events', {
         headers: {
@@ -34,7 +28,13 @@ export default function UserDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      fetchEvents();
+    }
+  }, [token, fetchEvents]);
 
   if (!user) {
     return (
@@ -129,15 +129,15 @@ export default function UserDashboard() {
         ) : displayedEvents.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayedEvents.map(event => (
-              <Link key={event._id} to={`/events/${event._id}`} className="block transform transition-transform hover:scale-[1.02]">
+              <Link key={event.id} to={`/events/${event.id}`} className="block transform transition-transform hover:scale-[1.02]">
                 <EventCard
-                  id={event._id}
+                  id={event.id}
                   title={event.title}
                   date={new Date(event.date).toLocaleDateString()}
                   time={event.time}
                   description={event.description}
                   poster={event.poster}
-                  clubName={event.club?.name}
+                  clubName={event.Club?.name || event.club?.name}
                   isRegistered={true}
                 />
               </Link>

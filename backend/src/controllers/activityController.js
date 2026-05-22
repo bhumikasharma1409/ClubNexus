@@ -1,11 +1,13 @@
-const Activity = require('../models/Activity');
+const { Activity } = require('../models');
 
 exports.getRecentActivity = async (req, res) => {
     try {
         const { clubId } = req.params;
-        const activities = await Activity.find({ club: clubId })
-            .sort({ createdAt: -1 })
-            .limit(10);
+        const activities = await Activity.findAll({
+            where: { clubId },
+            order: [['createdAt', 'DESC']],
+            limit: 10
+        });
         res.json(activities);
     } catch (err) {
         console.error(err);

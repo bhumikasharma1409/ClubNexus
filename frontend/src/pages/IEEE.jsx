@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import Footer from '../components/footer';
 import Slideshow from '../components/Slideshow';
 import EventCard from '../components/EventCard';
 import ApplicationFormModal from '../components/ApplicationFormModal';

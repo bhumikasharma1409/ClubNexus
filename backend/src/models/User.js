@@ -1,19 +1,14 @@
-// src/models/User.js
-const mongoose = require('mongoose');
-
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true },
-  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ['user', 'admin'], default: 'user' },
-  club: { type: mongoose.Schema.Types.ObjectId, ref: 'Club', default: null },
-  year: { type: String },
-  batch: { type: String },
-  course: { type: String },
-  otp: { type: String },
-  otpExpires: { type: Date },
-  registeredEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
-  createdAt: { type: Date, default: Date.now }
-});
-
-module.exports = mongoose.model('User', userSchema);
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    name: { type: DataTypes.STRING, allowNull: false },
+    email: { type: DataTypes.STRING, allowNull: false, unique: true, validate: { isEmail: true } },
+    password: { type: DataTypes.STRING, allowNull: false },
+    role: { type: DataTypes.ENUM('user', 'admin'), defaultValue: 'user' },
+    year: { type: DataTypes.STRING },
+    batch: { type: DataTypes.STRING },
+    course: { type: DataTypes.STRING },
+    otp: { type: DataTypes.STRING },
+    otpExpires: { type: DataTypes.DATE }
+  });
+  return User;
+};

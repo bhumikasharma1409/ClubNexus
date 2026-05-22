@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import AddEventModal from "../components/AddEventModal";
 import AdminSidebar from "../components/AdminSidebar";
 
@@ -9,7 +9,7 @@ export default function AdminEvents() {
   const token = localStorage.getItem("adminToken");
 
   // FETCH EVENTS
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
       const res = await fetch("/api/events", {
         headers: {
@@ -22,11 +22,11 @@ export default function AdminEvents() {
     } catch (err) {
       console.error("Error loading events", err);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [fetchEvents]);
 
   // Split events
   const upcomingEvents = events.filter((e) => !e.isPublished);

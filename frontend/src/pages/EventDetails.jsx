@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import Footer from '../components/footer';
 import { useAuth } from '../context/AuthContext';
 
 const EventDetails = () => {
@@ -54,7 +54,7 @@ const EventDetails = () => {
             console.log("Checking DL Status. User:", user, "Event:", event);
             if (user && event) {
                 try {
-                    const url = `/api/duty-leaves/status?userId=${user._id || user.id}&eventId=${event._id}`;
+                    const url = `/api/duty-leaves/status?userId=${user.id || user._id}&eventId=${event.id}`;
                     console.log("Fetching status from:", url);
                     const res = await fetch(url);
                     if (res.ok) {
@@ -77,6 +77,12 @@ const EventDetails = () => {
         setSubmitting(true);
 
         try {
+            // Handle Sequelize (event.Club) and MongoDB/Legacy (event.club) cases
+            const clubId = event.Club?.id || event.club?.id || event.club?._id || event.club;
+            const userId = user.id || user._id;
+
+            console.log("Submitting DL with:", { clubId, userId, eventId: event.id });
+
             const res = await fetch('/api/duty-leaves', {
                 method: 'POST',
                 headers: {
@@ -86,22 +92,24 @@ const EventDetails = () => {
                     ...formData,
                     eventName: event.title,
                     date: event.date,
-                    clubId: event.club._id || event.club,
-                    userId: user._id || user.id,
-                    eventId: event._id
+                    clubId: clubId,
+                    userId: userId,
+                    eventId: event.id
                 }),
             });
+
+            const data = await res.json();
 
             if (res.ok) {
                 alert('Duty Leave application submitted successfully!');
                 setDlStatus('Pending');
                 setShowModal(false);
             } else {
-                alert('Failed to submit application. Please try again.');
+                alert('Failed: ' + (data.message || 'Unknown server error'));
             }
         } catch (err) {
             console.error(err);
-            alert('An error occurred.');
+            alert('An error occurred: ' + err.message);
         } finally {
             setSubmitting(false);
         }

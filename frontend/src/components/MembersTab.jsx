@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ManageOpeningsModal from './ManageOpeningsModal';
 import * as XLSX from 'xlsx';
 
@@ -8,7 +8,7 @@ const MembersTab = ({ clubId }) => {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchOpeningData = async () => {
+    const fetchOpeningData = useCallback(async () => {
         try {
             const res = await fetch(`/api/openings/${clubId}`);
             if (res.ok) {
@@ -20,9 +20,9 @@ const MembersTab = ({ clubId }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [clubId]);
 
-    const fetchApplications = async () => {
+    const fetchApplications = useCallback(async () => {
         try {
             const res = await fetch(`/api/applications/${clubId}`);
             if (res.ok) {
@@ -32,14 +32,14 @@ const MembersTab = ({ clubId }) => {
         } catch (err) {
             console.error("Failed to fetch applications", err);
         }
-    };
+    }, [clubId]);
 
     useEffect(() => {
         if (clubId) {
             fetchOpeningData();
             fetchApplications();
         }
-    }, [clubId]);
+    }, [clubId, fetchOpeningData, fetchApplications]);
 
     const handleModalClose = () => {
         setShowModal(false);

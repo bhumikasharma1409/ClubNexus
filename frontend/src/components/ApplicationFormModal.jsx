@@ -27,8 +27,6 @@ const ApplicationFormModal = ({ onClose, clubId, roles = [], user }) => {
                 },
                 body: JSON.stringify({
                     ...formData,
-                    clubId,
-                    ...formData,
                     clubId
                 })
             });

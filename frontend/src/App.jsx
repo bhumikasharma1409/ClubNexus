@@ -34,14 +34,17 @@ import AddEventModal from "./components/AddEventModal";
 
 
 
-import UserDashboard from "./pages/UserDashboard";
+import UserDashboard from "./pages/userDashboard";
 
 import EventRegistrations from "./pages/EventRegistrations";
 import EventDetails from "./pages/EventDetails";
 
+import ScrollToTop from "./components/ScrollToTop";
+
 export default function App() {
   return (
     <div className="relative z-10 min-h-screen">
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Navigate to="/" replace />} />
